@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Registrasi - HotelElGangsing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+</head>
+<body class="flex items-center justify-center bg-gray-800 h-screen text-gray-900">
+  <div class="container mx-auto w-full max-w-4xl flex flex-col sm:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
+    <!-- Form Registrasi -->
+    <div class="register-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8">
+      <form class="w-full max-w-xs">
+        <h1 class="text-2xl font-bold mb-4 text-center">Registrasi</h1>
+        <input type="text" placeholder="Nama Pengguna" class="block w-full bg-gray-100 rounded-md border p-2 mb-3">
+        <input type="email" placeholder="Email" class="block w-full bg-gray-100 rounded-md border p-2 mb-3">
+        <input type="number" placeholder="Nomor Telepon" class="block w-full bg-gray-100 rounded-md border p-2 mb-3">
+        <input type="password" placeholder="Kata Sandi" class="block w-full bg-gray-100 rounded-md border p-2 mb-3">
+        <button class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Daftar</button>
+        <span class="block text-center text-sm text-gray-600 mt-4">atau gunakan akun Anda</span>
+        <div class="flex justify-center mt-4 space-x-4">
+          <a href="#" class="text-blue-700"><i class="lni lni-facebook-fill text-xl"></i></a>
+          <a href="#" class="text-red-500"><i class="lni lni-google text-xl"></i></a>
+          <a href="#" class="text-green-500"><i class="lni lni-whatsapp text-xl"></i></a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Form Login -->
+    <div class="login-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8 bg-gray-100">
+      <form class="w-full max-w-xs">
+        <h1 class="text-2xl font-bold mb-4 text-center">Masuk</h1>
+        <input type="text" placeholder="Nama Pengguna" class="block w-full bg-gray-100 rounded-md border p-2 mb-3">
+        <input type="password" placeholder="Kata Sandi" class="block w-full bg-gray-100 rounded-md border p-2 mb-3">
+        <div class="flex justify-between items-center mb-3">
+          <label class="flex items-center">
+            <input type="checkbox" class="mr-2">
+            <span class="text-sm text-gray-600">Ingat Saya</span>
+          </label>
+          <a href="#" class="text-sm text-blue-500 hover:underline">Lupa kata sandi?</a>
+        </div>
+        <button class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">Masuk</button>
+        <span class="block text-center text-sm text-gray-600 mt-4">atau gunakan akun Anda</span>
+        <div class="flex justify-center mt-4 space-x-4">
+          <a href="#" class="text-blue-700"><i class="lni lni-facebook-fill text-xl"></i></a>
+          <a href="#" class="text-red-500"><i class="lni lni-google text-xl"></i></a>
+          <a href="#" class="text-green-500"><i class="lni lni-whatsapp text-xl"></i></a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
