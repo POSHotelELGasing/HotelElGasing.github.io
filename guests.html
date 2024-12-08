@@ -34,35 +34,38 @@
         <li><a href="index.html" class="hover:underline px-4 py-2 block">Dashboard</a></li>
         <li><a href="rooms.html" class="hover:underline px-4 py-2 block">Kamar</a></li>
         <li><a href="guests.html" class="hover:underline px-4 py-2 block">Tamu</a></li>
-        <li><a href="transactions.html" class="hover:underline px-4 py-2 block">Transaksi</a></li>
+        <li><a href="transaksi.html" class="hover:underline px-4 py-2 block">Transaksi</a></li>
         <li><a href="login.html" class="hover:underline px-4 py-2 block">Login</a></li>
       </ul>
     </div>
   </nav>
 
   <!-- Manajemen Tamu -->
-  <section id="guests" class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
-    <div class="bg-white p-4 shadow rounded mb-4">
-      <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded">Tambah Tamu</button>
-    </div>
-    <div class="bg-white p-4 shadow rounded overflow-x-auto">
-      <table class="w-full border-collapse border">
-        <thead class="bg-blue-600 text-white">
-          <tr>
-            <th class="border p-2">Nama</th>
-            <th class="border p-2">Nomor Identitas</th>
-            <th class="border p-2">Nomor Telepon</th>
-            <th class="border p-2">Email</th>
-            <th class="border p-2">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="guest-list">
-          <!-- Data tamu akan ditampilkan melalui script -->
-        </tbody>
-      </table>
-    </div>
-  </section>
+   <main class="container mx-auto p-6">
+    <section id="guests" class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
+      <div class="bg-white p-4 shadow rounded mb-4">
+        <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded">Tambah Tamu</button>
+      </div>
+      <div class="bg-white p-4 shadow rounded overflow-x-auto">
+        <table class="w-full border-collapse border">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="border p-2">Nama</th>
+              <th class="border p-2">Nomor Identitas</th>
+              <th class="border p-2">Nomor Telepon</th>
+              <th class="border p-2">Email</th>
+              <th class="border p-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="guest-list">
+            <!-- Data tamu akan ditampilkan melalui script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+   </main>
+  
 
   <!-- Modal Tambah Tamu -->
   <div id="add-guest-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden opacity-0 transform scale-90">
