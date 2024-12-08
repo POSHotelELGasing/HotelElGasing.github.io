@@ -103,21 +103,33 @@
         }
       });
 
-      // Collapse menu on click
-      function collapseMenu() {
-        if (!navMenu.classList.contains("hidden")) {
-          navMenu.classList.remove("translate-y-0", "opacity-100");
-          navMenu.classList.add("-translate-y-full", "opacity-0");
-          setTimeout(() => {
-            navMenu.classList.add("hidden");
-          }, 300);
-        }
+      // Simulasi fungsi untuk mendapatkan total kamar, tamu, dan transaksi
+      function fetchDashboardData() {
+        return new Promise((resolve) => {
+          const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
+          const guests = JSON.parse(localStorage.getItem('guests') || '[]');
+          const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+          
+          resolve({
+            roomsCount: rooms.length,
+            guestsCount: guests.length,
+            transactionsCount: transactions.length,
+          });
+        });
       }
 
-      // Menampilkan kamar dan tamu saat halaman dimuat
+      // Update dashboard
+      function updateDashboard() {
+        fetchDashboardData().then(data => {
+          document.getElementById('total-rooms').textContent = data.roomsCount;
+          document.getElementById('total-guests').textContent = data.guestsCount;
+          document.getElementById('total-transactions').textContent = data.transactionsCount;
+        });
+      }
+
+      // Memperbarui dashboard saat halaman dimuat
       window.onload = () => {
-        displayRooms();
-        displayGuests();
+        updateDashboard();
       };
     </script>
   </body>
