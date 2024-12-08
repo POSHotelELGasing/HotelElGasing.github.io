@@ -1,15 +1,16 @@
 // Fungsi untuk menampilkan kamar
-// Fungsi untuk menghitung total item dari localStorage
 function updateDashboard() {
-  // Ambil data dari localStorage
   const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
   const guests = JSON.parse(localStorage.getItem('guests') || '[]');
   const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
   
-  // Perbarui elemen dashboard
   document.getElementById('total-rooms').textContent = rooms.length;
   document.getElementById('total-guests').textContent = guests.length;
   document.getElementById('total-transactions').textContent = transactions.length;
+  
+  // Menampilkan total pendapatan dari transaksi
+  const totalRevenue = transactions.reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0);
+  document.getElementById('total-revenue').textContent = `Rp ${totalRevenue.toLocaleString()}`;
 }
 
 // Panggil fungsi saat halaman dimuat
@@ -17,16 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
   updateDashboard();
   displayRooms();
   displayGuests();
+  displayTransactions();
 });
 
-
-// Panggil fungsi saat halaman dimuat
-document.addEventListener('DOMContentLoaded', updateDashboard);
-
+// Fungsi untuk menampilkan kamar
 function displayRooms() {
   const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
   const roomList = document.getElementById('room-list');
-  roomList.innerHTML = ''; // Kosongkan tabel
+  roomList.innerHTML = '';
 
   rooms.forEach(room => {
     const row = document.createElement('tr');
@@ -49,7 +48,7 @@ function addRoom(room) {
   const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
   rooms.push(room);
   localStorage.setItem('rooms', JSON.stringify(rooms));
-  displayRooms(); // Tampilkan data setelah ditambah
+  displayRooms();
 }
 
 // Fungsi untuk menghapus kamar
@@ -57,7 +56,7 @@ function deleteRoom(id) {
   let rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
   rooms = rooms.filter(room => room.id !== id);
   localStorage.setItem('rooms', JSON.stringify(rooms));
-  displayRooms(); // Update daftar setelah dihapus
+  displayRooms();
 }
 
 // Fungsi untuk mengedit kamar
@@ -73,9 +72,6 @@ function editRoom(id) {
   }
 }
 
-// Memanggil displayRooms saat halaman dimuat
-document.addEventListener('DOMContentLoaded', displayRooms);
-
 // Event listener untuk form penambahan kamar
 document.getElementById('add-room-form').addEventListener('submit', function(event) {
   event.preventDefault();
@@ -86,7 +82,7 @@ document.getElementById('add-room-form').addEventListener('submit', function(eve
   const status = document.getElementById('room-status').value;
 
   const newRoom = {
-    id: Date.now(), // Menggunakan timestamp sebagai ID unik
+    id: Date.now(),
     number,
     type,
     price,
@@ -94,8 +90,6 @@ document.getElementById('add-room-form').addEventListener('submit', function(eve
   };
 
   addRoom(newRoom);
-
-  // Reset form
   this.reset();
 });
 
@@ -103,7 +97,7 @@ document.getElementById('add-room-form').addEventListener('submit', function(eve
 function displayGuests() {
   const guests = JSON.parse(localStorage.getItem('guests') || '[]');
   const guestList = document.getElementById('guest-list');
-  guestList.innerHTML = ''; // Kosongkan tabel
+  guestList.innerHTML = '';
 
   guests.forEach(guest => {
     const row = document.createElement('tr');
@@ -150,9 +144,6 @@ function editGuest(id) {
   }
 }
 
-// Memanggil displayGuests saat halaman dimuat
-document.addEventListener('DOMContentLoaded', displayGuests);
-
 // Event listener untuk form penambahan tamu
 document.getElementById('add-guest-form').addEventListener('submit', function(event) {
   event.preventDefault();
@@ -163,7 +154,7 @@ document.getElementById('add-guest-form').addEventListener('submit', function(ev
   const email = document.getElementById('guest-email').value;
 
   const newGuest = {
-    id: Date.now(), // Menggunakan timestamp sebagai ID unik
+    id: Date.now(),
     name,
     idNumber,
     phone,
@@ -171,8 +162,6 @@ document.getElementById('add-guest-form').addEventListener('submit', function(ev
   };
 
   addGuest(newGuest);
-
-  // Reset form
   this.reset();
 });
 
@@ -180,12 +169,17 @@ document.getElementById('add-guest-form').addEventListener('submit', function(ev
 function displayTransactions() {
   const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
   const transactionList = document.getElementById('transaction-list');
-  transactionList.innerHTML = ''; // Kosongkan daftar transaksi
+  transactionList.innerHTML = '';
 
   transactions.forEach(transaction => {
     const row = document.createElement('tr');
+    
+    const guests = JSON.parse(localStorage.getItem('guests') || '[]');
+    const guest = guests.find(g => g.id === transaction.guestId);
+    const guestName = guest ? guest.name : 'Tamu Tidak Ditemukan';
+
     row.innerHTML = `
-      <td class="border p-2">${transaction.guest}</td>
+      <td class="border p-2">${guestName}</td>
       <td class="border p-2">${transaction.amount}</td>
       <td class="border p-2">${transaction.date}</td>
     `;
@@ -198,25 +192,48 @@ function addTransaction(transaction) {
   const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
   transactions.push(transaction);
   localStorage.setItem('transactions', JSON.stringify(transactions));
-  displayTransactions(); // Tampilkan data setelah ditambah
+  displayTransactions();
+  updateDashboard(); // Update dashboard setelah menambah transaksi
 }
 
 // Event listener untuk form transaksi
 document.getElementById('transaction-form').addEventListener('submit', function(event) {
   event.preventDefault();
 
-  const guest = document.getElementById('transaction-guest').value;
+  const guestId = document.getElementById('transaction-guest').value;
   const amount = document.getElementById('transaction-amount').value;
   const date = new Date().toLocaleString();
 
+  const guests = JSON.parse(localStorage.getItem('guests') || '[]');
+  const guest = guests.find(g => g.id === parseInt(guestId));
+
+  if (!guest) {
+    alert('Tamu tidak ditemukan!');
+    return;
+  }
+
   const newTransaction = {
-    guest,
+    guestId: parseInt(guestId),
     amount,
     date
   };
 
   addTransaction(newTransaction);
-
-  // Reset form
   this.reset();
 });
+
+// Fungsi untuk memuat daftar tamu pada dropdown transaksi
+function loadGuestOptions() {
+  const guests = JSON.parse(localStorage.getItem('guests') || '[]');
+  const guestSelect = document.getElementById('transaction-guest');
+  
+  guests.forEach(guest => {
+    const option = document.createElement('option');
+    option.value = guest.id;
+    option.textContent = guest.name;
+    guestSelect.appendChild(option);
+  });
+}
+
+// Panggil fungsi ini saat halaman dimuat
+document.addEventListener('DOMContentLoaded', loadGuestOptions);
