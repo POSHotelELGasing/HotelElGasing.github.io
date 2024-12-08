@@ -1,116 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manajemen Kamar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Kamar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Menambahkan transisi halus untuk navbar menu */
+      #menu {
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">Hotel POS System</h1>
+        <!-- Hamburger Icon -->
+        <button
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
+        >
+          ☰
+        </button>
+        <!-- Menu -->
+        <ul
+          id="menu"
+          class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+        >
+          <li>
+            <a href="index.html" class="hover:underline px-4 py-2 block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="rooms.html" class="hover:underline px-4 py-2 block"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a href="guests.html" class="hover:underline px-4 py-2 block"
+              >Tamu</a
+            >
+          </li>
+          <li>
+            <a href="transactions.html" class="hover:underline px-4 py-2 block"
+              >Transaksi</a
+            >
+          </li>
+          <li>
+            <a href="login.html" class="hover:underline px-4 py-2 block"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow-lg">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Manajemen Kamar</h1>
-      <ul class="flex space-x-4">
-        <li><a href="index.html" class="hover:underline">Dashboard</a></li>
-        <li><a href="rooms.html" class="hover:underline">Kamar</a></li>
-        <li><a href="guests.html" class="hover:underline">Tamu</a></li>
-        <li><a href="transactions.html" class="hover:underline">Transaksi</a></li>
-        <li><a href="login.html" class="hover:underline">Login</a></li>
-      </ul>
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+      <h2 class="text-2xl font-bold mb-4">Manajemen Kamar</h2>
+      <div class="bg-white p-4 shadow rounded mb-4">
+        <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded">
+          Tambah Kamar
+        </button>
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <table class="w-full border-collapse border">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="border p-2">Nomor Kamar</th>
+              <th class="border p-2">Tipe</th>
+              <th class="border p-2">Harga</th>
+              <th class="border p-2">Status</th>
+              <th class="border p-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="room-list">
+            <!-- Data kamar akan ditampilkan melalui script -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Modal Tambah Kamar -->
+    <div
+      id="add-room-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-1/3">
+        <h3 class="text-xl font-bold mb-4">Tambah Kamar</h3>
+        <form id="add-room-form">
+          <input
+            type="text"
+            id="room-number"
+            placeholder="Nomor Kamar"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="text"
+            id="room-type"
+            placeholder="Tipe"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="number"
+            id="room-price"
+            placeholder="Harga"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <select id="room-status" class="p-2 border rounded mb-4 w-full">
+            <option value="Available">Tersedia</option>
+            <option value="Occupied">Terisi</option>
+          </select>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full"
+          >
+            Tambah Kamar
+          </button>
+        </form>
+        <button
+          id="close-room-modal"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4"
+        >
+          Tutup
+        </button>
+      </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <main class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">Manajemen Kamar</h2>
-    <div class="bg-white p-4 shadow rounded mb-4">
-      <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded">Tambah Kamar</button>
-    </div>
-    <div class="bg-white p-4 shadow rounded">
-      <table class="w-full border-collapse border">
-        <thead class="bg-blue-600 text-white">
-          <tr>
-            <th class="border p-2">Nomor Kamar</th>
-            <th class="border p-2">Tipe</th>
-            <th class="border p-2">Harga</th>
-            <th class="border p-2">Status</th>
-            <th class="border p-2">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="room-list">
-          <!-- Data kamar akan ditampilkan melalui script -->
-        </tbody>
-      </table>
-    </div>
-  </main>
+    <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("menu");
 
-  <!-- Modal Tambah Kamar -->
-  <div id="add-room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-1/3">
-      <h3 class="text-xl font-bold mb-4">Tambah Kamar</h3>
-      <form id="add-room-form">
-        <input type="text" id="room-number" placeholder="Nomor Kamar" class="p-2 border rounded mb-4 w-full" required>
-        <input type="text" id="room-type" placeholder="Tipe" class="p-2 border rounded mb-4 w-full" required>
-        <input type="number" id="room-price" placeholder="Harga" class="p-2 border rounded mb-4 w-full" required>
-        <select id="room-status" class="p-2 border rounded mb-4 w-full">
-          <option value="Available">Tersedia</option>
-          <option value="Occupied">Terisi</option>
-        </select>
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full">Tambah Kamar</button>
-      </form>
-      <button id="close-room-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4">Tutup</button>
-    </div>
-  </div>
+      menuToggle.addEventListener("click", () => {
+        const isHidden = menu.classList.contains("hidden");
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          setTimeout(() => {
+            menu.classList.remove("-translate-y-full", "opacity-0");
+            menu.classList.add("translate-y-0", "opacity-100");
+          }, 10);
+        } else {
+          menu.classList.remove("translate-y-0", "opacity-100");
+          menu.classList.add("-translate-y-full", "opacity-0");
+          setTimeout(() => {
+            menu.classList.add("hidden");
+          }, 300);
+        }
+      });
+      // Script untuk menampilkan dan menyembunyikan modal tambah kamar
+      const addRoomBtn = document.getElementById("add-room-btn");
+      const addRoomModal = document.getElementById("add-room-modal");
+      const closeRoomModal = document.getElementById("close-room-modal");
 
-  <script>
-    // Script untuk menampilkan dan menyembunyikan modal tambah kamar
-    const addRoomBtn = document.getElementById('add-room-btn');
-    const addRoomModal = document.getElementById('add-room-modal');
-    const closeRoomModal = document.getElementById('close-room-modal');
-    
-    addRoomBtn.addEventListener('click', () => {
-      addRoomModal.classList.remove('hidden');
-    });
-    
-    closeRoomModal.addEventListener('click', () => {
-      addRoomModal.classList.add('hidden');
-    });
-    
-    // Menambah kamar
-    const addRoomForm = document.getElementById('add-room-form');
-    addRoomForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const roomNumber = document.getElementById('room-number').value;
-      const roomType = document.getElementById('room-type').value;
-      const roomPrice = document.getElementById('room-price').value;
-      const roomStatus = document.getElementById('room-status').value;
-      
-      const room = {
-        id: Date.now(),
-        number: roomNumber,
-        type: roomType,
-        price: roomPrice,
-        status: roomStatus
-      };
-      
-      const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
-      rooms.push(room);
-      localStorage.setItem('rooms', JSON.stringify(rooms));
-      displayRooms(); // Tampilkan data setelah ditambah
-      addRoomModal.classList.add('hidden'); // Close modal after adding
-    });
+      addRoomBtn.addEventListener("click", () => {
+        addRoomModal.classList.remove("hidden");
+      });
 
-    // Menampilkan kamar dari localStorage
-    function displayRooms() {
-      const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
-      const roomList = document.getElementById('room-list');
-      roomList.innerHTML = '';
+      closeRoomModal.addEventListener("click", () => {
+        addRoomModal.classList.add("hidden");
+      });
 
-      rooms.forEach(room => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+      // Menambah kamar
+      const addRoomForm = document.getElementById("add-room-form");
+      addRoomForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const roomNumber = document.getElementById("room-number").value;
+        const roomType = document.getElementById("room-type").value;
+        const roomPrice = document.getElementById("room-price").value;
+        const roomStatus = document.getElementById("room-status").value;
+
+        const room = {
+          id: Date.now(),
+          number: roomNumber,
+          type: roomType,
+          price: roomPrice,
+          status: roomStatus,
+        };
+
+        const rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
+        rooms.push(room);
+        localStorage.setItem("rooms", JSON.stringify(rooms));
+        displayRooms(); // Tampilkan data setelah ditambah
+        addRoomModal.classList.add("hidden"); // Close modal after adding
+      });
+
+      // Menampilkan kamar dari localStorage
+      function displayRooms() {
+        const rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
+        const roomList = document.getElementById("room-list");
+        roomList.innerHTML = "";
+
+        rooms.forEach((room) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
           <td class="border p-2">${room.number}</td>
           <td class="border p-2">${room.type}</td>
           <td class="border p-2">${room.price}</td>
@@ -120,20 +209,20 @@
             <button class="bg-red-600 text-white p-2 rounded" onclick="deleteRoom(${room.id})">Delete</button>
           </td>
         `;
-        roomList.appendChild(row);
-      });
-    }
+          roomList.appendChild(row);
+        });
+      }
 
-    // Menghapus kamar
-    function deleteRoom(id) {
-      const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
-      const filteredRooms = rooms.filter(room => room.id !== id);
-      localStorage.setItem('rooms', JSON.stringify(filteredRooms));
-      displayRooms(); // Tampilkan data setelah dihapus
-    }
+      // Menghapus kamar
+      function deleteRoom(id) {
+        const rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
+        const filteredRooms = rooms.filter((room) => room.id !== id);
+        localStorage.setItem("rooms", JSON.stringify(filteredRooms));
+        displayRooms(); // Tampilkan data setelah dihapus
+      }
 
-    // Menampilkan kamar saat halaman dimuat
-    window.onload = displayRooms;
-  </script>
-</body>
+      // Menampilkan kamar saat halaman dimuat
+      window.onload = displayRooms;
+    </script>
+  </body>
 </html>

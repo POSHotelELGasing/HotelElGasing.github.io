@@ -5,62 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manajemen Kamar</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Tambahkan animasi transisi untuk menu */
+    #menu {
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+  </style>
 </head>
 <body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow-lg">
+  <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
     <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Manajemen Kamar</h1>
-      <ul class="flex space-x-4">
-        <li><a href="index.html" class="hover:underline">Dashboard</a></li>
-        <li><a href="rooms.html" class="hover:underline">Kamar</a></li>
-        <li><a href="guests.html" class="hover:underline">Tamu</a></li>
-        <li><a href="transactions.html" class="hover:underline">Transaksi</a></li>
-        <li><a href="login.html" class="hover:underline">Login</a></li>
+      <h1 class="text-xl font-bold">Hotel POS System</h1>
+      <!-- Hamburger Icon -->
+      <button
+        id="menu-toggle"
+        class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+        aria-label="Toggle Navigation"
+      >
+        ☰
+      </button>
+      <!-- Menu -->
+      <ul
+        id="menu"
+        class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+      >
+        <li><a href="index.html" class="hover:underline px-4 py-2 block">Dashboard</a></li>
+        <li><a href="rooms.html" class="hover:underline px-4 py-2 block">Kamar</a></li>
+        <li><a href="guests.html" class="hover:underline px-4 py-2 block">Tamu</a></li>
+        <li><a href="transactions.html" class="hover:underline px-4 py-2 block">Transaksi</a></li>
+        <li><a href="login.html" class="hover:underline px-4 py-2 block">Login</a></li>
       </ul>
     </div>
   </nav>
 
-    <!-- Manajemen Tamu -->
-    <section id="guests" class="mb-12">
-        <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
-        <div class="bg-white p-4 shadow rounded mb-4">
-          <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded">Tambah Tamu</button>
-        </div>
-        <div class="bg-white p-4 shadow rounded">
-          <table class="w-full border-collapse border">
-            <thead class="bg-blue-600 text-white">
-              <tr>
-                <th class="border p-2">Nama</th>
-                <th class="border p-2">Nomor Identitas</th>
-                <th class="border p-2">Nomor Telepon</th>
-                <th class="border p-2">Email</th>
-                <th class="border p-2">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="guest-list">
-              <!-- Data tamu akan ditampilkan melalui script -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-  
-      <!-- Modal Tambah Tamu -->
-      <div id="add-guest-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded shadow-lg w-1/3">
-          <h3 class="text-xl font-bold mb-4">Tambah Tamu</h3>
-          <form id="add-guest-form">
-            <input type="text" id="guest-name" placeholder="Nama" class="p-2 border rounded mb-4 w-full" required>
-            <input type="text" id="guest-id" placeholder="Nomor Identitas" class="p-2 border rounded mb-4 w-full" required>
-            <input type="text" id="guest-phone" placeholder="Nomor Telepon" class="p-2 border rounded mb-4 w-full" required>
-            <input type="email" id="guest-email" placeholder="Email" class="p-2 border rounded mb-4 w-full" required>
-            <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full">Tambah Tamu</button>
-          </form>
-          <button id="close-guest-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4">Tutup</button>
-        </div>
-      </div>
+  <!-- Manajemen Tamu -->
+  <section id="guests" class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
+    <div class="bg-white p-4 shadow rounded mb-4">
+      <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded">Tambah Tamu</button>
+    </div>
+    <div class="bg-white p-4 shadow rounded overflow-x-auto">
+      <table class="w-full border-collapse border">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+            <th class="border p-2">Nama</th>
+            <th class="border p-2">Nomor Identitas</th>
+            <th class="border p-2">Nomor Telepon</th>
+            <th class="border p-2">Email</th>
+            <th class="border p-2">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="guest-list">
+          <!-- Data tamu akan ditampilkan melalui script -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Modal Tambah Tamu -->
+  <div id="add-guest-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden opacity-0 transform scale-90">
+    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-2/3">
+      <h3 class="text-xl font-bold mb-4">Tambah Tamu</h3>
+      <form id="add-guest-form">
+        <input type="text" id="guest-name" placeholder="Nama" class="p-2 border rounded mb-4 w-full" required>
+        <input type="text" id="guest-id" placeholder="Nomor Identitas" class="p-2 border rounded mb-4 w-full" required>
+        <input type="text" id="guest-phone" placeholder="Nomor Telepon" class="p-2 border rounded mb-4 w-full" required>
+        <input type="email" id="guest-email" placeholder="Email" class="p-2 border rounded mb-4 w-full" required>
+        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700 transition duration-300">Tambah Tamu</button>
+      </form>
+      <button id="close-guest-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700 transition duration-300">Tutup</button>
+    </div>
+  </div>
+
+
+
     <script>
+       const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+
+    menuToggle.addEventListener('click', () => {
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        setTimeout(() => {
+          menu.classList.remove('-translate-y-full', 'opacity-0');
+          menu.classList.add('translate-y-0', 'opacity-100');
+        }, 10);
+      } else {
+        menu.classList.remove('translate-y-0', 'opacity-100');
+        menu.classList.add('-translate-y-full', 'opacity-0');
+        setTimeout(() => {
+          menu.classList.add('hidden');
+        }, 300);
+      }
+    });
+      
         
     // Menampilkan data tamu dari localStorage
     function displayGuests() {
@@ -92,11 +133,16 @@
     const closeGuestModal = document.getElementById('close-guest-modal');
     
     addGuestBtn.addEventListener('click', () => {
-      addGuestModal.classList.remove('hidden');
+      addGuestModal.classList.remove('hidden', 'opacity-0', 'scale-95');
+      addGuestModal.classList.add('opacity-100', 'scale-100');
     });
     
     closeGuestModal.addEventListener('click', () => {
-      addGuestModal.classList.add('hidden');
+      addGuestModal.classList.remove('opacity-100', 'scale-100');
+      addGuestModal.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        addGuestModal.classList.add('hidden');
+      }, 300);
     });
 
     document.addEventListener('DOMContentLoaded', () => {
