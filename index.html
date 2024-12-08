@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel POS System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Hotel POS System</h1>
+      <ul class="flex space-x-4">
+        <li><a href="#dashboard" class="hover:underline">Dashboard</a></li>
+        <li><a href="#rooms" class="hover:underline">Kamar</a></li>
+        <li><a href="#guests" class="hover:underline">Tamu</a></li>
+        <li><a href="#transactions" class="hover:underline">Transaksi</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    <!-- Dashboard -->
+    <section id="dashboard" class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">Dashboard</h2>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-white p-4 shadow rounded text-center">
+          <h3 class="text-xl font-semibold">Total Kamar</h3>
+          <p id="total-rooms" class="text-3xl font-bold text-blue-600">0</p>
+        </div>
+        <div class="bg-white p-4 shadow rounded text-center">
+          <h3 class="text-xl font-semibold">Total Tamu</h3>
+          <p id="total-guests" class="text-3xl font-bold text-blue-600">0</p>
+        </div>
+        <div class="bg-white p-4 shadow rounded text-center">
+          <h3 class="text-xl font-semibold">Total Transaksi</h3>
+          <p id="total-transactions" class="text-3xl font-bold text-blue-600">0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manajemen Kamar -->
+    <section id="rooms" class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">Manajemen Kamar</h2>
+      <div class="bg-white p-4 shadow rounded">
+        <table class="w-full border-collapse border">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="border p-2">Nomor Kamar</th>
+              <th class="border p-2">Tipe</th>
+              <th class="border p-2">Harga</th>
+              <th class="border p-2">Status</th>
+              <th class="border p-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="room-list">
+            <!-- Data kamar akan ditampilkan melalui script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Manajemen Tamu -->
+    <section id="guests" class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
+      <div class="bg-white p-4 shadow rounded">
+        <table class="w-full border-collapse border">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="border p-2">Nama</th>
+              <th class="border p-2">Nomor Identitas</th>
+              <th class="border p-2">Nomor Telepon</th>
+              <th class="border p-2">Email</th>
+              <th class="border p-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="guest-list">
+            <!-- Data tamu akan ditampilkan melalui script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Transaksi -->
+    <section id="transactions" class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">Transaksi</h2>
+      <div class="bg-white p-4 shadow rounded">
+        <form id="transaction-form" class="flex space-x-4 mb-4">
+          <input type="text" id="transaction-guest" placeholder="Nama Tamu" class="p-2 border rounded w-1/3" required>
+          <input type="number" id="transaction-amount" placeholder="Jumlah" class="p-2 border rounded w-1/3" required>
+          <button type="submit" class="bg-blue-600 text-white p-2 rounded">Tambahkan</button>
+        </form>
+        <table class="w-full border-collapse border">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="border p-2">Nama Tamu</th>
+              <th class="border p-2">Jumlah</th>
+              <th class="border p-2">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-list">
+            <!-- Data transaksi akan ditampilkan melalui script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
