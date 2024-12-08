@@ -1,121 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manajemen Transaksi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Transaksi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Tambahkan animasi transisi untuk menu */
+      #menu {
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">Hotel POS System</h1>
+        <!-- Hamburger Icon -->
+        <button
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
+        >
+          ☰
+        </button>
+        <!-- Menu -->
+        <ul
+          id="menu"
+          class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+        >
+          <li>
+            <a href="index.html" class="hover:underline px-4 py-2 block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="rooms.html" class="hover:underline px-4 py-2 block"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a href="guests.html" class="hover:underline px-4 py-2 block"
+              >Tamu</a
+            >
+          </li>
+          <li>
+            <a href="transaksi.html" class="hover:underline px-4 py-2 block"
+              >Transaksi</a
+            >
+          </li>
+          <li>
+            <a href="login.html" class="hover:underline px-4 py-2 block"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow-lg">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Manajemen Transaksi Hotel</h1>
-      <ul class="flex space-x-4">
-        <li><a href="index.html" class="hover:underline">Dashboard</a></li>
-        <li><a href="rooms.html" class="hover:underline">Kamar</a></li>
-        <li><a href="guests.html" class="hover:underline">Tamu</a></li>
-        <li><a href="transaksi.html" class="hover:underline">Transaksi</a></li>
-        <li><a href="login.html" class="hover:underline">Login</a></li>
-      </ul>
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+      <h2 class="text-2xl font-bold mb-4">Manajemen Transaksi</h2>
+      <div class="bg-white p-4 shadow rounded mb-4">
+        <button
+          id="add-transaction-btn"
+          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
+        >
+          Tambah Transaksi
+        </button>
+      </div>
+      <div class="bg-white p-4 shadow rounded">
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse border table-auto">
+            <thead class="bg-blue-600 text-white">
+              <tr>
+                <th class="border p-2 text-xs sm:text-sm">Nomor Transaksi</th>
+                <th class="border p-2 text-xs sm:text-sm">Nama Tamu</th>
+                <th class="border p-2 text-xs sm:text-sm">Kamar</th>
+                <th class="border p-2 text-xs sm:text-sm">Jumlah Hari</th>
+                <th class="border p-2 text-xs sm:text-sm">Total Harga</th>
+                <th class="border p-2 text-xs sm:text-sm">Status Pembayaran</th>
+                <th class="border p-2 text-xs sm:text-sm">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="transaction-list">
+              <!-- Data transaksi akan ditampilkan melalui script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal Tambah Transaksi -->
+    <div
+      id="add-transaction-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
+        <h3 class="text-xl font-bold mb-4">Tambah Transaksi</h3>
+        <form id="add-transaction-form">
+          <input
+            type="text"
+            id="transaction-number"
+            placeholder="Nomor Transaksi"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="text"
+            id="guest-name"
+            placeholder="Nama Tamu"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="text"
+            id="room-number"
+            placeholder="Kamar"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="number"
+            id="number-of-days"
+            placeholder="Jumlah Hari"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="number"
+            id="total-price"
+            placeholder="Total Harga"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <select id="payment-status" class="p-2 border rounded mb-4 w-full">
+            <option value="Paid">Dibayar</option>
+            <option value="Unpaid">Belum Dibayar</option>
+          </select>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full"
+          >
+            Tambah Transaksi
+          </button>
+        </form>
+        <button
+          id="close-transaction-modal"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4"
+        >
+          Tutup
+        </button>
+      </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <main class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">Manajemen Transaksi</h2>
-    <div class="bg-white p-4 shadow rounded mb-4">
-      <button id="add-transaction-btn" class="bg-green-600 text-white p-2 rounded">Tambah Transaksi</button>
-    </div>
-    <div class="bg-white p-4 shadow rounded">
-      <table class="w-full border-collapse border">
-        <thead class="bg-blue-600 text-white">
-          <tr>
-            <th class="border p-2">Nomor Transaksi</th>
-            <th class="border p-2">Nama Tamu</th>
-            <th class="border p-2">Kamar</th>
-            <th class="border p-2">Jumlah Hari</th>
-            <th class="border p-2">Total Harga</th>
-            <th class="border p-2">Status Pembayaran</th>
-            <th class="border p-2">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="transaction-list">
-          <!-- Data transaksi akan ditampilkan melalui script -->
-        </tbody>
-      </table>
-    </div>
-  </main>
+    <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("menu");
 
-  <!-- Modal Tambah Transaksi -->
-  <div id="add-transaction-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-1/3">
-      <h3 class="text-xl font-bold mb-4">Tambah Transaksi</h3>
-      <form id="add-transaction-form">
-        <input type="text" id="transaction-number" placeholder="Nomor Transaksi" class="p-2 border rounded mb-4 w-full" required>
-        <input type="text" id="guest-name" placeholder="Nama Tamu" class="p-2 border rounded mb-4 w-full" required>
-        <input type="text" id="room-number" placeholder="Kamar" class="p-2 border rounded mb-4 w-full" required>
-        <input type="number" id="number-of-days" placeholder="Jumlah Hari" class="p-2 border rounded mb-4 w-full" required>
-        <input type="number" id="total-price" placeholder="Total Harga" class="p-2 border rounded mb-4 w-full" required>
-        <select id="payment-status" class="p-2 border rounded mb-4 w-full">
-          <option value="Paid">Dibayar</option>
-          <option value="Unpaid">Belum Dibayar</option>
-        </select>
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full">Tambah Transaksi</button>
-      </form>
-      <button id="close-transaction-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4">Tutup</button>
-    </div>
-  </div>
+      menuToggle.addEventListener("click", () => {
+        const isHidden = menu.classList.contains("hidden");
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          setTimeout(() => {
+            menu.classList.remove("-translate-y-full", "opacity-0");
+            menu.classList.add("translate-y-0", "opacity-100");
+          }, 10);
+        } else {
+          menu.classList.remove("translate-y-0", "opacity-100");
+          menu.classList.add("-translate-y-full", "opacity-0");
+          setTimeout(() => {
+            menu.classList.add("hidden");
+          }, 300);
+        }
+      });
 
-  <script>
-    const addTransactionBtn = document.getElementById('add-transaction-btn');
-    const addTransactionModal = document.getElementById('add-transaction-modal');
-    const closeTransactionModal = document.getElementById('close-transaction-modal');
-    
-    addTransactionBtn.addEventListener('click', () => {
-      addTransactionModal.classList.remove('hidden');
-    });
-    
-    closeTransactionModal.addEventListener('click', () => {
-      addTransactionModal.classList.add('hidden');
-    });
-    
-    const addTransactionForm = document.getElementById('add-transaction-form');
-    addTransactionForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const transactionNumber = document.getElementById('transaction-number').value;
-      const guestName = document.getElementById('guest-name').value;
-      const roomNumber = document.getElementById('room-number').value;
-      const numberOfDays = document.getElementById('number-of-days').value;
-      const totalPrice = document.getElementById('total-price').value;
-      const paymentStatus = document.getElementById('payment-status').value;
+      const addTransactionBtn = document.getElementById("add-transaction-btn");
+      const addTransactionModal = document.getElementById(
+        "add-transaction-modal"
+      );
+      const closeTransactionModal = document.getElementById(
+        "close-transaction-modal"
+      );
 
-      const transaction = {
-        id: Date.now(),
-        transactionNumber,
-        guestName,
-        roomNumber,
-        numberOfDays,
-        totalPrice,
-        paymentStatus
-      };
+      addTransactionBtn.addEventListener("click", () => {
+        addTransactionModal.classList.remove("hidden");
+      });
 
-      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-      transactions.push(transaction);
-      localStorage.setItem('transactions', JSON.stringify(transactions));
-      displayTransactions();
-      addTransactionModal.classList.add('hidden');
-    });
+      closeTransactionModal.addEventListener("click", () => {
+        addTransactionModal.classList.add("hidden");
+      });
 
-    function displayTransactions() {
-      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-      const transactionList = document.getElementById('transaction-list');
-      transactionList.innerHTML = '';
+      const addTransactionForm = document.getElementById(
+        "add-transaction-form"
+      );
+      addTransactionForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const transactionNumber =
+          document.getElementById("transaction-number").value;
+        const guestName = document.getElementById("guest-name").value;
+        const roomNumber = document.getElementById("room-number").value;
+        const numberOfDays = document.getElementById("number-of-days").value;
+        const totalPrice = document.getElementById("total-price").value;
+        const paymentStatus = document.getElementById("payment-status").value;
 
-      transactions.forEach(transaction => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        const transaction = {
+          id: Date.now(),
+          transactionNumber,
+          guestName,
+          roomNumber,
+          numberOfDays,
+          totalPrice,
+          paymentStatus,
+        };
+
+        const transactions = JSON.parse(
+          localStorage.getItem("transactions") || "[]"
+        );
+        transactions.push(transaction);
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+        displayTransactions();
+        addTransactionModal.classList.add("hidden");
+      });
+
+      function displayTransactions() {
+        const transactions = JSON.parse(
+          localStorage.getItem("transactions") || "[]"
+        );
+        const transactionList = document.getElementById("transaction-list");
+        transactionList.innerHTML = "";
+
+        transactions.forEach((transaction) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
           <td class="border p-2">${transaction.transactionNumber}</td>
           <td class="border p-2">${transaction.guestName}</td>
           <td class="border p-2">${transaction.roomNumber}</td>
@@ -127,18 +245,25 @@
             <button class="bg-red-600 text-white p-2 rounded" onclick="deleteTransaction(${transaction.id})">Delete</button>
           </td>
         `;
-        transactionList.appendChild(row);
-      });
-    }
+          transactionList.appendChild(row);
+        });
+      }
 
-    function deleteTransaction(id) {
-      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-      const filteredTransactions = transactions.filter(transaction => transaction.id !== id);
-      localStorage.setItem('transactions', JSON.stringify(filteredTransactions));
-      displayTransactions();
-    }
+      function deleteTransaction(id) {
+        const transactions = JSON.parse(
+          localStorage.getItem("transactions") || "[]"
+        );
+        const filteredTransactions = transactions.filter(
+          (transaction) => transaction.id !== id
+        );
+        localStorage.setItem(
+          "transactions",
+          JSON.stringify(filteredTransactions)
+        );
+        displayTransactions();
+      }
 
-    window.onload = displayTransactions;
-  </script>
-</body>
+      window.onload = displayTransactions;
+    </script>
+  </body>
 </html>
