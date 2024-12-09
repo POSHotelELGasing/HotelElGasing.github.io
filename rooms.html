@@ -6,12 +6,15 @@
     <title>Manajemen Kamar</title>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="./dist/output.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
 
     <style>
       /* Menambahkan transisi halus untuk navbar menu */
       #menu {
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
       }
     </style>
   </head>
@@ -74,7 +77,10 @@
 
     <!-- Main Content -->
     <main class="container mx-auto p-6">
-      <h2 class="text-2xl font-bold mb-4">Manajemen Kamar <span class="pl-3"><i class="fa-solid fa-door-open"></i></span></h2>
+      <h2 class="text-2xl font-bold mb-4">
+        Manajemen Kamar
+        <span class="pl-3"><i class="fa-solid fa-door-open"></i></span>
+      </h2>
       <div class="bg-white p-4 shadow rounded mb-4">
         <button
           id="add-room-btn"
@@ -106,7 +112,7 @@
       id="add-room-modal"
       class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
     >
-      <div class="bg-white p-6 rounded shadow-lg w-1/3">
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
         <h3 class="text-xl font-bold mb-4">Tambah Kamar</h3>
         <form id="add-room-form">
           <input
