@@ -68,31 +68,19 @@
     </div>
   </nav>
 
-  <!-- Manajemen Tamu -->
-   <main class="container mx-auto p-6">
-    <section id="guests" class="mb-12">
-      <h2 class="text-2xl font-bold mb-4">Manajemen Tamu <span class="pl-3"><i class=" fa-solid fa-restroom"></i></span> </h2>
-      <div class="bg-white p-4 shadow rounded mb-4">
-        <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Tamu</button>
-      </div>
-      <div class="bg-white p-4 shadow rounded overflow-x-auto">
-        <table class="w-full border-collapse border">
-          <thead class="bg-blue-600 text-white">
-            <tr>
-              <th class="border p-2">Nama</th>
-              <th class="border p-2">Nomor Identitas</th>
-              <th class="border p-2">Nomor Telepon</th>
-              <th class="border p-2">Email</th>
-              <th class="border p-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="guest-list">
-            <!-- Data tamu akan ditampilkan melalui script -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-   </main>
+ <!-- Manajemen Tamu -->
+ <main class="container mx-auto p-6">
+  <section id="guests" class="mb-12">
+    <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
+    <div class="bg-white p-4 shadow rounded mb-4">
+      <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Tamu</button>
+    </div>
+    <div id="guest-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Data tamu akan ditampilkan dalam bentuk kartu -->
+    </div>
+  </section>
+</main>
+
   
 
   <!-- Modal Tambah Tamu -->
@@ -101,13 +89,9 @@
       <h3 class="text-xl font-bold mb-4">Tambah Tamu</h3>
       <form id="add-guest-form">
         <label for="guest-name">Nama Tamu</label>
-        <input type="text" id="guest-name" placeholder="Nama" class="p-2 border rounded mb-4 w-full" required>
+        <input type="text" id="guest-name" class="p-2 border rounded mb-4 w-full" required>
         <label for="guest-id">Nomor Identitas</label>
-        <input type="text" id="guest-id" placeholder="Nomor Identitas" class="p-2 border rounded mb-4 w-full" required>
-        <label for="guest-phone">Nomor Telepon</label>
-        <input type="text" id="guest-phone" placeholder="No Telepon" class="p-2 border rounded mb-4 w-full" required>
-        <label for="guest-email">Email Tamu</label>
-        <input type="email" id="guest-email" placeholder="Email" class="p-2 border rounded mb-4 w-full" required>
+        <input type="text" id="guest-id" class="p-2 border rounded mb-4 w-full" required>
         <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700 transition duration-300">Tambah Tamu</button>
       </form>
       <button id="close-guest-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700 transition duration-300">Tutup</button>
@@ -157,27 +141,27 @@
     // Menampilkan data tamu dari localStorage
     function displayGuests() {
       const guests = JSON.parse(localStorage.getItem('guests') || '[]');
-      const guestList = document.getElementById('guest-list');
-      guestList.innerHTML = '';
+      const guestCards = document.getElementById('guest-cards');
+      guestCards.innerHTML = ''; // Bersihkan kartu sebelumnya
 
-      guests.forEach(guest => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-  <td class="border p-2">${guest.name}</td>
-  <td class="border p-2">${guest.idCard}</td>
-  <td class="border p-2">${guest.phone}</td>
-  <td class="border p-2">${guest.email}</td>
-  <td class="border p-2">
-    <button class="bg-blue-600 text-white p-2 rounded" onclick="editGuest(${guest.id})">Edit</button>
-    <button class="bg-red-600 text-white p-2 rounded" onclick="deleteGuest(${guest.id})">Delete</button>
-  </td>
-`;
+      guests.forEach((guest) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded shadow flex flex-col items-center text-center';
 
-        guestList.appendChild(row);
+        card.innerHTML = `
+          <img src="https://via.placeholder.com/100" alt="Foto Profil" class="w-24 h-24 rounded-full mb-4">
+          <h3 class="text-lg font-bold">${guest.name}</h3>
+          <p class="text-gray-600">${guest.idCard}</p>
+          <button class="mt-4 bg-blue-600 text-white py-1 px-4 rounded" onclick="viewGuestDetails(${guest.id})">
+            Lihat Detail
+          </button>
+        `;
+
+        guestCards.appendChild(card);
       });
-
-      document.getElementById('total-guests').textContent = guests.length;
     }
+
+    
 
     // Menambah tamu
     const addGuestBtn = document.getElementById('add-guest-btn');
@@ -297,6 +281,8 @@ document.getElementById('edit-guest-form').addEventListener('submit', (e) => {
     editGuestModal.classList.add('hidden');
   }, 300);
 });
+
+
 
     </script>
     <script src="assets/js/script.js"></script>

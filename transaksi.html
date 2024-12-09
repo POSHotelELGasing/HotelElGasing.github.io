@@ -51,14 +51,14 @@
           <li>
             <a
               href="guests.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block active-nav"
+              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
               >Tamu</a
             >
           </li>
           <li>
             <a
               href="transaksi.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block active-nav"
               >Transaksi</a
             >
           </li>
@@ -298,6 +298,26 @@
               .getElementById("add-transaction-modal")
               .classList.add("hidden");
           });
+      });
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("menu");
+
+      menuToggle.addEventListener("click", () => {
+        const isHidden = menu.classList.contains("hidden");
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          setTimeout(() => {
+            menu.classList.remove("-translate-y-full", "opacity-0");
+            menu.classList.add("translate-y-0", "opacity-100");
+          }, 10);
+        } else {
+          menu.classList.remove("translate-y-0", "opacity-100");
+          menu.classList.add("-translate-y-full", "opacity-0");
+          setTimeout(() => {
+            menu.classList.add("hidden");
+          }, 300);
+        }
       });
     </script>
   </body>
