@@ -1,290 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manajemen Kamar</title>
-  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-  <link rel="stylesheet" href="./dist/output.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Tamu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">Hotel POS System</h1>
+        <ul class="flex space-x-4">
+          <li><a href="#" class="hover:underline">Home</a></li>
+          <li><a href="#" class="hover:underline">Manajemen Kamar</a></li>
+          <li><a href="#" class="hover:underline">Manajemen Tamu</a></li>
+        </ul>
+      </div>
+    </nav>
 
-  <style>
-    /* Tambahkan animasi transisi untuk menu */
-    #menu {
-      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    }
-
-  /* Modal base styles */
-  #add-guest-modal {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  /* Modal visible state */
-  #add-guest-modal.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  /* Optional: Sembunyikan modal secara visual tetapi tetap render di DOM */
-  #add-guest-modal.hidden {
-    pointer-events: none;
-  }
-  </style>
-</head>
-<body class="bg-gray-100">
-
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Hotel POS System</h1>
-      <!-- Hamburger Icon -->
-      <button
-        id="menu-toggle"
-        class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
-        aria-label="Toggle Navigation"
-      >
-        ☰
-      </button>
-      <!-- Menu -->
-      <ul
-        id="menu"
-        class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
-      >
-        <li><a href="index.html" class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block">Dashboard</a></li>
-        <li><a href="rooms.html" class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block">Kamar</a></li>
-        <li><a href="guests.html" class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block active-nav">Tamu</a></li>
-        <li><a href="transaksi.html" class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block">Transaksi</a></li>
-        <li>
-          <a
-            href="product.html"
-            class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
-            >Product</a
-          >
-        </li>
-        <li><a href="login.html" class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block">Login</a></li>
-      </ul>
-    </div>
-  </nav>
-
- <!-- Manajemen Tamu -->
- <main class="container mx-auto p-6">
-  <section id="guests" class="mb-12">
-    <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
-    <div class="bg-white p-4 shadow rounded mb-4">
-      <button id="add-guest-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Tamu</button>
-    </div>
-    <div id="guest-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <!-- Data tamu akan ditampilkan dalam bentuk kartu -->
-    </div>
-  </section>
-</main>
-
-  
-
-  <!-- Modal Tambah Tamu -->
-  <div id="add-guest-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
-      <h3 class="text-xl font-bold mb-4">Tambah Tamu</h3>
-      <form id="add-guest-form">
-        <label for="guest-name">Nama Tamu</label>
-        <input type="text" id="guest-name" class="p-2 border rounded mb-4 w-full" required>
-        <label for="guest-id">Nomor Identitas</label>
-        <input type="text" id="guest-id" class="p-2 border rounded mb-4 w-full" required>
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700 transition duration-300">Tambah Tamu</button>
-      </form>
-      <button id="close-guest-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700 transition duration-300">Tutup</button>
-    </div>
-  </div>
-
-  <!-- Modal Edit Tamu -->
-<div id="edit-guest-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden opacity-0 transform scale-90">
-  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-2/3">
-    <h3 class="text-xl font-bold mb-4">Edit Tamu</h3>
-    <form id="edit-guest-form">
-      <input type="hidden" id="edit-guest-id">
-      <input type="text" id="edit-guest-name" placeholder="Nama" class="p-2 border rounded mb-4 w-full" required>
-      <input type="text" id="edit-guest-idcard" placeholder="Nomor Identitas" class="p-2 border rounded mb-4 w-full" required>
-      <input type="text" id="edit-guest-phone" placeholder="Nomor Telepon" class="p-2 border rounded mb-4 w-full" required>
-      <input type="email" id="edit-guest-email" placeholder="Email" class="p-2 border rounded mb-4 w-full" required>
-      <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700 transition duration-300">Simpan Perubahan</button>
-    </form>
-    <button id="close-edit-guest-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700 transition duration-300">Tutup</button>
-  </div>
-</div>
-
-
-
-    <script>
-       const menuToggle = document.getElementById('menu-toggle');
-    const menu = document.getElementById('menu');
-
-    menuToggle.addEventListener('click', () => {
-      const isHidden = menu.classList.contains('hidden');
-      if (isHidden) {
-        menu.classList.remove('hidden');
-        setTimeout(() => {
-          menu.classList.remove('-translate-y-full', 'opacity-0');
-          menu.classList.add('translate-y-0', 'opacity-100');
-        }, 10);
-      } else {
-        menu.classList.remove('translate-y-0', 'opacity-100');
-        menu.classList.add('-translate-y-full', 'opacity-0');
-        setTimeout(() => {
-          menu.classList.add('hidden');
-        }, 300);
-      }
-    });
-      
-        
-    // Menampilkan data tamu dari localStorage
-    function displayGuests() {
-      const guests = JSON.parse(localStorage.getItem('guests') || '[]');
-      const guestCards = document.getElementById('guest-cards');
-      guestCards.innerHTML = ''; // Bersihkan kartu sebelumnya
-
-      guests.forEach((guest) => {
-        const card = document.createElement('div');
-        card.className = 'bg-white p-4 rounded shadow flex flex-col items-center text-center';
-
-        card.innerHTML = `
-          <img src="https://via.placeholder.com/100" alt="Foto Profil" class="w-24 h-24 rounded-full mb-4">
-          <h3 class="text-lg font-bold">${guest.name}</h3>
-          <p class="text-gray-600">${guest.idCard}</p>
-          <button class="mt-4 bg-blue-600 text-white py-1 px-4 rounded" onclick="viewGuestDetails(${guest.id})">
-            Lihat Detail
-          </button>
-        `;
-
-        guestCards.appendChild(card);
-      });
-    }
-
-    
-
-    // Menambah tamu
-    const addGuestBtn = document.getElementById('add-guest-btn');
-const addGuestModal = document.getElementById('add-guest-modal');
-const closeGuestModal = document.getElementById('close-guest-modal');
-
-// Fungsi untuk membuka modal
-addGuestBtn.addEventListener('click', () => {
-  addGuestModal.classList.remove('hidden'); // Pastikan modal dapat diakses
-  setTimeout(() => {
-    addGuestModal.classList.add('visible'); // Tambahkan efek transisi
-  }, 10); // Beri sedikit waktu agar transisi bekerja
-});
-
-// Fungsi untuk menutup modal
-closeGuestModal.addEventListener('click', () => {
-  addGuestModal.classList.remove('visible'); // Hilangkan efek transisi
-  setTimeout(() => {
-    addGuestModal.classList.add('hidden'); // Sembunyikan modal sepenuhnya
-  }, 300); // Sesuaikan waktu ini dengan durasi transisi CSS
-});
-    document.addEventListener('DOMContentLoaded', () => {
-  displayGuests(); // Tampilkan tamu setelah halaman dimuat
-});
-
-    const addGuestForm = document.getElementById('add-guest-form');
-    addGuestForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const guestName = document.getElementById('guest-name').value;
-      const guestId = document.getElementById('guest-id').value;
-      const guestPhone = document.getElementById('guest-phone').value;
-      const guestEmail = document.getElementById('guest-email').value;
-
-      const guest = {
-        id: Date.now(),
-        name: guestName,
-        phone: guestPhone,
-        email: guestEmail,
-        idCard: guestId
-      };
-
-      const guests = JSON.parse(localStorage.getItem('guests') || '[]');
-      guests.push(guest);
-      localStorage.setItem('guests', JSON.stringify(guests));
-      displayGuests(); // Tampilkan data setelah ditambah
-      addGuestModal.classList.add('hidden'); // Close modal after adding
-    });
-
-    // Menghapus kamar
-    function deleteRoom(id) {
-      const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');
-      const filteredRooms = rooms.filter(room => room.id !== id);
-      localStorage.setItem('rooms', JSON.stringify(filteredRooms));
-      displayRooms(); // Tampilkan data setelah dihapus
-    }
-
-    // Menghapus tamu
-    function deleteGuest(id) {
-      const guests = JSON.parse(localStorage.getItem('guests') || '[]');
-      const filteredGuests = guests.filter(guest => guest.id !== id);
-      localStorage.setItem('guests', JSON.stringify(filteredGuests));
-      displayGuests(); // Tampilkan data setelah dihapus
-    }
-    // Menampilkan modal edit
-function editGuest(id) {
-  const guests = JSON.parse(localStorage.getItem('guests') || '[]');
-  const guest = guests.find(g => g.id === id);
-
-  if (guest) {
-    document.getElementById('edit-guest-id').value = guest.id;
-    document.getElementById('edit-guest-name').value = guest.name;
-    document.getElementById('edit-guest-idcard').value = guest.idCard;
-    document.getElementById('edit-guest-phone').value = guest.phone;
-    document.getElementById('edit-guest-email').value = guest.email;
-
-    const editGuestModal = document.getElementById('edit-guest-modal');
-    editGuestModal.classList.remove('hidden', 'opacity-0', 'scale-95');
-    editGuestModal.classList.add('opacity-100', 'scale-100');
-  }
-}
-
-// Menutup modal edit
-document.getElementById('close-edit-guest-modal').addEventListener('click', () => {
-  const editGuestModal = document.getElementById('edit-guest-modal');
-  editGuestModal.classList.remove('opacity-100', 'scale-100');
-  editGuestModal.classList.add('opacity-0', 'scale-95');
-  setTimeout(() => {
-    editGuestModal.classList.add('hidden');
-  }, 300);
-});
-
-// Menyimpan perubahan data tamu
-document.getElementById('edit-guest-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const id = parseInt(document.getElementById('edit-guest-id').value, 10);
-  const name = document.getElementById('edit-guest-name').value;
-  const idCard = document.getElementById('edit-guest-idcard').value;
-  const phone = document.getElementById('edit-guest-phone').value;
-  const email = document.getElementById('edit-guest-email').value;
-
-  let guests = JSON.parse(localStorage.getItem('guests') || '[]');
-  guests = guests.map(guest => {
-    if (guest.id === id) {
-      return { ...guest, name, idCard, phone, email };
-    }
-    return guest;
-  });
-
-  localStorage.setItem('guests', JSON.stringify(guests));
-  displayGuests();
-
-  const editGuestModal = document.getElementById('edit-guest-modal');
-  editGuestModal.classList.remove('opacity-100', 'scale-100');
-  editGuestModal.classList.add('opacity-0', 'scale-95');
-  setTimeout(() => {
-    editGuestModal.classList.add('hidden');
-  }, 300);
-});
-
-
-
-    </script>
-    <script src="assets/js/script.js"></script>
     <!-- Main Content -->
+    <main class="container mx-auto p-6">
+      <section>
+        <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
+        <div class="mb-4">
+          <button
+            id="add-guest-btn"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-300"
+          >
+            Tambah Tamu
+          </button>
+        </div>
+        <div id="guest-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Guest cards will be dynamically rendered here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal Tambahkan Tamu -->
+    <div
+      id="add-guest-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2">
+        <h3 class="text-xl font-bold mb-4">Tambahkan Tamu</h3>
+        <form id="add-guest-form">
+          <div class="mb-4">
+            <label for="guest-name" class="block font-bold">Nama:</label>
+            <input
+              type="text"
+              id="guest-name"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="guest-idCard" class="block font-bold"
+              >Nomor Identitas:</label
+            >
+            <input
+              type="text"
+              id="guest-idCard"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="guest-phone" class="block font-bold"
+              >Nomor Telepon:</label
+            >
+            <input
+              type="text"
+              id="guest-phone"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="guest-email" class="block font-bold">Email:</label>
+            <input
+              type="email"
+              id="guest-email"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+          >
+            Simpan
+          </button>
+          <button
+            type="button"
+            id="close-add-guest-modal"
+            class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition duration-300"
+          >
+            Batal
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      const guests = JSON.parse(localStorage.getItem("guests")) || [];
+
+      // Display Guest Cards
+      <!-- Guest Card Rendering Section -->
+      function displayGuestCards() {
+        const guestCards = document.getElementById("guest-cards");
+        guestCards.innerHTML = "";
+        guests.forEach((guest, index) => {
+          const card = document.createElement("div");
+          card.className =
+            "bg-white p-4 shadow rounded flex flex-col items-center text-center";
+          card.innerHTML = `
+      <img src="./assets/image/profile.png" alt="Foto" class="rounded-full mb-4">
+      <h4 class="font-bold text-lg">${guest.name}</h4>
+      <p class="text-gray-600">${guest.idCard}</p>
+      <p class="text-gray-600">${guest.phone}</p>
+      <!-- Button Section: Flexbox for alignment -->
+      <div class="flex justify-center space-x-2 mt-4">
+        <button onclick="viewGuestDetails(${index})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Detail</button>
+        <button onclick="editGuest(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+        <button onclick="deleteGuest(${index})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Hapus</button>
+      </div>
+    `;
+          guestCards.appendChild(card);
+        });
+      }
+
+      // Add Guest
+      document.getElementById("add-guest-btn").addEventListener("click", () => {
+        document.getElementById("add-guest-modal").classList.remove("hidden");
+      });
+
+      document
+        .getElementById("close-add-guest-modal")
+        .addEventListener("click", () => {
+          document.getElementById("add-guest-modal").classList.add("hidden");
+        });
+
+      document
+        .getElementById("add-guest-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = document.getElementById("guest-name").value;
+          const idCard = document.getElementById("guest-idCard").value;
+          const phone = document.getElementById("guest-phone").value;
+          const email = document.getElementById("guest-email").value;
+
+          guests.push({ name, idCard, phone, email });
+          localStorage.setItem("guests", JSON.stringify(guests));
+          displayGuestCards();
+          document.getElementById("add-guest-modal").classList.add("hidden");
+          e.target.reset();
+        });
+
+      // View Guest Details
+      function viewGuestDetails(index) {
+        const guest = guests[index];
+        Swal.fire({
+          title: `<strong>Detail Tamu</strong>`,
+          html: `
+          <p><strong>Nama:</strong> ${guest.name}</p>
+          <p><strong>Nomor Identitas:</strong> ${guest.idCard}</p>
+          <p><strong>Nomor Telepon:</strong> ${guest.phone}</p>
+          <p><strong>Email:</strong> ${guest.email}</p>
+        `,
+          confirmButtonText: "Tutup",
+        });
+      }
+
+      // Edit Guest
+      function editGuest(index) {
+        const guest = guests[index];
+        Swal.fire({
+          title: "Edit Tamu",
+          html: `
+          <input id="swal-name" class="swal2-input" placeholder="Nama" value="${guest.name}">
+          <input id="swal-idCard" class="swal2-input" placeholder="Nomor Identitas" value="${guest.idCard}">
+          <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon" value="${guest.phone}">
+          <input id="swal-email" class="swal2-input" placeholder="Email" value="${guest.email}">
+        `,
+          confirmButtonText: "Simpan",
+          preConfirm: () => {
+            const name = document.getElementById("swal-name").value;
+            const idCard = document.getElementById("swal-idCard").value;
+            const phone = document.getElementById("swal-phone").value;
+            const email = document.getElementById("swal-email").value;
+            guests[index] = { name, idCard, phone, email };
+            localStorage.setItem("guests", JSON.stringify(guests));
+          },
+        }).then(displayGuestCards);
+      }
+
+      // Delete Guest
+      function deleteGuest(index) {
+        Swal.fire({
+          title: "Hapus Tamu?",
+          text: "Data ini tidak dapat dipulihkan!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Ya, Hapus!",
+          cancelButtonText: "Batal",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            guests.splice(index, 1);
+            localStorage.setItem("guests", JSON.stringify(guests));
+            displayGuestCards();
+          }
+        });
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", displayGuestCards);
+    </script>
+  </body>
 </html>
