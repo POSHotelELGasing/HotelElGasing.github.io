@@ -77,11 +77,16 @@
 
     <!-- Main Content -->
     <main class="container mx-auto p-6">
-      <h2 class="text-2xl font-bold mb-4">Manajemen Transaksi <span class="pl-3"><i class="fa-solid fa-money-bill-transfer"></i></span></h2>
+      <h2 class="text-2xl font-bold mb-4">
+        Manajemen Transaksi
+        <span class="pl-3"
+          ><i class="fa-solid fa-money-bill-transfer"></i
+        ></span>
+      </h2>
       <div class="bg-white p-4 shadow rounded mb-4">
         <button
           id="add-transaction-btn"
-          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto "
+          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
         >
           Tambah Transaksi
         </button>
@@ -116,6 +121,7 @@
       <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
         <h3 class="text-xl font-bold mb-4">Tambah Transaksi</h3>
         <form id="add-transaction-form">
+          <label for="transaction-number">Nomor Transaksi</label>
           <input
             type="text"
             id="transaction-number"
@@ -123,6 +129,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="guest-name">Nama Tamu</label>
           <input
             type="text"
             id="guest-name"
@@ -130,6 +137,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="room-number">Kamar Nomor</label>
           <input
             type="text"
             id="room-number"
@@ -137,6 +145,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="number-of-days">Lama Waktu</label>
           <input
             type="number"
             id="number-of-days"
@@ -144,13 +153,15 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="total-price">Total Harga</label>
           <input
             type="number"
             id="total-price"
-            placeholder="Total Harga"
+            placeholder="Rp."
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="payment-status">Status Pembayaran</label>
           <select id="payment-status" class="p-2 border rounded mb-4 w-full">
             <option value="Paid">Dibayar</option>
             <option value="Unpaid">Belum Dibayar</option>
@@ -254,7 +265,7 @@
           <td class="border p-2">${transaction.guestName}</td>
           <td class="border p-2">${transaction.roomNumber}</td>
           <td class="border p-2">${transaction.numberOfDays}</td>
-          <td class="border p-2">${transaction.totalPrice}</td>
+          <td class="border p-2">Rp.${transaction.totalPrice}</td>
           <td class="border p-2">${transaction.paymentStatus}</td>
           <td class="border p-2">
             <button class="bg-blue-600 text-white p-2 rounded" onclick="editTransaction(${transaction.id})">Edit</button>
