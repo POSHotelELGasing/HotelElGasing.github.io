@@ -6,12 +6,16 @@
     <title>Hotel POS System</title>
     <link rel="stylesheet" href="./dist/output.css" />
   </head>
-  <body class="flex items-center justify-center bg-gray-800 h-screen text-gray-900">
+  <body
+    class="flex items-center justify-center bg-gray-800 h-screen text-gray-900"
+  >
     <div
       class="container mx-auto w-full max-w-4xl flex flex-col sm:flex-row bg-white rounded-lg shadow-lg overflow-hidden"
     >
       <!-- Form Registrasi -->
-      <div class="register-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8">
+      <div
+        class="register-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8"
+      >
         <form id="registerForm" class="w-full max-w-xs">
           <h1 class="text-2xl font-bold mb-4 text-center">Registrasi</h1>
           <input
@@ -48,7 +52,9 @@
       </div>
 
       <!-- Form Login -->
-      <div class="login-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8 bg-gray-100">
+      <div
+        class="login-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8 bg-gray-100"
+      >
         <form id="loginForm" class="w-full max-w-xs">
           <h1 class="text-2xl font-bold mb-4 text-center">Masuk</h1>
           <input
@@ -75,45 +81,50 @@
 
     <script>
       // Event handler untuk Registrasi
-      document.getElementById("registerForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-        const username = document.getElementById("regUsername").value;
-        const email = document.getElementById("regEmail").value;
-        const phone = document.getElementById("regPhone").value;
-        const password = document.getElementById("regPassword").value;
+          const username = document.getElementById("regUsername").value;
+          const email = document.getElementById("regEmail").value;
+          const phone = document.getElementById("regPhone").value;
+          const password = document.getElementById("regPassword").value;
 
-        // Simpan data registrasi ke LocalStorage
-        const userData = { username, email, phone, password };
-        localStorage.setItem("userData", JSON.stringify(userData));
+          // Simpan data registrasi ke LocalStorage
+          const userData = { username, email, phone, password };
+          localStorage.setItem("userData", JSON.stringify(userData));
 
-        alert("Registrasi berhasil! Silakan login.");
-      });
+          alert("Registrasi berhasil! Silakan login.");
+        });
 
       // Event handler untuk Login
-      document.getElementById("loginForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-        const loginUsername = document.getElementById("loginUsername").value;
-        const loginPassword = document.getElementById("loginPassword").value;
+          const loginUsername = document.getElementById("loginUsername").value;
+          const loginPassword = document.getElementById("loginPassword").value;
 
-        // Ambil data pengguna dari LocalStorage
-        const storedUserData = JSON.parse(localStorage.getItem("userData"));
+          // Ambil data pengguna dari LocalStorage
+          const storedUserData = JSON.parse(localStorage.getItem("userData"));
 
-        if (
-          storedUserData &&
-          loginUsername === storedUserData.username &&
-          loginPassword === storedUserData.password
-        ) {
-          // Simpan status login ke LocalStorage
-          localStorage.setItem("isLoggedIn", "true");
+          if (
+            storedUserData &&
+            loginUsername === storedUserData.username &&
+            loginPassword === storedUserData.password
+          ) {
+            // Simpan status login ke LocalStorage
+            localStorage.setItem("isLoggedIn", "true");
 
-          // Redirect ke dashboard
-          window.location.href = "index.html";
-        } else {
-          alert("Nama pengguna atau kata sandi salah!");
-        }
-      });
+            // Redirect ke dashboard
+            window.location.href =
+              "https://poshotelelgasing.github.io/HotelElGasing.github.io/index.html";
+          } else {
+            alert("Nama pengguna atau kata sandi salah!");
+          }
+        });
     </script>
   </body>
 </html>
