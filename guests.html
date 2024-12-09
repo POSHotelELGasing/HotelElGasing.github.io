@@ -83,6 +83,22 @@
     </div>
   </div>
 
+  <!-- Modal Edit Tamu -->
+<div id="edit-guest-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden opacity-0 transform scale-90">
+  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-2/3">
+    <h3 class="text-xl font-bold mb-4">Edit Tamu</h3>
+    <form id="edit-guest-form">
+      <input type="hidden" id="edit-guest-id">
+      <input type="text" id="edit-guest-name" placeholder="Nama" class="p-2 border rounded mb-4 w-full" required>
+      <input type="text" id="edit-guest-idcard" placeholder="Nomor Identitas" class="p-2 border rounded mb-4 w-full" required>
+      <input type="text" id="edit-guest-phone" placeholder="Nomor Telepon" class="p-2 border rounded mb-4 w-full" required>
+      <input type="email" id="edit-guest-email" placeholder="Email" class="p-2 border rounded mb-4 w-full" required>
+      <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700 transition duration-300">Simpan Perubahan</button>
+    </form>
+    <button id="close-edit-guest-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700 transition duration-300">Tutup</button>
+  </div>
+</div>
+
 
 
     <script>
@@ -116,15 +132,16 @@
       guests.forEach(guest => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td class="border p-2">${guest.name}</td>
-          <td class="border p-2">${guest.id}</td>
-          <td class="border p-2">${guest.phone}</td>
-          <td class="border p-2">${guest.email}</td>
-          <td class="border p-2">
-            <button class="bg-blue-600 text-white p-2 rounded" onclick="editGuest(${guest.id})">Edit</button>
-            <button class="bg-red-600 text-white p-2 rounded" onclick="deleteGuest(${guest.id})">Delete</button>
-          </td>
-        `;
+  <td class="border p-2">${guest.name}</td>
+  <td class="border p-2">${guest.idCard}</td>
+  <td class="border p-2">${guest.phone}</td>
+  <td class="border p-2">${guest.email}</td>
+  <td class="border p-2">
+    <button class="bg-blue-600 text-white p-2 rounded" onclick="editGuest(${guest.id})">Edit</button>
+    <button class="bg-red-600 text-white p-2 rounded" onclick="deleteGuest(${guest.id})">Delete</button>
+  </td>
+`;
+
         guestList.appendChild(row);
       });
 
@@ -191,6 +208,63 @@
       localStorage.setItem('guests', JSON.stringify(filteredGuests));
       displayGuests(); // Tampilkan data setelah dihapus
     }
+    // Menampilkan modal edit
+function editGuest(id) {
+  const guests = JSON.parse(localStorage.getItem('guests') || '[]');
+  const guest = guests.find(g => g.id === id);
+
+  if (guest) {
+    document.getElementById('edit-guest-id').value = guest.id;
+    document.getElementById('edit-guest-name').value = guest.name;
+    document.getElementById('edit-guest-idcard').value = guest.idCard;
+    document.getElementById('edit-guest-phone').value = guest.phone;
+    document.getElementById('edit-guest-email').value = guest.email;
+
+    const editGuestModal = document.getElementById('edit-guest-modal');
+    editGuestModal.classList.remove('hidden', 'opacity-0', 'scale-95');
+    editGuestModal.classList.add('opacity-100', 'scale-100');
+  }
+}
+
+// Menutup modal edit
+document.getElementById('close-edit-guest-modal').addEventListener('click', () => {
+  const editGuestModal = document.getElementById('edit-guest-modal');
+  editGuestModal.classList.remove('opacity-100', 'scale-100');
+  editGuestModal.classList.add('opacity-0', 'scale-95');
+  setTimeout(() => {
+    editGuestModal.classList.add('hidden');
+  }, 300);
+});
+
+// Menyimpan perubahan data tamu
+document.getElementById('edit-guest-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const id = parseInt(document.getElementById('edit-guest-id').value, 10);
+  const name = document.getElementById('edit-guest-name').value;
+  const idCard = document.getElementById('edit-guest-idcard').value;
+  const phone = document.getElementById('edit-guest-phone').value;
+  const email = document.getElementById('edit-guest-email').value;
+
+  let guests = JSON.parse(localStorage.getItem('guests') || '[]');
+  guests = guests.map(guest => {
+    if (guest.id === id) {
+      return { ...guest, name, idCard, phone, email };
+    }
+    return guest;
+  });
+
+  localStorage.setItem('guests', JSON.stringify(guests));
+  displayGuests();
+
+  const editGuestModal = document.getElementById('edit-guest-modal');
+  editGuestModal.classList.remove('opacity-100', 'scale-100');
+  editGuestModal.classList.add('opacity-0', 'scale-95');
+  setTimeout(() => {
+    editGuestModal.classList.add('hidden');
+  }, 300);
+});
+
     </script>
     <script src="assets/js/script.js"></script>
     <!-- Main Content -->
