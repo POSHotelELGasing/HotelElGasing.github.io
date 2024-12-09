@@ -235,5 +235,62 @@ function loadGuestOptions() {
   });
 }
 
+// Menampilkan modal edit
+function editGuest(id) {
+  const guests = JSON.parse(localStorage.getItem('guests') || '[]');
+  const guest = guests.find(g => g.id === id);
+
+  if (guest) {
+    document.getElementById('edit-guest-id').value = guest.id;
+    document.getElementById('edit-guest-name').value = guest.name;
+    document.getElementById('edit-guest-idcard').value = guest.idCard;
+    document.getElementById('edit-guest-phone').value = guest.phone;
+    document.getElementById('edit-guest-email').value = guest.email;
+
+    const editGuestModal = document.getElementById('edit-guest-modal');
+    editGuestModal.classList.remove('hidden', 'opacity-0', 'scale-95');
+    editGuestModal.classList.add('opacity-100', 'scale-100');
+  }
+}
+
+// Menutup modal edit
+document.getElementById('close-edit-guest-modal').addEventListener('click', () => {
+  const editGuestModal = document.getElementById('edit-guest-modal');
+  editGuestModal.classList.remove('opacity-100', 'scale-100');
+  editGuestModal.classList.add('opacity-0', 'scale-95');
+  setTimeout(() => {
+    editGuestModal.classList.add('hidden');
+  }, 300);
+});
+
+// Menyimpan perubahan data tamu
+document.getElementById('edit-guest-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const id = parseInt(document.getElementById('edit-guest-id').value, 10);
+  const name = document.getElementById('edit-guest-name').value;
+  const idCard = document.getElementById('edit-guest-idcard').value;
+  const phone = document.getElementById('edit-guest-phone').value;
+  const email = document.getElementById('edit-guest-email').value;
+
+  let guests = JSON.parse(localStorage.getItem('guests') || '[]');
+  guests = guests.map(guest => {
+    if (guest.id === id) {
+      return { ...guest, name, idCard, phone, email };
+    }
+    return guest;
+  });
+
+  localStorage.setItem('guests', JSON.stringify(guests));
+  displayGuests();
+
+  const editGuestModal = document.getElementById('edit-guest-modal');
+  editGuestModal.classList.remove('opacity-100', 'scale-100');
+  editGuestModal.classList.add('opacity-0', 'scale-95');
+  setTimeout(() => {
+    editGuestModal.classList.add('hidden');
+  }, 300);
+});
+
 // Panggil fungsi ini saat halaman dimuat
 document.addEventListener('DOMContentLoaded', loadGuestOptions);
