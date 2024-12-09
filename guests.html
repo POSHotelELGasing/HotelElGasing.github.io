@@ -8,7 +8,6 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
     />
-    <!-- <link rel="stylesheet" href="./dist/output.css"> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
       /* Tambahkan animasi transisi untuk menu */
@@ -26,7 +25,6 @@
     <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold">Hotel POS System</h1>
-        <!-- Hamburger Icon -->
         <button
           id="menu-toggle"
           class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
@@ -34,57 +32,50 @@
         >
           ☰
         </button>
-        <!-- Menu -->
         <ul
           id="menu"
           class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
         >
           <li>
-            <a
-              href="index.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+            <a href="index.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Dashboard</a
             >
           </li>
           <li>
-            <a
-              href="rooms.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+            <a href="rooms.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Kamar</a
             >
           </li>
           <li>
             <a
               href="guests.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block active-nav"
+              class="hover:bg-blue-500 rounded-md px-4 py-2 active-nav"
               >Tamu</a
             >
           </li>
           <li>
             <a
               href="transaksi.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Transaksi</a
             >
           </li>
           <li>
             <a
               href="product.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Product</a
             >
           </li>
           <li>
             <a
               href="employee.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Pegawai</a
             >
           </li>
           <li>
-            <a
-              href="login.html"
-              class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
+            <a href="login.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Login</a
             >
           </li>
@@ -109,71 +100,6 @@
         </div>
       </section>
     </main>
-
-    <!-- Modal Tambahkan Tamu -->
-    <div
-      id="add-guest-modal"
-      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
-    >
-      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2">
-        <h3 class="text-xl font-bold mb-4">Tambahkan Tamu</h3>
-        <form id="add-guest-form">
-          <div class="mb-4">
-            <label for="guest-name" class="block font-bold">Nama:</label>
-            <input
-              type="text"
-              id="guest-name"
-              class="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label for="guest-idCard" class="block font-bold"
-              >Nomor Identitas:</label
-            >
-            <input
-              type="text"
-              id="guest-idCard"
-              class="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label for="guest-phone" class="block font-bold"
-              >Nomor Telepon:</label
-            >
-            <input
-              type="text"
-              id="guest-phone"
-              class="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label for="guest-email" class="block font-bold">Email:</label>
-            <input
-              type="email"
-              id="guest-email"
-              class="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
-          >
-            Simpan
-          </button>
-          <button
-            type="button"
-            id="close-add-guest-modal"
-            class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition duration-300"
-          >
-            Batal
-          </button>
-        </form>
-      </div>
-    </div>
 
     <!-- JavaScript -->
     <script>
@@ -200,7 +126,6 @@
       const guests = JSON.parse(localStorage.getItem("guests")) || [];
 
       // Display Guest Cards
-      <!-- Guest Card Rendering Section -->
       function displayGuestCards() {
         const guestCards = document.getElementById("guest-cards");
         guestCards.innerHTML = "";
@@ -209,59 +134,66 @@
           card.className =
             "bg-white p-4 shadow rounded flex flex-col items-center text-center";
           card.innerHTML = `
-      <img src="./assets/image/profile.png" alt="Foto" class="rounded-full mb-4">
-      <h4 class="font-bold text-lg">${guest.name}</h4>
-      <p class="text-gray-600">${guest.idCard}</p>
-      <p class="text-gray-600">${guest.phone}</p>
-      <!-- Button Section: Flexbox for alignment -->
-      <div class="flex justify-center space-x-2 mt-4">
-        <button onclick="viewGuestDetails(${index})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Detail</button>
-        <button onclick="editGuest(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
-        <button onclick="deleteGuest(${index})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Hapus</button>
-      </div>
-    `;
+            <img src="./assets/image/profile.png" alt="Foto" class="rounded-full mb-4">
+            <h4 class="font-bold text-lg">${guest.name}</h4>
+            <p class="text-gray-600">${guest.idCard}</p>
+            <p class="text-gray-600">${guest.phone}</p>
+            <div class="flex justify-center space-x-2 mt-4">
+              <button onclick="viewGuestDetails(${index})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Detail</button>
+              <button onclick="editGuest(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+              <button onclick="deleteGuest(${index})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Hapus</button>
+            </div>
+          `;
           guestCards.appendChild(card);
         });
       }
 
-      // Add Guest
+      // Add Guest using SweetAlert2
       document.getElementById("add-guest-btn").addEventListener("click", () => {
-        document.getElementById("add-guest-modal").classList.remove("hidden");
+        Swal.fire({
+          title: "Tambah Tamu",
+          html: `
+            <input id="swal-name" class="swal2-input" placeholder="Nama Tamu" required>
+            <input id="swal-idCard" class="swal2-input" placeholder="Nomor Identitas" required>
+            <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon" required>
+            <input id="swal-email" class="swal2-input" placeholder="Email Tamu" required>
+          `,
+          confirmButtonText: "Tambah",
+          cancelButtonText: "Batal",
+          showCancelButton: true,
+          preConfirm: () => {
+            const name = document.getElementById("swal-name").value;
+            const idCard = document.getElementById("swal-idCard").value;
+            const phone = document.getElementById("swal-phone").value;
+            const email = document.getElementById("swal-email").value;
+            if (!name || !idCard || !phone || !email) {
+              Swal.showValidationMessage("Semua bidang harus diisi!");
+              return false;
+            }
+            return { name, idCard, phone, email };
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const { name, idCard, phone, email } = result.value;
+            guests.push({ name, idCard, phone, email });
+            localStorage.setItem("guests", JSON.stringify(guests));
+            displayGuestCards();
+            Swal.fire("Berhasil!", "Tamu berhasil ditambahkan.", "success");
+          }
+        });
       });
-
-      document
-        .getElementById("close-add-guest-modal")
-        .addEventListener("click", () => {
-          document.getElementById("add-guest-modal").classList.add("hidden");
-        });
-
-      document
-        .getElementById("add-guest-form")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
-          const name = document.getElementById("guest-name").value;
-          const idCard = document.getElementById("guest-idCard").value;
-          const phone = document.getElementById("guest-phone").value;
-          const email = document.getElementById("guest-email").value;
-
-          guests.push({ name, idCard, phone, email });
-          localStorage.setItem("guests", JSON.stringify(guests));
-          displayGuestCards();
-          document.getElementById("add-guest-modal").classList.add("hidden");
-          e.target.reset();
-        });
 
       // View Guest Details
       function viewGuestDetails(index) {
         const guest = guests[index];
         Swal.fire({
-          title: `<strong>Detail Tamu</strong>`,
+          title: "Detail Tamu",
           html: `
-          <p><strong>Nama:</strong> ${guest.name}</p>
-          <p><strong>Nomor Identitas:</strong> ${guest.idCard}</p>
-          <p><strong>Nomor Telepon:</strong> ${guest.phone}</p>
-          <p><strong>Email:</strong> ${guest.email}</p>
-        `,
+            <p><strong>Nama:</strong> ${guest.name}</p>
+            <p><strong>Nomor Identitas:</strong> ${guest.idCard}</p>
+            <p><strong>Nomor Telepon:</strong> ${guest.phone}</p>
+            <p><strong>Email:</strong> ${guest.email}</p>
+          `,
           confirmButtonText: "Tutup",
         });
       }
@@ -272,43 +204,55 @@
         Swal.fire({
           title: "Edit Tamu",
           html: `
-          <input id="swal-name" class="swal2-input" placeholder="Nama" value="${guest.name}">
-          <input id="swal-idCard" class="swal2-input" placeholder="Nomor Identitas" value="${guest.idCard}">
-          <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon" value="${guest.phone}">
-          <input id="swal-email" class="swal2-input" placeholder="Email" value="${guest.email}">
-        `,
+            <input id="swal-name" class="swal2-input" placeholder="Nama" value="${guest.name}">
+            <input id="swal-idCard" class="swal2-input" placeholder="Nomor Identitas" value="${guest.idCard}">
+            <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon" value="${guest.phone}">
+            <input id="swal-email" class="swal2-input" placeholder="Email" value="${guest.email}">
+          `,
           confirmButtonText: "Simpan",
           preConfirm: () => {
             const name = document.getElementById("swal-name").value;
             const idCard = document.getElementById("swal-idCard").value;
             const phone = document.getElementById("swal-phone").value;
             const email = document.getElementById("swal-email").value;
+            if (!name || !idCard || !phone || !email) {
+              Swal.showValidationMessage("Semua bidang harus diisi!");
+              return false;
+            }
+            return { name, idCard, phone, email };
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const { name, idCard, phone, email } = result.value;
             guests[index] = { name, idCard, phone, email };
             localStorage.setItem("guests", JSON.stringify(guests));
-          },
-        }).then(displayGuestCards);
+            displayGuestCards();
+            Swal.fire("Berhasil!", "Tamu berhasil diperbarui.", "success");
+          }
+        });
       }
 
       // Delete Guest
       function deleteGuest(index) {
         Swal.fire({
-          title: "Hapus Tamu?",
-          text: "Data ini tidak dapat dipulihkan!",
+          title: "Apakah Anda yakin?",
+          text: "Tamu ini akan dihapus permanen!",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonText: "Ya, Hapus!",
+          confirmButtonText: "Hapus",
           cancelButtonText: "Batal",
         }).then((result) => {
           if (result.isConfirmed) {
             guests.splice(index, 1);
             localStorage.setItem("guests", JSON.stringify(guests));
             displayGuestCards();
+            Swal.fire("Terhapus!", "Tamu berhasil dihapus.", "success");
           }
         });
       }
 
       // Initialize
-      document.addEventListener("DOMContentLoaded", displayGuestCards);
+      displayGuestCards();
     </script>
   </body>
 </html>
