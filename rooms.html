@@ -115,6 +115,7 @@
       <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
         <h3 class="text-xl font-bold mb-4">Tambah Kamar</h3>
         <form id="add-room-form">
+          <label for="room-number">Nomor Kamar</label>
           <input
             type="text"
             id="room-number"
@@ -122,6 +123,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="room-type">Tipe Kamar</label>
           <input
             type="text"
             id="room-type"
@@ -129,6 +131,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="room-price">Harga Kamar</label>
           <input
             type="number"
             id="room-price"
@@ -136,6 +139,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
+          <label for="room-status">Status Kamar</label>
           <select id="room-status" class="p-2 border rounded mb-4 w-full">
             <option value="Available">Tersedia</option>
             <option value="Occupied">Terisi</option>
@@ -155,58 +159,55 @@
         </button>
       </div>
     </div>
-<!-- Modal Edit Kamar -->
-<div
-  id="edit-room-modal"
-  class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
->
-  <div class="bg-white p-6 rounded shadow-lg w-1/3">
-    <h3 class="text-xl font-bold mb-4">Edit Kamar</h3>
-    <form id="edit-room-form">
-      <input
-        type="hidden"
-        id="edit-room-id"
-      />
-      <input
-        type="text"
-        id="edit-room-number"
-        placeholder="Nomor Kamar"
-        class="p-2 border rounded mb-4 w-full"
-        required
-      />
-      <input
-        type="text"
-        id="edit-room-type"
-        placeholder="Tipe"
-        class="p-2 border rounded mb-4 w-full"
-        required
-      />
-      <input
-        type="number"
-        id="edit-room-price"
-        placeholder="Harga"
-        class="p-2 border rounded mb-4 w-full"
-        required
-      />
-      <select id="edit-room-status" class="p-2 border rounded mb-4 w-full">
-        <option value="Available">Tersedia</option>
-        <option value="Occupied">Terisi</option>
-      </select>
-      <button
-        type="submit"
-        class="bg-blue-600 text-white p-2 rounded w-full"
-      >
-        Simpan Perubahan
-      </button>
-    </form>
-    <button
-      id="close-edit-room-modal"
-      class="bg-red-600 text-white p-2 rounded w-full mt-4"
+    <!-- Modal Edit Kamar -->
+    <div
+      id="edit-room-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
     >
-      Tutup
-    </button>
-  </div>
-</div>
+      <div class="bg-white p-6 rounded shadow-lg w-1/3">
+        <h3 class="text-xl font-bold mb-4">Edit Kamar</h3>
+        <form id="edit-room-form">
+          <input type="hidden" id="edit-room-id" />
+          <input
+            type="text"
+            id="edit-room-number"
+            placeholder="Nomor Kamar"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="text"
+            id="edit-room-type"
+            placeholder="Tipe"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <input
+            type="number"
+            id="edit-room-price"
+            placeholder="Harga"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          <select id="edit-room-status" class="p-2 border rounded mb-4 w-full">
+            <option value="Available">Tersedia</option>
+            <option value="Occupied">Terisi</option>
+          </select>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full"
+          >
+            Simpan Perubahan
+          </button>
+        </form>
+        <button
+          id="close-edit-room-modal"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4"
+        >
+          Tutup
+        </button>
+      </div>
+    </div>
 
     <script>
       const menuToggle = document.getElementById("menu-toggle");
@@ -296,46 +297,48 @@
       }
 
       const editRoomModal = document.getElementById("edit-room-modal");
-const closeEditRoomModal = document.getElementById("close-edit-room-modal");
+      const closeEditRoomModal = document.getElementById(
+        "close-edit-room-modal"
+      );
 
-closeEditRoomModal.addEventListener("click", () => {
-  editRoomModal.classList.add("hidden");
-});
+      closeEditRoomModal.addEventListener("click", () => {
+        editRoomModal.classList.add("hidden");
+      });
 
-function editRoom(id) {
-  const rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
-  const room = rooms.find((room) => room.id === id);
+      function editRoom(id) {
+        const rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
+        const room = rooms.find((room) => room.id === id);
 
-  if (room) {
-    document.getElementById("edit-room-id").value = room.id;
-    document.getElementById("edit-room-number").value = room.number;
-    document.getElementById("edit-room-type").value = room.type;
-    document.getElementById("edit-room-price").value = room.price;
-    document.getElementById("edit-room-status").value = room.status;
+        if (room) {
+          document.getElementById("edit-room-id").value = room.id;
+          document.getElementById("edit-room-number").value = room.number;
+          document.getElementById("edit-room-type").value = room.type;
+          document.getElementById("edit-room-price").value = room.price;
+          document.getElementById("edit-room-status").value = room.status;
 
-    editRoomModal.classList.remove("hidden");
-  }
-}
+          editRoomModal.classList.remove("hidden");
+        }
+      }
 
-const editRoomForm = document.getElementById("edit-room-form");
-editRoomForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const id = parseInt(document.getElementById("edit-room-id").value, 10);
-  const number = document.getElementById("edit-room-number").value;
-  const type = document.getElementById("edit-room-type").value;
-  const price = document.getElementById("edit-room-price").value;
-  const status = document.getElementById("edit-room-status").value;
+      const editRoomForm = document.getElementById("edit-room-form");
+      editRoomForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = parseInt(document.getElementById("edit-room-id").value, 10);
+        const number = document.getElementById("edit-room-number").value;
+        const type = document.getElementById("edit-room-type").value;
+        const price = document.getElementById("edit-room-price").value;
+        const status = document.getElementById("edit-room-status").value;
 
-  let rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
-  const roomIndex = rooms.findIndex((room) => room.id === id);
+        let rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
+        const roomIndex = rooms.findIndex((room) => room.id === id);
 
-  if (roomIndex !== -1) {
-    rooms[roomIndex] = { id, number, type, price, status };
-    localStorage.setItem("rooms", JSON.stringify(rooms));
-    displayRooms();
-    editRoomModal.classList.add("hidden");
-  }
-});
+        if (roomIndex !== -1) {
+          rooms[roomIndex] = { id, number, type, price, status };
+          localStorage.setItem("rooms", JSON.stringify(rooms));
+          displayRooms();
+          editRoomModal.classList.add("hidden");
+        }
+      });
 
       // Menampilkan kamar saat halaman dimuat
       window.onload = displayRooms;
