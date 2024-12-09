@@ -107,7 +107,6 @@
           const loginUsername = document.getElementById("loginUsername").value;
           const loginPassword = document.getElementById("loginPassword").value;
 
-          // Ambil data pengguna dari LocalStorage
           const storedUserData = JSON.parse(localStorage.getItem("userData"));
 
           if (
@@ -115,12 +114,9 @@
             loginUsername === storedUserData.username &&
             loginPassword === storedUserData.password
           ) {
-            // Simpan status login ke LocalStorage
             localStorage.setItem("isLoggedIn", "true");
-
-            // Redirect ke dashboard
-            window.location.href =
-              "https://poshotelelgasing.github.io/HotelElGasing.github.io/index.html";
+            localStorage.setItem("currentUser", JSON.stringify(storedUserData));
+            window.location.href = "./employee.html";
           } else {
             alert("Nama pengguna atau kata sandi salah!");
           }
