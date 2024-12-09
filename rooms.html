@@ -16,6 +16,23 @@
       #menu {
         transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
       }
+
+      #add-room-modal {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      /* Modal visible state */
+      #add-room-modal.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Optional: Sembunyikan modal sepenuhnya */
+      #add-room-modal.hidden {
+        pointer-events: none;
+      }
     </style>
   </head>
   <body class="bg-gray-100">
@@ -235,11 +252,17 @@
       const closeRoomModal = document.getElementById("close-room-modal");
 
       addRoomBtn.addEventListener("click", () => {
-        addRoomModal.classList.remove("hidden");
+        addRoomModal.classList.remove("hidden"); // Pastikan modal tidak disembunyikan
+        setTimeout(() => {
+          addRoomModal.classList.add("visible"); // Tambahkan efek transisi
+        }, 10); // Beri sedikit jeda untuk memastikan transisi berjalan
       });
 
       closeRoomModal.addEventListener("click", () => {
-        addRoomModal.classList.add("hidden");
+        addRoomModal.classList.remove("visible"); // Hilangkan efek transisi
+        setTimeout(() => {
+          addRoomModal.classList.add("hidden"); // Sembunyikan modal sepenuhnya setelah transisi
+        }, 300); // Waktu sesuai durasi transisi di CSS
       });
 
       // Menambah kamar

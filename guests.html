@@ -13,6 +13,24 @@
     #menu {
       transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     }
+
+  /* Modal base styles */
+  #add-guest-modal {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  /* Modal visible state */
+  #add-guest-modal.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Optional: Sembunyikan modal secara visual tetapi tetap render di DOM */
+  #add-guest-modal.hidden {
+    pointer-events: none;
+  }
   </style>
 </head>
 <body class="bg-gray-100">
@@ -156,22 +174,24 @@
 
     // Menambah tamu
     const addGuestBtn = document.getElementById('add-guest-btn');
-    const addGuestModal = document.getElementById('add-guest-modal');
-    const closeGuestModal = document.getElementById('close-guest-modal');
-    
-    addGuestBtn.addEventListener('click', () => {
-      addGuestModal.classList.remove('hidden', 'opacity-0', 'scale-95');
-      addGuestModal.classList.add('opacity-100', 'scale-100');
-    });
-    
-    closeGuestModal.addEventListener('click', () => {
-      addGuestModal.classList.remove('opacity-100', 'scale-100');
-      addGuestModal.classList.add('opacity-0', 'scale-95');
-      setTimeout(() => {
-        addGuestModal.classList.add('hidden');
-      }, 300);
-    });
+const addGuestModal = document.getElementById('add-guest-modal');
+const closeGuestModal = document.getElementById('close-guest-modal');
 
+// Fungsi untuk membuka modal
+addGuestBtn.addEventListener('click', () => {
+  addGuestModal.classList.remove('hidden'); // Pastikan modal dapat diakses
+  setTimeout(() => {
+    addGuestModal.classList.add('visible'); // Tambahkan efek transisi
+  }, 10); // Beri sedikit waktu agar transisi bekerja
+});
+
+// Fungsi untuk menutup modal
+closeGuestModal.addEventListener('click', () => {
+  addGuestModal.classList.remove('visible'); // Hilangkan efek transisi
+  setTimeout(() => {
+    addGuestModal.classList.add('hidden'); // Sembunyikan modal sepenuhnya
+  }, 300); // Sesuaikan waktu ini dengan durasi transisi CSS
+});
     document.addEventListener('DOMContentLoaded', () => {
   displayGuests(); // Tampilkan tamu setelah halaman dimuat
 });

@@ -16,6 +16,23 @@
       #menu {
         transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
       }
+
+      #add-transaction-modal {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      /* Modal visible state */
+      #add-transaction-modal.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Optional: Sembunyikan modal sepenuhnya */
+      #add-transaction-modal.hidden {
+        pointer-events: none;
+      }
     </style>
   </head>
   <body class="bg-gray-100">
@@ -212,11 +229,17 @@
       );
 
       addTransactionBtn.addEventListener("click", () => {
-        addTransactionModal.classList.remove("hidden");
+        addTransactionModal.classList.remove("hidden"); // Pastikan modal terlihat di DOM
+        setTimeout(() => {
+          addTransactionModal.classList.add("visible"); // Tambahkan efek transisi
+        }, 10); // Beri sedikit jeda agar transisi berjalan
       });
 
       closeTransactionModal.addEventListener("click", () => {
-        addTransactionModal.classList.add("hidden");
+        addTransactionModal.classList.remove("visible"); // Hilangkan efek transisi
+        setTimeout(() => {
+          addTransactionModal.classList.add("hidden"); // Sembunyikan modal sepenuhnya setelah transisi selesai
+        }, 300); // Sesuai durasi transisi di CSS
       });
 
       const addTransactionForm = document.getElementById(
