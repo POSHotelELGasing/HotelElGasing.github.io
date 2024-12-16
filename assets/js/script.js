@@ -1,3 +1,85 @@
+  // Konfigurasi Firebase
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+    authDomain: "prog4-34938.firebaseapp.com",
+    projectId: "prog4-34938",
+    storageBucket: "prog4-34938.firebasestorage.app",
+    messagingSenderId: "920234132726",
+    appId: "1:920234132726:web:4439c637de33ddf4f3d8d7"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // Event handler untuk Registrasi
+  document
+    .getElementById("registerForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("regUsername").value;
+      const email = document.getElementById("regEmail").value;
+      const phone = document.getElementById("regPhone").value;
+      const password = document.getElementById("regPassword").value;
+
+      // Daftar pengguna menggunakan Firebase Authentication
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          // Simpan data pengguna ke Firestore
+          db.collection("users").doc(user.uid).set({
+            username: username,
+            email: email,
+            phone: phone,
+          });
+
+          alert("Registrasi berhasil! Silakan login.");
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    });
+
+  // Event handler untuk Login
+  document
+    .getElementById("loginForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const loginUsername = document.getElementById("loginUsername").value;
+      const loginPassword = document.getElementById("loginPassword").value;
+
+      // Login menggunakan Firebase Authentication
+      auth.signInWithEmailAndPassword(loginUsername, loginPassword)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          
+          // Mendapatkan data pengguna dari Firestore
+          db.collection("users").doc(user.uid).get()
+            .then((doc) => {
+              if (doc.exists) {
+                // Set data pengguna saat login
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("currentUser", JSON.stringify(doc.data()));
+                window.location.href = "./employee.html";
+              }
+            });
+        })
+        .catch((error) => {
+          alert("Nama pengguna atau kata sandi salah!");
+        });
+    });
+
+
 // Fungsi untuk menampilkan kamar
 function updateDashboard() {
   const rooms = JSON.parse(localStorage.getItem('rooms') || '[]');

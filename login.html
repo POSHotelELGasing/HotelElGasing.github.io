@@ -5,74 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel POS System</title>
     <link rel="stylesheet" href="./dist/output.css" />
+    
+    <!-- Firebase SDK Versi 8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
-  <body
-    class="flex items-center justify-center bg-gray-800 h-screen text-gray-900"
-  >
-    <div
-      class="container mx-auto w-full max-w-4xl flex flex-col sm:flex-row bg-white rounded-lg shadow-lg overflow-hidden"
-    >
+  <body class="flex items-center justify-center bg-gray-800 h-screen text-gray-900">
+    <div class="container mx-auto w-full max-w-4xl flex flex-col sm:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
+      
       <!-- Form Registrasi -->
-      <div
-        class="register-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8"
-      >
+      <div class="register-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8">
         <form id="registerForm" class="w-full max-w-xs">
           <h1 class="text-2xl font-bold mb-4 text-center">Registrasi</h1>
-          <input
-            type="text"
-            id="regUsername"
-            placeholder="Nama Pengguna"
-            class="block w-full bg-gray-100 rounded-md border p-2 mb-3"
-          />
-          <input
-            type="email"
-            id="regEmail"
-            placeholder="Email"
-            class="block w-full bg-gray-100 rounded-md border p-2 mb-3"
-          />
-          <input
-            type="number"
-            id="regPhone"
-            placeholder="Nomor Telepon"
-            class="block w-full bg-gray-100 rounded-md border p-2 mb-3"
-          />
-          <input
-            type="password"
-            id="regPassword"
-            placeholder="Kata Sandi"
-            class="block w-full bg-gray-100 rounded-md border p-2 mb-3"
-          />
-          <button
-            type="submit"
-            class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-          >
+          <input type="text" id="regUsername" placeholder="Nama Pengguna" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
+          <input type="email" id="regEmail" placeholder="Email" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
+          <input type="number" id="regPhone" placeholder="Nomor Telepon" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
+          <input type="password" id="regPassword" placeholder="Kata Sandi" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
+          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
             Daftar
           </button>
         </form>
       </div>
 
       <!-- Form Login -->
-      <div
-        class="login-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8 bg-gray-100"
-      >
+      <div class="login-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8 bg-gray-100">
         <form id="loginForm" class="w-full max-w-xs">
           <h1 class="text-2xl font-bold mb-4 text-center">Masuk</h1>
-          <input
-            type="text"
-            id="loginUsername"
-            placeholder="Nama Pengguna"
-            class="block w-full bg-gray-100 rounded-md border p-2 mb-3"
-          />
-          <input
-            type="password"
-            id="loginPassword"
-            placeholder="Kata Sandi"
-            class="block w-full bg-gray-100 rounded-md border p-2 mb-3"
-          />
-          <button
-            type="submit"
-            class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-          >
+          <input type="email" id="loginEmail" placeholder="Email" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
+          <input type="password" id="loginPassword" placeholder="Kata Sandi" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
+          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
             Masuk
           </button>
         </form>
@@ -80,47 +42,76 @@
     </div>
 
     <script>
-      // Event handler untuk Registrasi
-      document
-        .getElementById("registerForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
+      // Firebase Config
+      const firebaseConfig = {
+        apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+        authDomain: "prog4-34938.firebaseapp.com",
+        projectId: "prog4-34938",
+        storageBucket: "prog4-34938.appspot.com",
+        messagingSenderId: "920234132726",
+        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7"
+      };
 
-          const username = document.getElementById("regUsername").value;
-          const email = document.getElementById("regEmail").value;
-          const phone = document.getElementById("regPhone").value;
-          const password = document.getElementById("regPassword").value;
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
 
-          // Simpan data registrasi ke LocalStorage
-          const userData = { username, email, phone, password };
-          localStorage.setItem("userData", JSON.stringify(userData));
+      // Registrasi
+      document.getElementById("registerForm").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-          alert("Registrasi berhasil! Silakan login.");
-        });
+        const username = document.getElementById("regUsername").value;
+        const email = document.getElementById("regEmail").value;
+        const phone = document.getElementById("regPhone").value;
+        const password = document.getElementById("regPassword").value;
 
-      // Event handler untuk Login
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
+        // Create user using Firebase Authentication
+        auth.createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
 
-          const loginUsername = document.getElementById("loginUsername").value;
-          const loginPassword = document.getElementById("loginPassword").value;
+            // Save additional user data in Firestore
+            db.collection("users").doc(user.uid).set({
+              username: username,
+              email: email,
+              phone: phone,
+            });
 
-          const storedUserData = JSON.parse(localStorage.getItem("userData"));
+            alert("Registrasi berhasil! Silakan login.");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      });
 
-          if (
-            storedUserData &&
-            loginUsername === storedUserData.username &&
-            loginPassword === storedUserData.password
-          ) {
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("currentUser", JSON.stringify(storedUserData));
-            window.location.href = "./employee.html";
-          } else {
+      // Login
+      document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const loginEmail = document.getElementById("loginEmail").value;
+        const loginPassword = document.getElementById("loginPassword").value;
+
+        // Login using Firebase Authentication
+        auth.signInWithEmailAndPassword(loginEmail, loginPassword)
+          .then((userCredential) => {
+            const user = userCredential.user;
+
+            // Get user data from Firestore
+            db.collection("users").doc(user.uid).get()
+              .then((doc) => {
+                if (doc.exists) {
+                  // Store user data in localStorage
+                  localStorage.setItem("isLoggedIn", "true");
+                  localStorage.setItem("currentUser", JSON.stringify(doc.data()));
+                  window.location.href = "./employee.html"; // Ganti dengan halaman yang sesuai
+                }
+              });
+          })
+          .catch((error) => {
             alert("Nama pengguna atau kata sandi salah!");
-          }
-        });
+          });
+      });
     </script>
   </body>
 </html>
