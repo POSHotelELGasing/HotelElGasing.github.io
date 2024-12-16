@@ -31,7 +31,7 @@
       <div class="form-container login-container">
         <form id="loginForm">
           <h1>Masuk</h1>
-          <input type="text" placeholder="Nama Pengguna" id="loginUsername" />
+          <input type="email" placeholder="Email" id="loginEmail" />
           <input type="password" placeholder="Kata Sandi" id="loginPassword" />
           <button type="submit">Masuk</button>
         </form>
@@ -76,28 +76,41 @@
         .addEventListener("submit", function (e) {
           e.preventDefault();
 
-          const username = document.getElementById("regUsername").value;
-          const email = document.getElementById("regEmail").value;
-          const phone = document.getElementById("regPhone").value;
+          // Ambil data input dari form
+          const username = document.getElementById("regUsername").value.trim();
+          const email = document.getElementById("regEmail").value.trim();
+          const phone = document.getElementById("regPhone").value.trim();
           const password = document.getElementById("regPassword").value;
 
-          // Create user using Firebase Authentication
+          if (!username || !email || !phone || !password) {
+            alert("Semua kolom harus diisi!");
+            return;
+          }
+
+          // Registrasi dengan Firebase Authentication
           auth
             .createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
               const user = userCredential.user;
 
-              // Save additional user data in Firestore
-              db.collection("users").doc(user.uid).set({
+              // Simpan data tambahan ke Firestore
+              return db.collection("users").doc(user.uid).set({
                 username: username,
                 email: email,
                 phone: phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               });
-
+            })
+            .then(() => {
               alert("Registrasi berhasil! Silakan login.");
+              document.getElementById("registerForm").reset();
+              document
+                .getElementById("container")
+                .classList.remove("right-panel-active");
             })
             .catch((error) => {
-              alert(error.message);
+              alert("Registrasi gagal: " + error.message);
+              console.error("Error saat registrasi:", error);
             });
         });
 
@@ -110,30 +123,34 @@
           const loginEmail = document.getElementById("loginEmail").value;
           const loginPassword = document.getElementById("loginPassword").value;
 
-          // Login using Firebase Authentication
+          // Login menggunakan Firebase Authentication
           auth
             .signInWithEmailAndPassword(loginEmail, loginPassword)
             .then((userCredential) => {
               const user = userCredential.user;
 
-              // Get user data from Firestore
+              // Ambil data user dari Firestore
               db.collection("users")
                 .doc(user.uid)
                 .get()
                 .then((doc) => {
                   if (doc.exists) {
-                    // Store user data in localStorage
+                    alert("Login berhasil!");
+                    // Simpan data di localStorage
                     localStorage.setItem("isLoggedIn", "true");
                     localStorage.setItem(
                       "currentUser",
                       JSON.stringify(doc.data())
                     );
-                    window.location.href = "./employee.html"; // Ganti dengan halaman yang sesuai
+                    window.location.href = "./employee.html"; // Halaman tujuan setelah login
+                  } else {
+                    alert("Data pengguna tidak ditemukan!");
                   }
                 });
             })
             .catch((error) => {
-              alert("Nama pengguna atau kata sandi salah!");
+              alert("Email atau kata sandi salah!");
+              console.error("Error saat login:", error.message);
             });
         });
 
