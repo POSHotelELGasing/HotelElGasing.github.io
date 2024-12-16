@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +8,69 @@
   </head>
   <body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold">Hotel POS System</h1>
-      <p id="user-info" class="text-sm"></p>
+    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">Hotel POS System</h1>
+        <button
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
+        >
+          ☰
+        </button>
+        <ul
+          id="menu"
+          class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+        >
+          <li>
+            <a href="index.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="rooms.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a
+              href="guests.html"
+              class="hover:bg-blue-500 rounded-md px-4 py-2 active-nav"
+              >Tamu</a
+            >
+          </li>
+          <li>
+            <a
+              href="transaksi.html"
+              class="hover:bg-blue-500 rounded-md px-4 py-2"
+              >Transaksi</a
+            >
+          </li>
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 rounded-md px-4 py-2"
+              >Product</a
+            >
+          </li>
+          <li>
+            <a
+              href="employee.html"
+              class="hover:bg-blue-500 rounded-md px-4 py-2"
+              >Pegawai</a
+            >
+          </li>
+          <li>
+            <a href="login.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- Welcome message -->
+      <div class="text-center text-white mt-4 sm:mt-0">
+        <p id="user-info" class="text-sm font-medium"></p>
+      </div>
     </nav>
 
     <!-- Main Content -->
@@ -106,6 +166,25 @@
     </div>
 
     <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("menu");
+
+      menuToggle.addEventListener("click", () => {
+        const isHidden = menu.classList.contains("hidden");
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          setTimeout(() => {
+            menu.classList.remove("-translate-y-full", "opacity-0");
+            menu.classList.add("translate-y-0", "opacity-100");
+          }, 10);
+        } else {
+          menu.classList.remove("translate-y-0", "opacity-100");
+          menu.classList.add("-translate-y-full", "opacity-0");
+          setTimeout(() => {
+            menu.classList.add("hidden");
+          }, 300);
+        }
+      });
       // Ambil data pengguna login
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -114,7 +193,7 @@
         window.location.href = "./login.html";
       }
 
-      // Tampilkan informasi pengguna di header
+      // Tampilkan informasi pengguna di bawah navbar
       document.getElementById(
         "user-info"
       ).innerText = `Selamat datang, ${currentUser.username} (${currentUser.email})`;
@@ -127,18 +206,18 @@
       const renderEmployees = () => {
         employeeList.innerHTML = employees
           .map(
-            (e, index) => `
-            <tr>
-              <td class="border p-2">${e.id}</td>
-              <td class="border p-2">${e.fullName}</td>
-              <td class="border p-2">${e.role}</td>
-              <td class="border p-2">${e.shift}</td>
-              <td class="border p-2">${e.phoneNumber}</td>
-              <td class="border p-2">
-                <button class="bg-yellow-500 text-white p-1 rounded" onclick="editEmployee(${index})">Edit</button>
-                <button class="bg-red-500 text-white p-1 rounded" onclick="deleteEmployee(${index})">Hapus</button>
-              </td>
-            </tr>`
+            (e, index) =>
+              `<tr>
+                <td class="border p-2">${e.id}</td>
+                <td class="border p-2">${e.fullName}</td>
+                <td class="border p-2">${e.role}</td>
+                <td class="border p-2">${e.shift}</td>
+                <td class="border p-2">${e.phoneNumber}</td>
+                <td class="border p-2">
+                  <button class="bg-yellow-500 text-white p-1 rounded" onclick="editEmployee(${index})">Edit</button>
+                  <button class="bg-red-500 text-white p-1 rounded" onclick="deleteEmployee(${index})">Hapus</button>
+                </td>
+              </tr>`
           )
           .join("");
       };
@@ -214,11 +293,12 @@
       document
         .getElementById("add-employee-btn")
         .addEventListener("click", () => openModal("Tambah Pegawai"));
+      
       document
         .getElementById("close-modal-btn")
         .addEventListener("click", closeModal);
 
-      // Inisialisasi tabel
+      // Render pegawai saat awal
       renderEmployees();
     </script>
   </body>
