@@ -11,6 +11,9 @@
     <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold">Hotel POS System</h1>
+        <div class="text-center text-white mt-4 sm:mt-0">
+          <p id="user-info" class="text-sm font-medium"></p>
+        </div>
         <button
           id="menu-toggle"
           class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
@@ -68,9 +71,6 @@
         </ul>
       </div>
       <!-- Welcome message -->
-      <div class="text-center text-white mt-4 sm:mt-0">
-        <p id="user-info" class="text-sm font-medium"></p>
-      </div>
     </nav>
 
     <!-- Main Content -->
@@ -293,7 +293,7 @@
       document
         .getElementById("add-employee-btn")
         .addEventListener("click", () => openModal("Tambah Pegawai"));
-      
+
       document
         .getElementById("close-modal-btn")
         .addEventListener("click", closeModal);

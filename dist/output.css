@@ -1078,6 +1078,130 @@ video {
   outline-offset: 2px;
 }
 
+
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  form {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0px;
+    height: 100%;
+    text-align: center;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -1.5px;
+    margin: 0;
+    margin-bottom: 15px;
+  }
+
+  h1.title {
+    text-align: start;
+    font-size: 24px;
+    line-height: 24px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+  }
+
+  .content label {
+    font-size: 10px;
+    user-select: none;
+    padding-left: 5px;
+  }
+
+  a {
+    color: #333;
+    font-size: 10px;
+    text-decoration: none;
+    margin: 15px 0;
+    transition: 0.3s ease-in-out;
+  }
+
+  .social-container a {
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 30px;
+    width: 30px;
+    transition: 0.3s ease-in-out;
+  }
+
+  .social-container {
+    margin: 0px;
+    padding-top: 5px;
+  }
+
+  button {
+    position: relative;
+    border-radius: 20px;
+    border: 1px solid #4bb6b7;
+    background-color: #4bb6b7;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 10px;
+    padding: 12px 20px;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    transition: 0.3s ease-in-out;
+  }
+
+  p {
+    text-align: start;
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+    text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+  }
+
+  .overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+  }
+
+  span {
+    font-size: 12px;
+    margin-top: 25px;
+  }
+
+  input {
+    background-color: #eee;
+    border-radius: 10px;
+    border: none;
+    padding: 12px 15px;
+    margin: 5px 0;
+    width: 90%;
+  }
+
+  .content .checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+  }
+}
+
 @media (min-width: 640px) {
   .sm\:relative {
     position: relative;

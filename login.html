@@ -5,39 +5,378 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel POS System</title>
     <link rel="stylesheet" href="./dist/output.css" />
-    
+
     <!-- Firebase SDK Versi 8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    \
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins");
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        background-color: #201e43;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: "Poppins", sans-serif;
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      h1 {
+        font-weight: 700;
+        letter-spacing: -1.5px;
+        margin: 0;
+        margin-bottom: 15px;
+      }
+
+      h1.title {
+        font-size: 45px;
+        line-height: 45px;
+        margin: 0;
+        text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 100;
+        line-height: 20px;
+        letter-spacing: 0.5px;
+        margin: 20px 0 30px;
+        text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
+      }
+
+      span {
+        font-size: 14px;
+        margin-top: 25px;
+      }
+
+      a {
+        color: #333;
+        font-size: 14px;
+        text-decoration: none;
+        margin: 15px 0;
+        transition: 0.3s ease-in-out;
+      }
+
+      a:hover {
+        color: #4bb6b7;
+      }
+
+      .content {
+        display: flex;
+        width: 100%;
+        height: 50px;
+        align-items: center;
+        justify-content: space-around;
+      }
+
+      .content .checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content input {
+        accent-color: #333;
+        width: 12px;
+        height: 12px;
+      }
+
+      .content label {
+        font-size: 14px;
+        user-select: none;
+        padding-left: 5px;
+      }
+
+      button {
+        position: relative;
+        border-radius: 20px;
+        border: 1px solid #4bb6b7;
+        background-color: #4bb6b7;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        margin: 10px;
+        padding: 12px 80px;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+        transition: 0.3s ease-in-out;
+      }
+
+      button:hover {
+        letter-spacing: 3px;
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      button:focus {
+        outline: none;
+      }
+
+      button.ghost {
+        background-color: rgba(225, 225, 225, 0.2);
+        border: 2px solid #fff;
+        color: #fff;
+      }
+
+      button.ghost i {
+        position: absolute;
+        opacity: 0;
+        transition: 0.3s ease-in-out;
+      }
+
+      button.ghost i.register {
+        right: 70px;
+      }
+
+      button.ghost i.login {
+        left: 70px;
+      }
+
+      button.ghost:hover i.register {
+        right: 40px;
+        opacity: 1;
+      }
+
+      button.ghost:hover i.login {
+        left: 40px;
+        opacity: 1;
+      }
+
+      form {
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 50px;
+        height: 100%;
+        text-align: center;
+      }
+
+      input {
+        background-color: #eee;
+        border-radius: 10px;
+        border: none;
+        padding: 12px 15px;
+        margin: 6px 0;
+        width: 100%;
+      }
+
+      .container {
+        background-color: #fff;
+        border-radius: 25px;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+          0 10px 10px rgba(0, 0, 0, 0.22);
+        position: relative;
+        overflow: hidden;
+        width: 768px;
+        max-width: 100%;
+        min-height: 500px;
+      }
+
+      .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+      }
+
+      .login-container {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+      }
+
+      .container.right-panel-active .login-container {
+        transform: translateX(100%);
+      }
+
+      .register-container {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+      }
+
+      .container.right-panel-active .register-container {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: show 0.6s;
+      }
+
+      @keyframes show {
+        0%,
+        49.99% {
+          opacity: 0;
+          z-index: 1;
+        }
+
+        50%,
+        100% {
+          opacity: 1;
+          z-index: 5;
+        }
+      }
+
+      .overlay-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: transform 0.6s ease-in-out;
+        z-index: 100;
+      }
+
+      .container.right-panel-active .overlay-container {
+        transform: translate(-100%);
+      }
+
+      .overlay {
+        background-image: url("/assets/img/Juggle.gif");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #fff;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+      }
+
+      .overlay::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: linear-gradient(
+          to top,
+          rgba(46, 94, 109, 0.4) 40%,
+          rgba(46, 94, 109, 0)
+        );
+      }
+
+      .container.right-panel-active .overlay {
+        transform: translateX(50%);
+      }
+
+      .overlay-panel {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+      }
+
+      .overlay-left {
+        transform: translateX(-20%);
+      }
+
+      .container.right-panel-active .overlay-left {
+        transform: translateX(0);
+      }
+
+      .overlay-right {
+        right: 0;
+        transform: translateX(0);
+      }
+
+      .container.right-panel-active .overlay-right {
+        transform: translateX(20%);
+      }
+
+      .social-container {
+        margin: 20px 0;
+      }
+
+      .social-container a {
+        border: 1px solid #dddddd;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5px;
+        height: 40px;
+        width: 40px;
+        transition: 0.3s ease-in-out;
+      }
+
+      .social-container a:hover {
+        border: 1px solid #4bb6b7;
+      }
+
+      .back {
+        font-size: 4vh;
+        position: absolute;
+        margin: 1vh;
+        z-index: 200;
+        cursor: pointer;
+      }
+    </style>
   </head>
-  <body class="flex items-center justify-center bg-gray-800 h-screen text-gray-900">
-    <div class="container mx-auto w-full max-w-4xl flex flex-col sm:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
-      
-      <!-- Form Registrasi -->
-      <div class="register-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8">
-        <form id="registerForm" class="w-full max-w-xs">
-          <h1 class="text-2xl font-bold mb-4 text-center">Registrasi</h1>
-          <input type="text" id="regUsername" placeholder="Nama Pengguna" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
-          <input type="email" id="regEmail" placeholder="Email" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
-          <input type="number" id="regPhone" placeholder="Nomor Telepon" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
-          <input type="password" id="regPassword" placeholder="Kata Sandi" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
-          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
-            Daftar
-          </button>
+  <body
+    class="flex items-center justify-center bg-gray-800 h-screen text-gray-900"
+  >
+    <div class="container" id="container">
+      <!-- Registrasi -->
+      <div class="form-container register-container">
+        <form id="registerForm">
+          <h1>Daftar</h1>
+          <input type="text" placeholder="Nama Pengguna" id="regUsername" />
+          <input type="email" placeholder="Email" id="regEmail" />
+          <input type="number" placeholder="Nomor Telepon" id="regPhone" />
+          <input type="password" placeholder="Kata Sandi" id="regPassword" />
+          <button type="submit">Daftar</button>
         </form>
       </div>
 
-      <!-- Form Login -->
-      <div class="login-container w-full sm:w-1/2 flex flex-col items-center justify-center p-8 bg-gray-100">
-        <form id="loginForm" class="w-full max-w-xs">
-          <h1 class="text-2xl font-bold mb-4 text-center">Masuk</h1>
-          <input type="email" id="loginEmail" placeholder="Email" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
-          <input type="password" id="loginPassword" placeholder="Kata Sandi" class="block w-full bg-gray-100 rounded-md border p-2 mb-3" />
-          <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition">
-            Masuk
-          </button>
+      <!-- Login -->
+      <div class="form-container login-container">
+        <form id="loginForm">
+          <h1>Masuk</h1>
+          <input type="email" placeholder="Email" id="loginEmail" />
+          <input type="password" placeholder="Kata Sandi" id="loginPassword" />
+          <button type="submit">Masuk</button>
         </form>
+      </div>
+
+      <!-- Overlay -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Selamat Datang Kembali!</h1>
+            <p>Untuk tetap terhubung dengan kami, silakan login</p>
+            <button class="ghost" id="login">Masuk</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Halo, Teman!</h1>
+            <p>Buat akun Anda dan mulai perjalanan baru bersama kami</p>
+            <button class="ghost" id="register">Daftar</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -49,7 +388,7 @@
         projectId: "prog4-34938",
         storageBucket: "prog4-34938.appspot.com",
         messagingSenderId: "920234132726",
-        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7"
+        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
       };
 
       // Initialize Firebase
@@ -58,59 +397,168 @@
       const db = firebase.firestore();
 
       // Registrasi
-      document.getElementById("registerForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-        const username = document.getElementById("regUsername").value;
-        const email = document.getElementById("regEmail").value;
-        const phone = document.getElementById("regPhone").value;
-        const password = document.getElementById("regPassword").value;
+          // Ambil data input dari form
+          const username = document.getElementById("regUsername").value.trim();
+          const email = document.getElementById("regEmail").value.trim();
+          const phone = document.getElementById("regPhone").value.trim();
+          const password = document.getElementById("regPassword").value;
 
-        // Create user using Firebase Authentication
-        auth.createUserWithEmailAndPassword(email, password)
-          .then((userCredential) => {
-            const user = userCredential.user;
+          if (!username || !email || !phone || !password) {
+            alert("Semua kolom harus diisi!");
+            return;
+          }
 
-            // Save additional user data in Firestore
-            db.collection("users").doc(user.uid).set({
-              username: username,
-              email: email,
-              phone: phone,
+          // Registrasi dengan Firebase Authentication
+          auth
+            .createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+
+              // Simpan data tambahan ke Firestore
+              return db.collection("users").doc(user.uid).set({
+                username: username,
+                email: email,
+                phone: phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+            })
+            .then(() => {
+              alert("Registrasi berhasil! Silakan login.");
+              document.getElementById("registerForm").reset();
+              document
+                .getElementById("container")
+                .classList.remove("right-panel-active");
+            })
+            .catch((error) => {
+              alert("Registrasi gagal: " + error.message);
+              console.error("Error saat registrasi:", error);
             });
-
-            alert("Registrasi berhasil! Silakan login.");
-          })
-          .catch((error) => {
-            alert(error.message);
-          });
-      });
+        });
 
       // Login
-      document.getElementById("loginForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-        const loginEmail = document.getElementById("loginEmail").value;
-        const loginPassword = document.getElementById("loginPassword").value;
+          const loginEmail = document.getElementById("loginEmail").value;
+          const loginPassword = document.getElementById("loginPassword").value;
 
-        // Login using Firebase Authentication
-        auth.signInWithEmailAndPassword(loginEmail, loginPassword)
-          .then((userCredential) => {
-            const user = userCredential.user;
+          // Login menggunakan Firebase Authentication
+          auth
+            .signInWithEmailAndPassword(loginEmail, loginPassword)
+            .then((userCredential) => {
+              const user = userCredential.user;
 
-            // Get user data from Firestore
-            db.collection("users").doc(user.uid).get()
-              .then((doc) => {
-                if (doc.exists) {
-                  // Store user data in localStorage
-                  localStorage.setItem("isLoggedIn", "true");
-                  localStorage.setItem("currentUser", JSON.stringify(doc.data()));
-                  window.location.href = "./employee.html"; // Ganti dengan halaman yang sesuai
-                }
-              });
-          })
-          .catch((error) => {
-            alert("Nama pengguna atau kata sandi salah!");
-          });
+              // Ambil data user dari Firestore
+              db.collection("users")
+                .doc(user.uid)
+                .get()
+                .then((doc) => {
+                  if (doc.exists) {
+                    alert("Login berhasil!");
+                    // Simpan data di localStorage
+                    localStorage.setItem("isLoggedIn", "true");
+                    localStorage.setItem(
+                      "currentUser",
+                      JSON.stringify(doc.data())
+                    );
+                    window.location.href = "./employee.html"; // Halaman tujuan setelah login
+                  } else {
+                    alert("Data pengguna tidak ditemukan!");
+                  }
+                });
+            })
+            .catch((error) => {
+              alert("Email atau kata sandi salah!");
+              console.error("Error saat login:", error.message);
+            });
+        });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Referensi elemen
+        const registerForm = document.querySelector(".register-container form");
+        const loginForm = document.querySelector(".login-container form");
+        const registerButton = document.getElementById("register");
+        const loginButton = document.getElementById("login");
+        const container = document.getElementById("container");
+        const backButton = document.getElementById("back-btn");
+
+        // Toggle antara login dan registrasi
+        registerButton.addEventListener("click", () => {
+          container.classList.add("right-panel-active");
+        });
+
+        loginButton.addEventListener("click", () => {
+          container.classList.remove("right-panel-active");
+        });
+
+        // Navigasi tombol kembali ke halaman utama
+        backButton.addEventListener("click", () => {
+          window.location.href = "../index.html";
+        });
+
+        // Fungsi untuk menyimpan data registrasi
+        registerForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const username = registerForm
+            .querySelector('input[placeholder="Nama Pengguna"]')
+            .value.trim();
+          const email = registerForm
+            .querySelector('input[placeholder="Email"]')
+            .value.trim();
+          const phone = registerForm
+            .querySelector('input[placeholder="Nomor Telepon"]')
+            .value.trim();
+          const password = registerForm.querySelector(
+            'input[placeholder="Kata Sandi"]'
+          ).value;
+
+          if (username && email && phone && password) {
+            const userData = { username, email, phone, password };
+            localStorage.setItem("user", JSON.stringify(userData));
+            alert("Registrasi berhasil! Silakan login.");
+            container.classList.remove("right-panel-active"); // Pindah ke form login
+          } else {
+            alert("Semua kolom harus diisi.");
+          }
+        });
+
+        // Fungsi untuk login
+        loginForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const username = loginForm
+            .querySelector('input[placeholder="Nama Pengguna"]')
+            .value.trim();
+          const password = loginForm.querySelector(
+            'input[placeholder="Kata Sandi"]'
+          ).value;
+
+          const savedUser = JSON.parse(localStorage.getItem("user"));
+
+          if (
+            savedUser &&
+            savedUser.username === username &&
+            savedUser.password === password
+          ) {
+            // Periksa huruf pertama dari username
+            const firstChar = username.charAt(0).toLowerCase(); // Konversi ke huruf kecil
+            if (firstChar === "a") {
+              alert("Login berhasil sebagai admin!");
+              window.location.href = "dashboardadmin.html"; // Alihkan ke Dashboard Admin
+            } else {
+              alert("Login berhasil!");
+              window.location.href = "Home.html"; // Alihkan ke Home
+            }
+          } else {
+            alert("Nama pengguna atau kata sandi salah.");
+          }
+        });
       });
     </script>
   </body>
