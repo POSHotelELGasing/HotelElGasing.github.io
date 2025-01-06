@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manajemen Kamar</title>
-  <link rel="stylesheet" href="./dist/output.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
@@ -30,14 +29,14 @@
         <li>
           <a
             href="index.html"
-            class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block "
+            class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block active-nav"
             >Dashboard</a
           >
         </li>
         <li>
           <a
             href="rooms.html"
-            class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block active-nav"
+            class="hover:bg-blue-500 rounded-md transition ease-in-out delay-250 px-4 py-2 block"
             >Kamar</a
           >
         </li>
@@ -81,18 +80,13 @@
   </nav>
 
   <!-- Main Content -->
-  <main class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">
-      Manajemen Kamar
-      <span class="pl-3"><i class="fa-solid fa-door-open"></i></span>
-    </h2>
+  <main class="container mx-auto p-4 sm:p-6">
+    <h2 class="text-2xl font-bold mb-4">Manajemen Kamar</h2>
     <div class="bg-white p-4 shadow rounded mb-4">
-      <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">
-        Tambah Kamar
-      </button>
+      <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Kamar</button>
     </div>
-    <div class="bg-white p-4 shadow rounded">
-      <table class="w-full border-collapse border">
+    <div class="bg-white p-4 shadow rounded overflow-x-auto">
+      <table class="table-auto w-full border-collapse border text-sm sm:text-base">
         <thead class="bg-blue-600 text-white">
           <tr>
             <th class="border p-2">Nomor Kamar</th>
@@ -102,32 +96,31 @@
             <th class="border p-2">Aksi</th>
           </tr>
         </thead>
-        <tbody id="room-list">
-          <!-- Data kamar akan ditampilkan melalui script -->
-        </tbody>
+        <tbody id="room-list"></tbody>
       </table>
     </div>
   </main>
 
-  <!-- Modal Tambah Kamar -->
-  <div id="add-room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
-      <h3 class="text-xl font-bold mb-4">Tambah Kamar</h3>
-      <form id="add-room-form">
-        <label for="room-number">Nomor Kamar</label>
-        <input type="text" id="room-number" placeholder="Nomor Kamar" class="p-2 border rounded mb-4 w-full" required />
-        <label for="room-type">Tipe Kamar</label>
-        <input type="text" id="room-type" placeholder="Tipe" class="p-2 border rounded mb-4 w-full" required />
-        <label for="room-price">Harga Kamar</label>
-        <input type="number" id="room-price" placeholder="Harga" class="p-2 border rounded mb-4 w-full" required />
-        <label for="room-status">Status Kamar</label>
-        <select id="room-status" class="p-2 border rounded mb-4 w-full">
+  <!-- Modal Form -->
+  <div id="room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
+      <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Kamar</h3>
+      <form id="room-form">
+        <input type="hidden" id="room-id" />
+        <label for="room-number" class="block mb-2">Nomor Kamar</label>
+        <input type="text" id="room-number" placeholder="Nomor Kamar" class="w-full p-2 border rounded mb-4" required />
+        <label for="room-type" class="block mb-2">Tipe Kamar</label>
+        <input type="text" id="room-type" placeholder="Tipe Kamar" class="w-full p-2 border rounded mb-4" required />
+        <label for="room-price" class="block mb-2">Harga Kamar</label>
+        <input type="number" id="room-price" placeholder="Harga" class="w-full p-2 border rounded mb-4" required />
+        <label for="room-status" class="block mb-2">Status Kamar</label>
+        <select id="room-status" class="w-full p-2 border rounded mb-4">
           <option value="Available">Tersedia</option>
           <option value="Occupied">Terisi</option>
         </select>
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full">Tambah Kamar</button>
+        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700">Simpan</button>
       </form>
-      <button id="close-room-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4">Tutup</button>
+      <button id="close-modal-btn" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700">Tutup</button>
     </div>
   </div>
 
@@ -151,6 +144,7 @@
           }, 300);
         }
       });
+
     // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
@@ -161,87 +155,103 @@
       appId: "1:920234132726:web:4439c637de33ddf4f3d8d7"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Show/Hide Modal
-    const addRoomBtn = document.getElementById("add-room-btn");
-    const addRoomModal = document.getElementById("add-room-modal");
-    const closeRoomModal = document.getElementById("close-room-modal");
+    // Modal Handlers
+    const roomModal = document.getElementById("room-modal");
+    const openModal = (title) => {
+      document.getElementById("modal-title").textContent = title;
+      roomModal.classList.remove("hidden");
+    };
+    const closeModal = () => {
+      roomModal.classList.add("hidden");
+      document.getElementById("room-form").reset();
+    };
 
-    addRoomBtn.addEventListener("click", () => {
-      addRoomModal.classList.remove("hidden");
+    document.getElementById("add-room-btn").addEventListener("click", () => {
+      document.getElementById("room-id").value = "";
+      openModal("Tambah Kamar");
     });
 
-    closeRoomModal.addEventListener("click", () => {
-      addRoomModal.classList.add("hidden");
-    });
+    document.getElementById("close-modal-btn").addEventListener("click", closeModal);
 
-    // Add Room
-    const addRoomForm = document.getElementById("add-room-form");
-    addRoomForm.addEventListener("submit", (e) => {
+    // Add/Edit Room
+    const roomForm = document.getElementById("room-form");
+    roomForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const roomNumber = document.getElementById("room-number").value;
-      const roomType = document.getElementById("room-type").value;
-      const roomPrice = document.getElementById("room-price").value;
-      const roomStatus = document.getElementById("room-status").value;
 
-      db.collection("rooms").add({
-        number: roomNumber,
-        type: roomType,
-        price: roomPrice,
-        status: roomStatus,
-      })
-      .then(() => {
-        alert("Kamar berhasil ditambahkan!");
-        displayRooms();
-        addRoomModal.classList.add("hidden");
-      })
-      .catch((error) => {
-        alert("Gagal menambahkan kamar: " + error.message);
-      });
+      const id = document.getElementById("room-id").value;
+      const number = document.getElementById("room-number").value;
+      const type = document.getElementById("room-type").value;
+      const price = document.getElementById("room-price").value;
+      const status = document.getElementById("room-status").value;
+
+      const roomData = { number, type, price, status };
+
+      if (id) {
+        db.collection("rooms").doc(id).update(roomData).then(() => {
+          alert("Kamar berhasil diperbarui!");
+          closeModal();
+          displayRooms();
+        });
+      } else {
+        db.collection("rooms").add(roomData).then(() => {
+          alert("Kamar berhasil ditambahkan!");
+          closeModal();
+          displayRooms();
+        });
+      }
     });
 
     // Display Rooms
-    function displayRooms() {
-      db.collection("rooms").get()
-        .then((querySnapshot) => {
-          const roomList = document.getElementById("room-list");
-          roomList.innerHTML = "";
-          querySnapshot.forEach((doc) => {
-            const room = doc.data();
-            const row = `
-              <tr>
-                <td class="border p-2">${room.number}</td>
-                <td class="border p-2">${room.type}</td>
-                <td class="border p-2">${room.price}</td>
-                <td class="border p-2">${room.status}</td>
-                <td class="border p-2">
-                  <button class="bg-red-600 text-white p-2 rounded" onclick="deleteRoom('${doc.id}')">Delete</button>
-                </td>
-              </tr>`;
-            roomList.innerHTML += row;
-          });
-        })
-        .catch((error) => {
-          alert("Gagal mengambil data kamar: " + error.message);
+    const displayRooms = () => {
+      const roomList = document.getElementById("room-list");
+      roomList.innerHTML = "";
+
+      db.collection("rooms").get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+          const room = doc.data();
+          roomList.innerHTML += `
+            <tr>
+              <td class="border p-2">${room.number}</td>
+              <td class="border p-2">${room.type}</td>
+              <td class="border p-2">${room.price}</td>
+              <td class="border p-2">${room.status}</td>
+              <td class="border p-2">
+                <button class="bg-yellow-500 text-white p-1 rounded mr-2" onclick="editRoom('${doc.id}')">Edit</button>
+                <button class="bg-red-500 text-white p-1 rounded" onclick="deleteRoom('${doc.id}')">Hapus</button>
+              </td>
+            </tr>
+          `;
         });
-    }
+      });
+    };
+
+    // Edit Room
+    const editRoom = (id) => {
+      db.collection("rooms").doc(id).get().then((doc) => {
+        if (doc.exists) {
+          const room = doc.data();
+          document.getElementById("room-id").value = id;
+          document.getElementById("room-number").value = room.number;
+          document.getElementById("room-type").value = room.type;
+          document.getElementById("room-price").value = room.price;
+          document.getElementById("room-status").value = room.status;
+          openModal("Edit Kamar");
+        }
+      });
+    };
 
     // Delete Room
-    function deleteRoom(id) {
-      db.collection("rooms").doc(id).delete()
-        .then(() => {
-          alert("Kamar berhasil dihapus!");
-          displayRooms();
-        })
-        .catch((error) => {
-          alert("Gagal menghapus kamar: " + error.message);
-        });
-    }
+    const deleteRoom = (id) => {
+      db.collection("rooms").doc(id).delete().then(() => {
+        alert("Kamar berhasil dihapus!");
+        displayRooms();
+      });
+    };
 
-    // Load Rooms on Page Load
+    // Initialize
     window.onload = displayRooms;
   </script>
 </body>
