@@ -1,136 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manajemen Produk</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body class="bg-gray-100">
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Hotel POS System</h1>
-      <button
-        id="menu-toggle"
-        class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
-        aria-label="Toggle Navigation"
-      >
-        ☰
-      </button>
-      <ul
-        id="menu"
-        class="hidden sm:flex flex-col sm:flex-row sm:space-x-4 absolute sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
-      >
-        <li><a href="index.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block">Dashboard</a></li>
-        <li><a href="rooms.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block">Kamar</a></li>
-        <li><a href="guests.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block">Tamu</a></li>
-        <li><a href="transaksi.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block">Transaksi</a></li>
-        <li><a href="product.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block active-nav">Product</a></li>
-        <li><a href="employee.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block">Pegawai</a></li>
-        <li><a href="login.html" class="hover:bg-blue-500 rounded-md px-4 py-2 block">Login</a></li>
-      </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Produk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      /* Tambahkan animasi transisi untuk menu */
+      #menu {
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      }
+
+      .active-nav {
+        background-color: #3b82f6;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">Hotel POS System</h1>
+        <!-- Hamburger Icon -->
+        <button
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
+        >
+          ☰
+        </button>
+        <!-- Menu -->
+        <ul
+          id="menu"
+          class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+        >
+          <li>
+            <a
+              href="index.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="rooms.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a
+              href="guests.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block active-nav"
+              >Tamu</a
+            >
+          </li>
+          <li>
+            <a
+              href="transaksi.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              >Transaksi</a
+            >
+          </li>
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              >Product</a
+            >
+          </li>
+          <li>
+            <a
+              href="employee.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              >Pegawai</a
+            >
+          </li>
+          <li>
+            <a
+              href="login.html"
+              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+      <header class="mb-6">
+        <h2 class="text-2xl font-bold">Manajemen Produk</h2>
+        <button
+          id="add-product-btn"
+          class="bg-green-600 text-white p-2 rounded mt-4"
+        >
+          Tambah Produk
+        </button>
+      </header>
+
+      <!-- Product Cards -->
+      <div
+        id="product-list"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      ></div>
+    </main>
+
+    <!-- Modal Form -->
+    <div
+      id="product-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
+        <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Produk</h3>
+        <form id="product-form">
+          <input type="hidden" id="product-id" />
+          <label for="product-name" class="block mb-2">Nama Produk</label>
+          <input
+            type="text"
+            id="product-name"
+            class="w-full p-2 border rounded mb-4"
+            required
+          />
+          <label for="category" class="block mb-2">Kategori</label>
+          <select id="category" class="w-full p-2 border rounded mb-4" required>
+            <option value="" disabled selected>Pilih Kategori</option>
+            <option value="Makanan">Makanan</option>
+            <option value="Minuman">Minuman</option>
+          </select>
+          <label for="price" class="block mb-2">Harga</label>
+          <input
+            type="number"
+            id="price"
+            class="w-full p-2 border rounded mb-4"
+            required
+          />
+          <label for="stock" class="block mb-2">Stok</label>
+          <input
+            type="number"
+            id="stock"
+            class="w-full p-2 border rounded mb-4"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
+          >
+            Simpan
+          </button>
+        </form>
+        <button
+          id="close-modal-btn"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+        >
+          Tutup
+        </button>
+      </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <main class="container mx-auto p-6">
-    <header class="mb-6">
-      <h2 class="text-2xl font-bold">Manajemen Produk</h2>
-      <button id="add-product-btn" class="bg-green-600 text-white p-2 rounded mt-4">Tambah Produk</button>
-    </header>
-
-    <!-- Product Cards -->
-    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-  </main>
-
-  <!-- Modal Form -->
-  <div id="product-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
-      <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Produk</h3>
-      <form id="product-form">
-        <input type="hidden" id="product-id" />
-        <label for="product-name" class="block mb-2">Nama Produk</label>
-        <input type="text" id="product-name" class="w-full p-2 border rounded mb-4" required />
-        <label for="category" class="block mb-2">Kategori</label>
-        <select id="category" class="w-full p-2 border rounded mb-4" required>
-          <option value="" disabled selected>Pilih Kategori</option>
-          <option value="Makanan">Makanan</option>
-          <option value="Minuman">Minuman</option>
-        </select>
-        <label for="price" class="block mb-2">Harga</label>
-        <input type="number" id="price" class="w-full p-2 border rounded mb-4" required />
-        <label for="stock" class="block mb-2">Stok</label>
-        <input type="number" id="stock" class="w-full p-2 border rounded mb-4" required />
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700">Simpan</button>
-      </form>
-      <button id="close-modal-btn" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700">Tutup</button>
-    </div>
-  </div>
-
-  <script>
-     const firebaseConfig = {
-      apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
-      authDomain: "prog4-34938.firebaseapp.com",
-      projectId: "prog4-34938",
-      storageBucket: "prog4-34938.appspot.com",
-      messagingSenderId: "920234132726",
-      appId: "1:920234132726:web:4439c637de33ddf4f3d8d7"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    const productList = document.getElementById("product-list");
-    const productModal = document.getElementById("product-modal");
-
-    const closeModal = () => {
-      productModal.classList.add("hidden");
-      document.getElementById("product-form").reset();
-    };
-
-    document.getElementById("add-product-btn").addEventListener("click", () => {
-      document.getElementById("modal-title").textContent = "Tambah Produk";
-      productModal.classList.remove("hidden");
-    });
-
-    document.getElementById("close-modal-btn").addEventListener("click", closeModal);
-
-    document.getElementById("product-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const id = document.getElementById("product-id").value;
-      const productData = {
-        name: document.getElementById("product-name").value,
-        category: document.getElementById("category").value,
-        price: parseFloat(document.getElementById("price").value),
-        stock: parseInt(document.getElementById("stock").value),
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+        authDomain: "prog4-34938.firebaseapp.com",
+        projectId: "prog4-34938",
+        storageBucket: "prog4-34938.appspot.com",
+        messagingSenderId: "920234132726",
+        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
       };
 
-      if (id) {
-        db.collection("product").doc(id).update(productData).then(() => {
-          Swal.fire("Berhasil!", "Produk berhasil diperbarui!", "success");
-          closeModal();
-          displayProducts();
-        });
-      } else {
-        db.collection("product").add(productData).then(() => {
-          Swal.fire("Berhasil!", "Produk berhasil ditambahkan!", "success");
-          closeModal();
-          displayProducts();
-        });
-      }
-    });
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-    const displayProducts = () => {
-      productList.innerHTML = "";
-      db.collection("product").get().then((snapshot) => {
-        snapshot.forEach((doc) => {
-          const product = doc.data();
-          productList.innerHTML += `
+      const productList = document.getElementById("product-list");
+      const productModal = document.getElementById("product-modal");
+
+      const closeModal = () => {
+        productModal.classList.add("hidden");
+        document.getElementById("product-form").reset();
+      };
+
+      document
+        .getElementById("add-product-btn")
+        .addEventListener("click", () => {
+          document.getElementById("modal-title").textContent = "Tambah Produk";
+          productModal.classList.remove("hidden");
+        });
+
+      document
+        .getElementById("close-modal-btn")
+        .addEventListener("click", closeModal);
+
+      document
+        .getElementById("product-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const id = document.getElementById("product-id").value;
+          const productData = {
+            name: document.getElementById("product-name").value,
+            category: document.getElementById("category").value,
+            price: parseFloat(document.getElementById("price").value),
+            stock: parseInt(document.getElementById("stock").value),
+          };
+
+          if (id) {
+            db.collection("product")
+              .doc(id)
+              .update(productData)
+              .then(() => {
+                Swal.fire(
+                  "Berhasil!",
+                  "Produk berhasil diperbarui!",
+                  "success"
+                );
+                closeModal();
+                displayProducts();
+              });
+          } else {
+            db.collection("product")
+              .add(productData)
+              .then(() => {
+                Swal.fire(
+                  "Berhasil!",
+                  "Produk berhasil ditambahkan!",
+                  "success"
+                );
+                closeModal();
+                displayProducts();
+              });
+          }
+        });
+
+      const displayProducts = () => {
+        productList.innerHTML = "";
+        db.collection("product")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              const product = doc.data();
+              productList.innerHTML += `
             <div class="bg-white p-4 shadow rounded">
               <h4 class="text-lg font-bold">${product.name}</h4>
               <p class="text-sm">Kategori: ${product.category}</p>
@@ -141,46 +252,53 @@
                 <button class="bg-red-500 text-white p-1 rounded" onclick="deleteProduct('${doc.id}')">Hapus</button>
               </div>
             </div>`;
-        });
-      });
-    };
-
-    const editProduct = (id) => {
-      db.collection("product").doc(id).get().then((doc) => {
-        if (doc.exists) {
-          const product = doc.data();
-          document.getElementById("product-id").value = id;
-          document.getElementById("product-name").value = product.name;
-          document.getElementById("category").value = product.category;
-          document.getElementById("price").value = product.price;
-          document.getElementById("stock").value = product.stock;
-          document.getElementById("modal-title").textContent = "Edit Produk";
-          productModal.classList.remove("hidden");
-        }
-      });
-    };
-
-    const deleteProduct = (id) => {
-      Swal.fire({
-        title: "Yakin ingin menghapus?",
-        text: "Data produk tidak dapat dikembalikan!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Ya, hapus!",
-        cancelButtonText: "Batal",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          db.collection("product").doc(id).delete().then(() => {
-            Swal.fire("Terhapus!", "Produk berhasil dihapus.", "success");
-            displayProducts();
+            });
           });
-        }
-      });
-    };
+      };
 
-    window.onload = displayProducts;
-  </script>
-</body>
+      const editProduct = (id) => {
+        db.collection("product")
+          .doc(id)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              const product = doc.data();
+              document.getElementById("product-id").value = id;
+              document.getElementById("product-name").value = product.name;
+              document.getElementById("category").value = product.category;
+              document.getElementById("price").value = product.price;
+              document.getElementById("stock").value = product.stock;
+              document.getElementById("modal-title").textContent =
+                "Edit Produk";
+              productModal.classList.remove("hidden");
+            }
+          });
+      };
+
+      const deleteProduct = (id) => {
+        Swal.fire({
+          title: "Yakin ingin menghapus?",
+          text: "Data produk tidak dapat dikembalikan!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Ya, hapus!",
+          cancelButtonText: "Batal",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            db.collection("product")
+              .doc(id)
+              .delete()
+              .then(() => {
+                Swal.fire("Terhapus!", "Produk berhasil dihapus.", "success");
+                displayProducts();
+              });
+          }
+        });
+      };
+
+      window.onload = displayProducts;
+    </script>
+  </body>
 </html>
