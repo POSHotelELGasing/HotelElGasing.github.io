@@ -129,3 +129,50 @@ document
 
 // Inisialisasi awal
 displayGuests();
+
+// modal guests
+document
+  .getElementById("add-guest-btn")
+  .addEventListener("click", async function () {
+    const { value: formValues } = await Swal.fire({
+      title: "Tambah Tamu",
+      html: `
+        <label for="guest-name" class="block text-sm font-bold mb-2">Nama:</label>
+        <input id="guest-name" type="text" class="swal2-input" placeholder="Masukkan nama" required>
+
+        <label for="guest-phone" class="block text-sm font-bold mb-2">Telepon:</label>
+        <input id="guest-phone" type="text" class="swal2-input" placeholder="Masukkan telepon" required>
+
+        <label for="guest-email" class="block text-sm font-bold mb-2">Email:</label>
+        <input id="guest-email" type="email" class="swal2-input" placeholder="Masukkan email" required>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      cancelButtonText: "Batal",
+      confirmButtonText: "Simpan",
+      preConfirm: () => {
+        const name = document.getElementById("guest-name").value;
+        const phone = document.getElementById("guest-phone").value;
+        const email = document.getElementById("guest-email").value;
+
+        if (!name || !phone || !email) {
+          Swal.showValidationMessage("Semua kolom harus diisi!");
+          return null;
+        }
+
+        return { name, phone, email };
+      },
+    });
+
+    if (formValues) {
+      const newGuest = {
+        id: Date.now(),
+        name: formValues.name,
+        phone: formValues.phone,
+        email: formValues.email,
+      };
+
+      addGuest(newGuest);
+      Swal.fire("Berhasil!", "Tamu berhasil ditambahkan.", "success");
+    }
+  });
