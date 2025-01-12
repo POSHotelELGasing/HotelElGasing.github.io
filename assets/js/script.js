@@ -195,7 +195,6 @@ function displayGuests() {
     card.className = "bg-white shadow rounded p-4";
     card.innerHTML = `
       <h3 class="text-lg font-bold mb-2">${guest.name}</h3>
-      <p><strong>ID:</strong> ${guest.id}</p>
       <p><strong>Telepon:</strong> ${guest.phone}</p>
       <p><strong>Email:</strong> ${guest.email}</p>
       <div class="flex mt-4 space-x-2">
@@ -223,39 +222,53 @@ function deleteGuest(id) {
   displayGuests();
 }
 
-// Fungsi untuk mengedit tamu
+// Fungsi untuk mengedit tamu (contoh placeholder)
 function editGuest(id) {
-  const guests = JSON.parse(localStorage.getItem("guests") || "[]");
-  const guest = guests.find((g) => g.id === id);
-
-  if (guest) {
-    document.getElementById("guest-name").value = guest.name;
-    document.getElementById("guest-id-number").value = guest.id; // Sesuaikan jika diperlukan
-    document.getElementById("guest-phone").value = guest.phone;
-    document.getElementById("guest-email").value = guest.email;
-  }
+  alert("Fitur edit belum diimplementasikan");
 }
+
+// Event listener untuk modal
+const modal = document.getElementById("guest-modal");
+const addGuestBtn = document.getElementById("add-guest-btn");
+const closeModalBtn = document.getElementById("close-modal");
+
+addGuestBtn.addEventListener("click", () => {
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+});
+
+closeModalBtn.addEventListener("click", () => {
+  modal.classList.remove("flex");
+  modal.classList.add("hidden");
+});
+
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+  }
+});
 
 // Event listener untuk form penambahan tamu
 document
   .getElementById("add-guest-form")
-  ?.addEventListener("submit", function (event) {
+  .addEventListener("submit", function (event) {
     event.preventDefault();
 
     const name = document.getElementById("guest-name").value;
-    const idNumber = document.getElementById("guest-id-number").value;
     const phone = document.getElementById("guest-phone").value;
     const email = document.getElementById("guest-email").value;
 
     const newGuest = {
       id: Date.now(),
       name,
-      idNumber,
       phone,
       email,
     };
 
     addGuest(newGuest);
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
     this.reset();
   });
 
