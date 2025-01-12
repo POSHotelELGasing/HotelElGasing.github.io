@@ -81,27 +81,7 @@ function editGuest(id) {
   });
 }
 
-// Event listener untuk modal
-const modal = document.getElementById("guest-modal");
-const addGuestBtn = document.getElementById("add-guest-btn");
-const closeModalBtn = document.getElementById("close-modal");
 
-addGuestBtn.addEventListener("click", () => {
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
-});
-
-closeModalBtn.addEventListener("click", () => {
-  modal.classList.remove("flex");
-  modal.classList.add("hidden");
-});
-
-modal.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.classList.remove("flex");
-    modal.classList.add("hidden");
-  }
-});
 
 // Event listener untuk form penambahan tamu
 document
