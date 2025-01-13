@@ -102,15 +102,32 @@
   </main>
 
   <!-- Modal Form -->
-  <div id="room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
-      <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Kamar</h3>
-      <form id="room-form">
-        <input type="hidden" id="room-id" />
-        <label for="room-number" class="block mb-2">Nomor Kamar</label>
-        <input type="text" id="room-number" class="w-full p-2 border rounded mb-4" required />
-        <label for="room-type" class="block mb-2">Tipe Kamar</label>
-        <input type="text" id="room-type" class="w-full p-2 border rounded mb-4" required />
+<div id="room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
+    <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Kamar</h3>
+    <form id="room-form">
+      <input type="hidden" id="room-id" />
+
+      <!-- Dropdown Nomor Kamar -->
+      <label for="room-number" class="block mb-2">Nomor Kamar</label>
+      <select id="room-number" class="w-full p-2 border rounded mb-4" required>
+        <option value="" disabled selected>Pilih Nomor Kamar</option>
+        <option value="101">101</option>
+        <option value="102">102</option>
+        <option value="103">103</option>
+        <option value="104">104</option>
+        <option value="105">105</option>
+        <option value="106">106</option>
+      </select>
+
+      <!-- Dropdown Tipe Kamar -->
+      <label for="room-type" class="block mb-2">Tipe Kamar</label>
+      <select id="room-type" class="w-full p-2 border rounded mb-4" required>
+        <option value="" disabled selected>Pilih Tipe Kamar</option>
+        <option value="Double Bed">Double Bed</option>
+        <option value="Luxury Bed">Luxury Bed</option>
+        <option value="Twin Bed">Twin Bed</option>
+      </select>
         <label for="room-price" class="block mb-2">Harga Kamar</label>
         <input type="number" id="room-price" class="w-full p-2 border rounded mb-4" required />
         <label for="room-status" class="block mb-2">Status Kamar</label>
