@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel POS System</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -12,22 +12,28 @@
     />
 
     <style>
-      /* Tambahkan animasi transisi untuk menu */
+      /* Animasi transisi untuk menu */
       #menu {
         transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
       }
 
       .active-nav {
-        background-color: #3b82f6;
+        background-color: #1d4ed8;
+      }
+
+      .stat-icon {
+        font-size: 2rem;
+        color: #3b82f6;
       }
     </style>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-50">
     <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+    <nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold">Hotel POS System</h1>
-        <!-- Hamburger Icon -->
+        <h1 class="text-xl font-bold flex items-center">
+          <i class="fa-solid fa-hotel mr-2"></i>Hotel POS System
+        </h1>
         <button
           id="menu-toggle"
           class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
@@ -43,49 +49,49 @@
           <li>
             <a
               href="index.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block active-nav"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
               >Dashboard</a
             >
           </li>
           <li>
             <a
               href="rooms.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Kamar</a
             >
           </li>
           <li>
             <a
               href="guests.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block "
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Tamu</a
             >
           </li>
           <li>
             <a
               href="transaksi.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Transaksi</a
             >
           </li>
           <li>
             <a
               href="product.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Product</a
             >
           </li>
           <li>
             <a
               href="employee.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Pegawai</a
             >
           </li>
           <li>
             <a
               href="login.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Login</a
             >
           </li>
@@ -94,30 +100,48 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto p-4 sm:p-6">
+    <main class="container mx-auto p-4 sm:p-6 pt-16">
+      <!-- Dashboard -->
       <section id="dashboard" class="mb-12">
-        <h2 class="text-2xl font-bold mb-4">
-          Dashboard
-          <span class="p-3"><i class="fa-solid fa-house-chimney"></i></span>
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <i class="fa-solid fa-house-chimney mr-3 text-blue-600"></i> Dashboard
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="bg-white p-4 shadow rounded text-center">
-            <h3 class="text-xl font-semibold">Total Kamar</h3>
-            <p id="total-rooms" class="text-3xl font-bold text-blue-600">0</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-white p-6 shadow rounded-lg text-center">
+            <div class="mb-4">
+              <i class="fa-solid fa-bed stat-icon"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-700">Total Kamar</h3>
+            <p id="total-rooms" class="text-4xl font-bold text-blue-600">0</p>
           </div>
-          <div class="bg-white p-4 shadow rounded text-center">
-            <h3 class="text-xl font-semibold">Total Tamu</h3>
-            <p id="total-guests" class="text-3xl font-bold text-blue-600">0</p>
+          <div class="bg-white p-6 shadow rounded-lg text-center">
+            <div class="mb-4">
+              <i class="fa-solid fa-user-group stat-icon"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-700">Total Tamu</h3>
+            <p id="total-guests" class="text-4xl font-bold text-blue-600">0</p>
           </div>
-          <div class="bg-white p-4 shadow rounded text-center">
-            <h3 class="text-xl font-semibold">Total Transaksi</h3>
-            <p id="total-transactions" class="text-3xl font-bold text-blue-600">
+          <div class="bg-white p-6 shadow rounded-lg text-center">
+            <div class="mb-4">
+              <i class="fa-solid fa-cash-register stat-icon"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-700">Total Transaksi</h3>
+            <p id="total-transactions" class="text-4xl font-bold text-blue-600">
               0
             </p>
           </div>
         </div>
       </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white py-4">
+      <div class="container mx-auto text-center">
+        <p class="text-sm">
+          &copy; 2025 Hotel POS System. All rights reserved.
+        </p>
+      </div>
+    </footer>
 
     <script>
       const menuToggle = document.getElementById("menu-toggle");
@@ -140,7 +164,6 @@
         }
       });
 
-      // Simulasi fungsi untuk mendapatkan total kamar, tamu, dan transaksi
       function fetchDashboardData() {
         return new Promise((resolve) => {
           const rooms = JSON.parse(localStorage.getItem("rooms") || "[]");
@@ -157,7 +180,6 @@
         });
       }
 
-      // Update dashboard
       function updateDashboard() {
         fetchDashboardData().then((data) => {
           document.getElementById("total-rooms").textContent = data.roomsCount;
@@ -168,7 +190,6 @@
         });
       }
 
-      // Memperbarui dashboard saat halaman dimuat
       window.onload = () => {
         updateDashboard();
       };
