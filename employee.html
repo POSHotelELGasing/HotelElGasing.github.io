@@ -5,16 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CRUD Profil Pegawai</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      /* Tambahkan animasi transisi untuk menu */
-      #menu {
-        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-      }
-
-      .active-nav {
-        background-color: #3b82f6;
-      }
-    </style>
   </head>
   <body class="bg-gray-100">
     <!-- Navbar -->
@@ -46,41 +36,35 @@
             >
           </li>
           <li>
-            <a
-              href="guests.html"
-              class="hover:bg-blue-500 rounded-md px-4 py-2 "
+            <a href="guests.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Tamu</a
             >
           </li>
           <li>
-            <a
-              href="transaksi.html"
-              class="hover:bg-blue-500 rounded-md px-4 py-2"
+            <a href="transaksi.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Transaksi</a
             >
           </li>
           <li>
-            <a
-              href="product.html"
-              class="hover:bg-blue-500 rounded-md px-4 py-2"
+            <a href="product.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Product</a
             >
           </li>
           <li>
-            <a
-              href="employee.html"
-              class="hover:bg-blue-500 rounded-md px-4 py-2 active-nav"
+            <a href="employee.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
               >Pegawai</a
             >
           </li>
           <li>
-            <a href="login.html" class="hover:bg-blue-500 rounded-md px-4 py-2"
-              >Login</a
+            <button
+              id="auth-button"
+              class="hover:bg-blue-500 rounded-md px-4 py-2 block"
             >
+              Login
+            </button>
           </li>
         </ul>
       </div>
-      <!-- Welcome message -->
     </nav>
 
     <!-- Main Content -->
@@ -114,70 +98,10 @@
       </section>
     </main>
 
-    <!-- Modal Form -->
-    <div
-      id="employee-modal"
-      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
-    >
-      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
-        <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Pegawai</h3>
-        <form id="employee-form">
-          <input type="hidden" id="employee-id" />
-
-          <label for="full-name" class="block mb-2">Nama Lengkap</label>
-          <input
-            type="text"
-            id="full-name"
-            placeholder="Masukkan nama lengkap"
-            class="w-full p-2 border rounded mb-4"
-            required
-          />
-
-          <label for="role" class="block mb-2">Peran</label>
-          <input
-            type="text"
-            id="role"
-            placeholder="Masukkan peran pegawai"
-            class="w-full p-2 border rounded mb-4"
-            required
-          />
-
-          <label for="shift" class="block mb-2">Shift</label>
-          <select id="shift" class="w-full p-2 border rounded mb-4" required>
-            <option value="">Pilih Shift</option>
-            <option value="Pagi">Pagi</option>
-            <option value="Siang">Siang</option>
-            <option value="Malam">Malam</option>
-          </select>
-
-          <label for="phone-number" class="block mb-2">No. Telepon</label>
-          <input
-            type="text"
-            id="phone-number"
-            placeholder="Masukkan nomor telepon"
-            class="w-full p-2 border rounded mb-4"
-            required
-          />
-
-          <button
-            type="submit"
-            class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
-          >
-            Simpan
-          </button>
-        </form>
-        <button
-          id="close-modal-btn"
-          class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
-        >
-          Tutup
-        </button>
-      </div>
-    </div>
-
     <script>
       const menuToggle = document.getElementById("menu-toggle");
       const menu = document.getElementById("menu");
+      const authButton = document.getElementById("auth-button");
 
       menuToggle.addEventListener("click", () => {
         const isHidden = menu.classList.contains("hidden");
@@ -195,121 +119,35 @@
           }, 300);
         }
       });
-      // Ambil data pengguna login
+
+      // Simpan pengguna login di localStorage
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-      if (!currentUser) {
-        alert("Silakan login terlebih dahulu!");
-        window.location.href = "./login.html";
+      // Periksa jika pengguna login
+      if (currentUser) {
+        // Ubah tombol menjadi Logout
+        authButton.textContent = "Logout";
+        document.getElementById(
+          "user-info"
+        ).innerText = `Selamat datang, ${currentUser.username} (${currentUser.email})`;
+      } else {
+        // Arahkan ke halaman login jika tidak login
+        document.getElementById("user-info").innerText = "Anda belum login.";
+        authButton.textContent = "Login";
       }
 
-      // Tampilkan informasi pengguna di bawah navbar
-      document.getElementById(
-        "user-info"
-      ).innerText = `Selamat datang, ${currentUser.username} (${currentUser.email})`;
-
-      // Data pegawai
-      let employees = JSON.parse(localStorage.getItem("employees")) || [];
-      const employeeList = document.getElementById("employee-list");
-
-      // Render tabel pegawai
-      const renderEmployees = () => {
-        employeeList.innerHTML = employees
-          .map(
-            (e, index) =>
-              `<tr>
-                <td class="border p-2">${e.id}</td>
-                <td class="border p-2">${e.fullName}</td>
-                <td class="border p-2">${e.role}</td>
-                <td class="border p-2">${e.shift}</td>
-                <td class="border p-2">${e.phoneNumber}</td>
-                <td class="border p-2">
-                  <button class="bg-yellow-500 text-white p-1 rounded" onclick="editEmployee(${index})">Edit</button>
-                  <button class="bg-red-500 text-white p-1 rounded" onclick="deleteEmployee(${index})">Hapus</button>
-                </td>
-              </tr>`
-          )
-          .join("");
-      };
-
-      // Tambah/Edit pegawai
-      const employeeForm = document.getElementById("employee-form");
-      employeeForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const id =
-          document.getElementById("employee-id").value || employees.length + 1;
-        const fullName = document.getElementById("full-name").value;
-        const role = document.getElementById("role").value;
-        const shift = document.getElementById("shift").value;
-        const phoneNumber = document.getElementById("phone-number").value;
-
-        if (document.getElementById("employee-id").value) {
-          // Update pegawai
-          const index = employees.findIndex((emp) => emp.id == id);
-          employees[index] = {
-            id: parseInt(id),
-            fullName,
-            role,
-            shift,
-            phoneNumber,
-          };
+      // Tambahkan event listener untuk tombol Login/Logout
+      authButton.addEventListener("click", () => {
+        if (currentUser) {
+          // Logout: Hapus data pengguna dari localStorage dan muat ulang halaman
+          localStorage.removeItem("currentUser");
+          alert("Berhasil logout!");
+          window.location.href = "login.html";
         } else {
-          // Tambah pegawai baru
-          employees.push({
-            id: employees.length + 1,
-            fullName,
-            role,
-            shift,
-            phoneNumber,
-          });
+          // Login: Arahkan ke halaman login
+          window.location.href = "login.html";
         }
-
-        localStorage.setItem("employees", JSON.stringify(employees));
-        closeModal();
-        renderEmployees();
       });
-
-      // Hapus pegawai
-      const deleteEmployee = (index) => {
-        employees.splice(index, 1);
-        localStorage.setItem("employees", JSON.stringify(employees));
-        renderEmployees();
-      };
-
-      // Edit pegawai
-      const editEmployee = (index) => {
-        const employee = employees[index];
-        document.getElementById("employee-id").value = employee.id;
-        document.getElementById("full-name").value = employee.fullName;
-        document.getElementById("role").value = employee.role;
-        document.getElementById("shift").value = employee.shift;
-        document.getElementById("phone-number").value = employee.phoneNumber;
-        openModal("Edit Pegawai");
-      };
-
-      // Modal
-      const employeeModal = document.getElementById("employee-modal");
-      const openModal = (title) => {
-        document.getElementById("modal-title").innerText = title;
-        employeeModal.classList.remove("hidden");
-      };
-
-      const closeModal = () => {
-        employeeModal.classList.add("hidden");
-        employeeForm.reset();
-      };
-
-      document
-        .getElementById("add-employee-btn")
-        .addEventListener("click", () => openModal("Tambah Pegawai"));
-
-      document
-        .getElementById("close-modal-btn")
-        .addEventListener("click", closeModal);
-
-      // Render pegawai saat awal
-      renderEmployees();
     </script>
   </body>
 </html>
