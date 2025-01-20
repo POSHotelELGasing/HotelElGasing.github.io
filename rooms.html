@@ -93,14 +93,64 @@
   <!-- Main Content -->
   <main class="container mx-auto p-4">
     <h2 class="text-2xl font-bold mb-4">Manajemen Kamar</h2>
-    <div class="bg-white p-4 shadow rounded mb-4">
-      <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Kamar</button>
-    </div>
+<div class="bg-white p-4 shadow rounded mb-4">
+  <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Kamar</button>
+  <button id="add-room-number-btn" class="bg-blue-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0">Tambah Nomor Kamar</button>
+  <button id="detail-room-number-btn" class="bg-yellow-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0">Detail Nomor Kamar</button>
+</div>
+
 
     <!-- Room Cards -->
     <div id="room-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
   </main>
+<!-- Modal Form Nomor Kamar -->
+<div id="room-number-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
+    <h3 id="room-number-modal-title" class="text-xl font-bold mb-4">Tambah Nomor Kamar</h3>
+    <form id="room-number-form">
+      <label for="new-room-number" class="block mb-2">Nomor Kamar</label>
+      <input
+        type="number"
+        id="new-room-number"
+        placeholder="Masukkan nomor kamar"
+        class="w-full p-2 border rounded mb-4"
+        required
+      />
+      <button
+        type="submit"
+        class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
+      >
+        Simpan
+      </button>
+    </form>
+    <button
+      id="close-room-number-modal-btn"
+      class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+    >
+      Tutup
+    </button>
+  </div>
+</div>
+<!-- Detail Nomor Kamar Modal -->
+<div
+  id="detail-room-number-modal"
+  class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+>
+  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
+    <h3 class="text-xl font-bold mb-4">Detail Nomor Kamar</h3>
+    <ul id="room-number-list" class="space-y-4">
+      <!-- Daftar nomor kamar akan dimuat di sini -->
+    </ul>
+    <button
+      id="close-detail-room-number-modal-btn"
+      class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+    >
+      Tutup
+    </button>
+  </div>
+</div>
 
+  
   <!-- Modal Form -->
 <div id="room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
   <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
@@ -307,6 +357,157 @@
         }
       });
     };
+
+// Modal Nomor Kamar
+const roomNumberModal = document.getElementById("room-number-modal");
+const openRoomNumberModal = () => roomNumberModal.classList.remove("hidden");
+const closeRoomNumberModal = () => roomNumberModal.classList.add("hidden");
+
+// Tambah Nomor Kamar
+document.getElementById("add-room-number-btn").addEventListener("click", openRoomNumberModal);
+document.getElementById("close-room-number-modal-btn").addEventListener("click", closeRoomNumberModal);
+
+document.getElementById("room-number-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const roomNumber = document.getElementById("new-room-number").value;
+
+  db.collection("roomNumbers").add({ number: roomNumber }).then(() => {
+    Swal.fire("Berhasil!", "Nomor kamar berhasil ditambahkan!", "success");
+    closeRoomNumberModal();
+  });
+});
+
+// Detail Nomor Kamar
+document.getElementById("detail-room-number-btn").addEventListener("click", () => {
+  db.collection("roomNumbers").get().then((snapshot) => {
+    let numbers = "";
+    snapshot.forEach((doc) => {
+      const roomNumber = doc.data().number;
+      numbers += `<li>${roomNumber}</li>`;
+    });
+
+  });
+});
+
+// Validasi Nomor Kamar di Dropdown
+document.getElementById("add-room-btn").addEventListener("click", () => {
+  const dropdown = document.getElementById("room-number");
+  dropdown.innerHTML = `<option value="" disabled selected>Pilih Nomor Kamar</option>`;
+  db.collection("roomNumbers").get().then((snapshot) => {
+    snapshot.forEach((doc) => {
+      const roomNumber = doc.data().number;
+      dropdown.innerHTML += `<option value="${roomNumber}">${roomNumber}</option>`;
+    });
+  });
+
+  openModal("Tambah Kamar");
+});
+
+// Modal Detail Nomor Kamar
+const detailRoomNumberModal = document.getElementById(
+  "detail-room-number-modal"
+);
+const closeDetailRoomNumberModal = () =>
+  detailRoomNumberModal.classList.add("hidden");
+document
+  .getElementById("close-detail-room-number-modal-btn")
+  .addEventListener("click", closeDetailRoomNumberModal);
+
+// Tombol untuk membuka modal detail nomor kamar
+document
+  .getElementById("detail-room-number-btn")
+  .addEventListener("click", () => {
+    const roomNumberList = document.getElementById("room-number-list");
+    roomNumberList.innerHTML = "";
+
+    db.collection("roomNumbers")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          const roomNumber = doc.data().number;
+          const listItem = document.createElement("li");
+          listItem.className =
+            "flex justify-between items-center bg-gray-100 p-2 rounded shadow";
+          listItem.innerHTML = `
+            <span class="text-gray-700 font-medium">${roomNumber}</span>
+            <div class="space-x-2">
+              <button class="edit-room-number-btn bg-blue-500 text-white p-1 rounded hover:bg-blue-600" data-id="${doc.id}">Edit</button>
+              <button class="delete-room-number-btn bg-red-500 text-white p-1 rounded hover:bg-red-600" data-id="${doc.id}">Hapus</button>
+            </div>
+          `;
+          roomNumberList.appendChild(listItem);
+        });
+
+        // Tambahkan event listener untuk tombol edit dan hapus
+        document
+          .querySelectorAll(".edit-room-number-btn")
+          .forEach((btn) =>
+            btn.addEventListener("click", (e) => {
+              const id = e.target.dataset.id;
+              editRoomNumber(id);
+            })
+          );
+
+        document
+          .querySelectorAll(".delete-room-number-btn")
+          .forEach((btn) =>
+            btn.addEventListener("click", (e) => {
+              const id = e.target.dataset.id;
+              deleteRoomNumber(id);
+            })
+          );
+
+        detailRoomNumberModal.classList.remove("hidden");
+      });
+  });
+
+// Fungsi Edit Nomor Kamar
+const editRoomNumber = (id) => {
+  db.collection("roomNumbers")
+    .doc(id)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const newNumber = prompt(
+          "Masukkan nomor kamar baru:",
+          doc.data().number
+        );
+        if (newNumber) {
+          db.collection("roomNumbers").doc(id).update({ number: newNumber });
+          Swal.fire("Berhasil!", "Nomor kamar berhasil diperbarui.", "success");
+          closeDetailRoomNumberModal();
+        }
+      }
+    });
+};
+
+// Fungsi Hapus Nomor Kamar
+const deleteRoomNumber = (id) => {
+  Swal.fire({
+    title: "Yakin ingin menghapus?",
+    text: "Nomor kamar tidak dapat dikembalikan setelah dihapus.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Ya, hapus!",
+    cancelButtonText: "Batal",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      db.collection("roomNumbers")
+        .doc(id)
+        .delete()
+        .then(() => {
+          Swal.fire(
+            "Terhapus!",
+            "Nomor kamar berhasil dihapus.",
+            "success"
+          );
+          closeDetailRoomNumberModal();
+        });
+    }
+  });
+};
 
     window.onload = displayRooms;
   </script>
