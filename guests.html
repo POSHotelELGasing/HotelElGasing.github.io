@@ -1,175 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manajemen Tamu</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>CRUD Profil Pegawai</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      /* Tambahkan animasi transisi untuk menu */
-      #menu {
-        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module">
+      // Import Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        deleteDoc,
+        doc,
+        updateDoc,
+      } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+
+      // Firebase Config
+      const firebaseConfig = {
+        apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+        authDomain: "prog4-34938.firebaseapp.com",
+        projectId: "prog4-34938",
+        storageBucket: "prog4-34938.firebasestorage.app",
+        messagingSenderId: "920234132726",
+        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const employeeList = document.getElementById("employee-list");
+      const addEmployeeBtn = document.getElementById("add-employee-btn");
+
+      // Load Employees
+      async function loadEmployees() {
+        employeeList.innerHTML = "";
+        const querySnapshot = await getDocs(collection(db, "employees"));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          createEmployeeCard(doc.id, data);
+        });
       }
 
-      .active-nav {
-        background-color: #3b82f6;
+      // Create Employee Card
+      function createEmployeeCard(id, data) {
+        const card = document.createElement("div");
+        card.className =
+          "bg-white shadow p-4 rounded flex flex-col sm:flex-row justify-between items-center mb-4";
+        card.innerHTML = `
+          <div>
+            <h3 class="font-bold text-lg">${data.name}</h3>
+            <p class="text-sm">Peran: ${data.role}</p>
+            <p class="text-sm">Shift: ${data.shift}</p>
+            <p class="text-sm">Telepon: ${data.phone}</p>
+          </div>
+          <div class="flex space-x-2 mt-2 sm:mt-0">
+            <button class="bg-blue-600 text-white px-3 py-1 rounded edit-btn">Edit</button>
+            <button class="bg-red-600 text-white px-3 py-1 rounded delete-btn">Hapus</button>
+          </div>
+        `;
+
+        // Edit Button
+        card.querySelector(".edit-btn").addEventListener("click", async () => {
+          const { value: newName } = await Swal.fire({
+            title: "Edit Nama",
+            input: "text",
+            inputValue: data.name,
+            showCancelButton: true,
+            confirmButtonText: "Simpan",
+            cancelButtonText: "Batal",
+          });
+          if (newName) {
+            await updateDoc(doc(db, "employees", id), { name: newName });
+            loadEmployees();
+          }
+        });
+
+        // Delete Button
+        card
+          .querySelector(".delete-btn")
+          .addEventListener("click", async () => {
+            const result = await Swal.fire({
+              title: "Konfirmasi Hapus",
+              text: "Yakin ingin menghapus data ini?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Ya, Hapus",
+              cancelButtonText: "Batal",
+            });
+            if (result.isConfirmed) {
+              await deleteDoc(doc(db, "employees", id));
+              loadEmployees();
+            }
+          });
+
+        employeeList.appendChild(card);
       }
-    </style>
+
+      // Add Employee
+      addEmployeeBtn.addEventListener("click", async () => {
+        const { value: formValues } = await Swal.fire({
+          title: "Tambah Pegawai",
+          html:
+            '<input id="swal-input1" class="swal2-input" placeholder="Nama Lengkap">' +
+            '<input id="swal-input2" class="swal2-input" placeholder="Peran">' +
+            '<input id="swal-input3" class="swal2-input" placeholder="Shift">' +
+            '<input id="swal-input4" class="swal2-input" placeholder="No. Telepon">',
+          focusConfirm: false,
+          preConfirm: () => {
+            return [
+              document.getElementById("swal-input1").value,
+              document.getElementById("swal-input2").value,
+              document.getElementById("swal-input3").value,
+              document.getElementById("swal-input4").value,
+            ];
+          },
+          confirmButtonText: "Tambah",
+          cancelButtonText: "Batal",
+          showCancelButton: true,
+        });
+
+        if (formValues) {
+          const [name, role, shift, phone] = formValues;
+          if (name && role && shift && phone) {
+            await addDoc(collection(db, "employees"), {
+              name,
+              role,
+              shift,
+              phone,
+            });
+            loadEmployees();
+          } else {
+            Swal.fire("Gagal", "Semua data harus diisi!", "error");
+          }
+        }
+      });
+
+      // Initial Load
+      loadEmployees();
+    </script>
   </head>
   <body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold">Hotel POS System</h1>
-        <!-- Hamburger Icon -->
-        <button
-          id="menu-toggle"
-          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
-          aria-label="Toggle Navigation"
-        >
-          ☰
-        </button>
-        <!-- Menu -->
-        <ul
-          id="menu"
-          class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
-        >
-          <li>
-            <a
-              href="index.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-              >Dashboard</a
-            >
-          </li>
-          <li>
-            <a
-              href="rooms.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-              >Kamar</a
-            >
-          </li>
-          <li>
-            <a
-              href="guests.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block active-nav"
-              >Tamu</a
-            >
-          </li>
-          <li>
-            <a
-              href="transaksi.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-              >Transaksi</a
-            >
-          </li>
-          <li>
-            <a
-              href="product.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-              >Product</a
-            >
-          </li>
-          <li>
-            <a
-              href="employee.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-              >Pegawai</a
-            >
-          </li>
-          <li>
-            <a
-              href="login.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-              >Login</a
-            >
-          </li>
-        </ul>
       </div>
     </nav>
 
     <!-- Main Content -->
     <main class="container mx-auto p-6">
-      <section>
-        <h2 class="text-2xl font-bold mb-4">Manajemen Tamu</h2>
-        <div class="mb-4">
-          <button
-            id="add-guest-btn"
-            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-300"
-          >
-            Tambah Tamu
-          </button>
-        </div>
-        <div id="guest-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Guest cards will be dynamically rendered here -->
-        </div>
-      </section>
+      <!-- Header -->
+      <header class="mb-6 flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Manajemen Pegawai</h2>
+        <button
+          id="add-employee-btn"
+          class="bg-green-600 text-white p-2 rounded"
+        >
+          Tambah Pegawai
+        </button>
+      </header>
+
+      <!-- Employee List -->
+      <section
+        id="employee-list"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+      ></section>
     </main>
-
-    <!-- Modal -->
-    <div
-      id="guest-modal"
-      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden"
-    >
-      <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-        <h2 class="text-xl font-bold mb-4">Tambah Tamu</h2>
-        <form id="add-guest-form">
-          <div class="mb-4">
-            <label for="guest-name" class="block text-sm font-bold mb-1"
-              >Nama:</label
-            >
-            <input
-              type="text"
-              id="guest-name"
-              class="w-full border rounded p-2"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label for="guest-phone" class="block text-sm font-bold mb-1"
-              >Telepon:</label
-            >
-            <input
-              type="text"
-              id="guest-phone"
-              class="w-full border rounded p-2"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label for="guest-email" class="block text-sm font-bold mb-1"
-              >Email:</label
-            >
-            <input
-              type="email"
-              id="guest-email"
-              class="w-full border rounded p-2"
-              required
-            />
-          </div>
-          <div class="flex justify-end space-x-2">
-            <button
-              type="button"
-              id="close-modal"
-              class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              Simpan
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <script src="./assets/js/guests.js"></script>
   </body>
 </html>
