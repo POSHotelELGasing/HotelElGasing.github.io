@@ -1,4 +1,3 @@
-// Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 import {
   getFirestore,
@@ -9,8 +8,14 @@ import {
   doc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-storage.js";
 
-// Firebase Config
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
   authDomain: "prog4-34938.firebaseapp.com",
@@ -23,6 +28,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const employeeList = document.getElementById("employee-list");
 const addEmployeeBtn = document.getElementById("add-employee-btn");
@@ -47,28 +53,69 @@ function createEmployeeCard(id, data) {
     "bg-white shadow p-4 rounded flex flex-col sm:flex-row justify-between items-center mb-4";
 
   card.innerHTML = `
-      <div>
+    <div class="flex flex-col items-center p-4 bg-white shadow-lg rounded-lg">
+      <img
+        src="${personalData.photo || "https://via.placeholder.com/150"}"
+        alt="Foto ${personalData.name || "Pegawai"}"
+        class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
+      />
+      <div class="text-center">
         <h3 class="font-bold text-lg">${
           personalData.name || "Tidak Ada Nama"
         }</h3>
-        <p class="text-sm">Jabatan: ${
+        <p class="text-sm text-gray-600">Jabatan: ${
           jobData.position || "Tidak Ada Jabatan"
         }</p>
-        <p class="text-sm">Departemen: ${
+        <p class="text-sm text-gray-600">Departemen: ${
           jobData.department || "Tidak Ada Departemen"
         }</p>
-        <p class="text-sm">Shift: ${jobData.shift || "Tidak Ada Shift"}</p>
-        <p class="text-sm">Kontak: ${
+        <p class="text-sm text-gray-600">Kontak: ${
           personalData.phone || "Tidak Ada Kontak"
         }</p>
       </div>
-      <div class="flex space-x-2 mt-2 sm:mt-0">
-        <button class="bg-blue-600 text-white px-3 py-1 rounded edit-btn">Edit</button>
-        <button class="bg-red-600 text-white px-3 py-1 rounded delete-btn">Hapus</button>
+      <div class="flex space-x-2 mt-4">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded detail-btn">Lihat Detail</button>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded edit-btn">Edit</button>
+        <button class="bg-red-600 text-white px-4 py-2 rounded delete-btn">Hapus</button>
       </div>
-    `;
+    </div>
+  `;
 
-  // Edit Button
+  // Event Listener untuk Tombol Detail
+  card.querySelector(".detail-btn").addEventListener("click", () => {
+    Swal.fire({
+      title: "Detail Pegawai",
+      html: `
+        <h3 class="text-lg font-bold mb-2">${
+          personalData.name || "Tidak Ada Nama"
+        }</h3>
+        <p><strong>Nomor Identitas:</strong> ${
+          personalData.id || "Tidak Ada"
+        }</p>
+        <p><strong>Tanggal Lahir:</strong> ${
+          personalData.dob || "Tidak Ada"
+        }</p>
+        <p><strong>Jenis Kelamin:</strong> ${
+          personalData.gender || "Tidak Ada"
+        }</p>
+        <p><strong>Alamat:</strong> ${personalData.address || "Tidak Ada"}</p>
+        <p><strong>Kontak:</strong> ${personalData.phone || "Tidak Ada"}</p>
+        <p><strong>Email:</strong> ${personalData.email || "Tidak Ada"}</p>
+        <hr class="my-2" />
+        <p><strong>ID Pegawai:</strong> ${jobData.employeeId || "Tidak Ada"}</p>
+        <p><strong>Jabatan:</strong> ${jobData.position || "Tidak Ada"}</p>
+        <p><strong>Departemen:</strong> ${jobData.department || "Tidak Ada"}</p>
+        <p><strong>Tanggal Bergabung:</strong> ${
+          jobData.joinDate || "Tidak Ada"
+        }</p>
+        <p><strong>Status:</strong> ${jobData.status || "Tidak Ada"}</p>
+        <p><strong>Shift:</strong> ${jobData.shift || "Tidak Ada"}</p>
+      `,
+      confirmButtonText: "Tutup",
+    });
+  });
+
+  // Event Listener untuk Tombol Edit
   card.querySelector(".edit-btn").addEventListener("click", async () => {
     const { value: newName } = await Swal.fire({
       title: "Edit Nama",
@@ -86,7 +133,7 @@ function createEmployeeCard(id, data) {
     }
   });
 
-  // Delete Button
+  // Event Listener untuk Tombol Delete
   card.querySelector(".delete-btn").addEventListener("click", async () => {
     const result = await Swal.fire({
       title: "Konfirmasi Hapus",
@@ -107,19 +154,26 @@ function createEmployeeCard(id, data) {
 
 // Add Employee
 addEmployeeBtn.addEventListener("click", async () => {
+  // Form Input Data Pribadi
   const { value: personalData } = await Swal.fire({
     title: "Data Pribadi Pegawai",
-    html:
-      '<input id="swal-name" class="swal2-input" placeholder="Nama Lengkap">' +
-      '<input id="swal-id" class="swal2-input" placeholder="Nomor Identitas">' +
-      '<input id="swal-dob" type="date" class="swal2-input" placeholder="Tanggal Lahir">' +
-      '<select id="swal-gender" class="swal2-input"><option value="">Jenis Kelamin</option><option value="Pria">Pria</option><option value="Wanita">Wanita</option></select>' +
-      '<input id="swal-address" class="swal2-input" placeholder="Alamat Lengkap">' +
-      '<input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon">' +
-      '<input id="swal-email" class="swal2-input" placeholder="Alamat Email">' +
-      '<input id="swal-photo" type="file" class="swal2-input" accept="image/*">',
+    html: `
+      <input id="swal-name" class="swal2-input" placeholder="Nama Lengkap">
+      <input id="swal-id" class="swal2-input" placeholder="Nomor Identitas">
+      <input id="swal-dob" type="date" class="swal2-input" placeholder="Tanggal Lahir">
+      <select id="swal-gender" class="swal2-input">
+        <option value="">Jenis Kelamin</option>
+        <option value="Pria">Pria</option>
+        <option value="Wanita">Wanita</option>
+      </select>
+      <input id="swal-address" class="swal2-input" placeholder="Alamat Lengkap">
+      <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon">
+      <input id="swal-email" class="swal2-input" placeholder="Alamat Email">
+      <input id="swal-photo" type="file" class="swal2-input" accept="image/*">
+    `,
     focusConfirm: false,
     preConfirm: () => {
+      const photoFile = document.getElementById("swal-photo").files[0];
       return {
         name: document.getElementById("swal-name").value,
         id: document.getElementById("swal-id").value,
@@ -128,6 +182,7 @@ addEmployeeBtn.addEventListener("click", async () => {
         address: document.getElementById("swal-address").value,
         phone: document.getElementById("swal-phone").value,
         email: document.getElementById("swal-email").value,
+        photoFile,
       };
     },
     confirmButtonText: "Lanjutkan",
@@ -136,15 +191,38 @@ addEmployeeBtn.addEventListener("click", async () => {
   });
 
   if (personalData) {
+    // Upload Photo to Firebase Storage
+    let photoURL = "";
+    if (personalData.photoFile) {
+      const photoRef = ref(
+        storage,
+        `employees/${personalData.id || Date.now()}`
+      );
+      await uploadBytes(photoRef, personalData.photoFile);
+      photoURL = await getDownloadURL(photoRef);
+    }
+
+    // Form Input Data Pekerjaan
     const { value: jobData } = await Swal.fire({
       title: "Data Pekerjaan Pegawai",
-      html:
-        '<input id="swal-employee-id" class="swal2-input" placeholder="Nomor ID Pegawai">' +
-        '<input id="swal-position" class="swal2-input" placeholder="Jabatan/Posisi">' +
-        '<input id="swal-department" class="swal2-input" placeholder="Departemen">' +
-        '<input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung">' +
-        '<select id="swal-status" class="swal2-input"><option value="">Status Kepegawaian</option><option value="Kontrak">Kontrak</option><option value="Tetap">Tetap</option><option value="Freelance">Freelance</option></select>' +
-        '<select id="swal-shift" class="swal2-input"><option value="">Shift Kerja</option><option value="Pagi">Pagi</option><option value="Siang">Siang</option><option value="Malam">Malam</option></select>',
+      html: `
+        <input id="swal-employee-id" class="swal2-input" placeholder="ID Pegawai">
+        <input id="swal-position" class="swal2-input" placeholder="Jabatan">
+        <input id="swal-department" class="swal2-input" placeholder="Departemen">
+        <input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung">
+        <select id="swal-status" class="swal2-input">
+          <option value="">Status Kepegawaian</option>
+          <option value="Kontrak">Kontrak</option>
+          <option value="Tetap">Tetap</option>
+          <option value="Freelance">Freelance</option>
+        </select>
+        <select id="swal-shift" class="swal2-input">
+          <option value="">Shift Kerja</option>
+          <option value="Pagi">Pagi</option>
+          <option value="Siang">Siang</option>
+          <option value="Malam">Malam</option>
+        </select>
+      `,
       focusConfirm: false,
       preConfirm: () => {
         return {
@@ -162,10 +240,13 @@ addEmployeeBtn.addEventListener("click", async () => {
     });
 
     if (jobData) {
+      // Simpan Data ke Firestore
       await addDoc(collection(db, "employees"), {
-        personalData,
+        personalData: { ...personalData, photo: photoURL },
         jobData,
       });
+
+      // Reload Employees
       loadEmployees();
     }
   }
