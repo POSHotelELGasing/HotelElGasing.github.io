@@ -29,6 +29,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const defaultPhoto = "https://via.placeholder.com/150"; // Gambar default pegawai
 
 const employeeList = document.getElementById("employee-list");
 const addEmployeeBtn = document.getElementById("add-employee-btn");
@@ -55,7 +56,7 @@ function createEmployeeCard(id, data) {
   card.innerHTML = `
     <div class="flex flex-col items-center p-4 bg-white shadow-lg rounded-lg">
       <img
-        src="${defaultPhoto}"
+        src="${personalData.photo || defaultPhoto}"
         alt="Foto ${personalData.name || "Pegawai"}"
         class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
       />
@@ -80,7 +81,6 @@ function createEmployeeCard(id, data) {
       </div>
     </div>
   `;
-  photo;
 
   // Event Listener untuk Tombol Detail
   card.querySelector(".detail-btn").addEventListener("click", () => {
@@ -189,7 +189,13 @@ addEmployeeBtn.addEventListener("click", async () => {
   });
 
   if (personalData) {
-    const photoURL = "https://via.placeholder.com/150"; // Set default foto
+    const photoURL = defaultPhoto; // Tetapkan gambar default
+
+    await addDoc(collection(db, "employees"), {
+      personalData: { ...personalData, photo: photoURL },
+      jobData,
+    });
+    
 
     // Form Input Data Pekerjaan
     const { value: jobData } = await Swal.fire({
