@@ -14,30 +14,31 @@ function closeLoading() {
   Swal.close();
 }
 
+// Toggle menu
 const menuToggle = document.getElementById("menu-toggle");
-      const menu = document.getElementById("menu");
+const menu = document.getElementById("menu");
 
-      menuToggle.addEventListener("click", () => {
-        const isHidden = menu.classList.contains("hidden");
-        if (isHidden) {
-          menu.classList.remove("hidden");
-          setTimeout(() => {
-            menu.classList.remove("-translate-y-full", "opacity-0");
-            menu.classList.add("translate-y-0", "opacity-100");
-          }, 10);
-        } else {
-          menu.classList.remove("translate-y-0", "opacity-100");
-          menu.classList.add("-translate-y-full", "opacity-0");
-          setTimeout(() => {
-            menu.classList.add("hidden");
-          }, 300);
-        }
-      });
-// Fungsi untuk menampilkan tamu
+menuToggle.addEventListener("click", () => {
+  const isHidden = menu.classList.contains("hidden");
+  if (isHidden) {
+    menu.classList.remove("hidden");
+    setTimeout(() => {
+      menu.classList.remove("-translate-y-full", "opacity-0");
+      menu.classList.add("translate-y-0", "opacity-100");
+    }, 10);
+  } else {
+    menu.classList.remove("translate-y-0", "opacity-100");
+    menu.classList.add("-translate-y-full", "opacity-0");
+    setTimeout(() => {
+      menu.classList.add("hidden");
+    }, 300);
+  }
+});
+
+// Fungsi untuk menampilkan daftar tamu
 function displayGuests() {
-  showLoading(); // Tampilkan loading
+  showLoading();
   setTimeout(() => {
-    // Simulasi waktu pemuatan data
     const guests = JSON.parse(localStorage.getItem("guests") || "[]");
     const guestCards = document.getElementById("guest-cards");
     guestCards.innerHTML = "";
@@ -46,6 +47,7 @@ function displayGuests() {
       const card = document.createElement("div");
       card.className = "bg-white shadow rounded p-4";
       card.innerHTML = `
+          <p><strong>ID:</strong> ${guest.id}</p>
           <h3 class="text-lg font-bold mb-2">${guest.name}</h3>
           <p><strong>Telepon:</strong> ${guest.phone}</p>
           <p><strong>Email:</strong> ${guest.email}</p>
@@ -57,8 +59,8 @@ function displayGuests() {
       guestCards.appendChild(card);
     });
 
-    closeLoading(); // Tutup loading setelah data dimuat
-  }, 1000); // Simulasi waktu pemrosesan (1 detik)
+    closeLoading();
+  }, 1000);
 }
 
 // Fungsi untuk menambah tamu
@@ -69,7 +71,7 @@ function addGuest(guest) {
   displayGuests();
 }
 
-// Fungsi untuk menghapus tamu dengan konfirmasi SweetAlert2
+// Fungsi untuk menghapus tamu
 function deleteGuest(id) {
   Swal.fire({
     title: "Apakah Anda yakin?",
@@ -91,12 +93,51 @@ function deleteGuest(id) {
   });
 }
 
-// Fungsi untuk mengedit tamu (contoh dengan SweetAlert2)
+// Fungsi untuk mengedit tamu (termasuk ID)
 function editGuest(id) {
+  let guests = JSON.parse(localStorage.getItem("guests") || "[]");
+  let guest = guests.find((guest) => guest.id === id);
+
+  if (!guest) return;
+
   Swal.fire({
-    icon: "info",
-    title: "Fitur Belum Tersedia",
-    text: "Fitur edit belum diimplementasikan.",
+    title: "Edit Data Tamu",
+    html: `
+      <input id="edit-id" class="swal2-input" value="${guest.id}" placeholder="ID">
+      <input id="edit-name" class="swal2-input" value="${guest.name}" placeholder="Nama">
+      <input id="edit-phone" class="swal2-input" value="${guest.phone}" placeholder="Telepon">
+      <input id="edit-email" class="swal2-input" value="${guest.email}" placeholder="Email">
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Simpan",
+    cancelButtonText: "Batal",
+    preConfirm: () => {
+      const editedId = document.getElementById("edit-id").value;
+      const editedName = document.getElementById("edit-name").value;
+      const editedPhone = document.getElementById("edit-phone").value;
+      const editedEmail = document.getElementById("edit-email").value;
+
+      if (!editedId || !editedName || !editedPhone || !editedEmail) {
+        Swal.showValidationMessage("Semua kolom harus diisi!");
+        return false;
+      }
+
+      // Cek jika ID baru sudah digunakan oleh tamu lain
+      if (editedId !== guest.id.toString() && guests.some(g => g.id.toString() === editedId)) {
+        Swal.showValidationMessage("ID sudah digunakan oleh tamu lain!");
+        return false;
+      }
+
+      // Perbarui data tamu
+      guest.id = editedId;
+      guest.name = editedName;
+      guest.phone = editedPhone;
+      guest.email = editedEmail;
+
+      // Simpan kembali ke localStorage
+      localStorage.setItem("guests", JSON.stringify(guests));
+      displayGuests();
+    },
   });
 }
 
@@ -128,17 +169,20 @@ document
   .addEventListener("submit", function (event) {
     event.preventDefault();
 
+    const id = document.getElementById("guest-id").value;
     const name = document.getElementById("guest-name").value;
     const phone = document.getElementById("guest-phone").value;
     const email = document.getElementById("guest-email").value;
 
-    const newGuest = {
-      id: Date.now(),
-      name,
-      phone,
-      email,
-    };
+    const guests = JSON.parse(localStorage.getItem("guests") || "[]");
 
+    // Cek jika ID sudah digunakan
+    if (guests.some(g => g.id.toString() === id)) {
+      Swal.fire("Error!", "ID sudah digunakan oleh tamu lain!", "error");
+      return;
+    }
+
+    const newGuest = { id, name, phone, email };
     addGuest(newGuest);
     modal.classList.remove("flex");
     modal.classList.add("hidden");
@@ -148,4 +192,3 @@ document
 
 // Inisialisasi awal
 displayGuests();
-
