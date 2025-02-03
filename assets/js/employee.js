@@ -51,34 +51,28 @@ function createEmployeeCard(id, data) {
 
   const card = document.createElement("div");
   card.className =
-    "bg-white shadow p-4 rounded flex flex-col sm:flex-row justify-between items-center mb-4";
+    "bg-white shadow-lg rounded-lg overflow-hidden p-4 flex flex-col items-center text-center";
 
   card.innerHTML = `
-    <div class="flex flex-col items-center p-4 bg-white shadow-lg rounded-lg">
-      <img
-        src="${personalData.photo || defaultPhoto}"
-        alt="Foto ${personalData.name || "Pegawai"}"
-        class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
-      />
-      <div class="text-center">
-        <h3 class="font-bold text-lg">${
-          personalData.name || "Tidak Ada Nama"
-        }</h3>
-        <p class="text-sm text-gray-600">Jabatan: ${
-          jobData.position || "Tidak Ada Jabatan"
-        }</p>
-        <p class="text-sm text-gray-600">Departemen: ${
-          jobData.department || "Tidak Ada Departemen"
-        }</p>
-        <p class="text-sm text-gray-600">Kontak: ${
-          personalData.phone || "Tidak Ada Kontak"
-        }</p>
-      </div>
-      <div class="flex space-x-2 mt-4">
-        <button class="bg-blue-500 text-white px-4 py-2 rounded detail-btn">Lihat Detail</button>
-        <button class="bg-blue-600 text-white px-4 py-2 rounded edit-btn">Edit</button>
-        <button class="bg-red-600 text-white px-4 py-2 rounded delete-btn">Hapus</button>
-      </div>
+    <img
+      src="${personalData.photo || defaultPhoto}"
+      alt="Foto ${personalData.name || "Pegawai"}"
+      class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
+    />
+    <h3 class="font-bold text-lg">${personalData.name || "Tidak Ada Nama"}</h3>
+    <p class="text-sm text-gray-600">Jabatan: ${
+      jobData.position || "Tidak Ada Jabatan"
+    }</p>
+    <p class="text-sm text-gray-600">Departemen: ${
+      jobData.department || "Tidak Ada Departemen"
+    }</p>
+    <p class="text-sm text-gray-600">Kontak: ${
+      personalData.phone || "Tidak Ada Kontak"
+    }</p>
+    <div class="flex space-x-2 mt-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded detail-btn">Detail</button>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded edit-btn">Edit</button>
+      <button class="bg-red-600 text-white px-4 py-2 rounded delete-btn">Hapus</button>
     </div>
   `;
 
@@ -195,7 +189,6 @@ addEmployeeBtn.addEventListener("click", async () => {
       personalData: { ...personalData, photo: photoURL },
       jobData,
     });
-    
 
     // Form Input Data Pekerjaan
     const { value: jobData } = await Swal.fire({
