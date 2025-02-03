@@ -173,7 +173,14 @@
             required
             min="1"
           />
-
+          <label class="block mb-2">Tanggal Transaksi</label>
+          <input
+            type="date"
+            id="transaction-date"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          />
+          
           <button
             type="submit"
             class="bg-blue-600 text-white p-2 rounded w-full"
@@ -237,6 +244,7 @@
                     <p>Kamar: ${transaction.roomNumber}</p>
                     <p>Durasi: ${transaction.days} hari</p>
                     <p class="font-bold">Total Harga: Rp ${transaction.totalPrice}</p>
+                    <p class="text-sm text-gray-500">Tanggal: ${transaction.date}</p> <!-- Tampilkan tanggal -->
                     <div class="mt-4 flex space-x-2">
                         <button class="bg-blue-600 text-white p-2 rounded" onclick="editTransaction('${doc.id}')">Edit</button>
                         <button class="bg-red-600 text-white p-2 rounded" onclick="deleteTransaction('${doc.id}')">Hapus</button>
@@ -259,29 +267,31 @@
       function loadRoomsAndGuests() {
         const transactionRoom = document.getElementById("transaction-room");
         const transactionGuest = document.getElementById("transaction-guest");
-
+      
         transactionRoom.innerHTML = '<option value="">Pilih Kamar</option>';
         transactionGuest.innerHTML = '<option value="">Pilih Tamu</option>';
-
+      
+        // Mengambil data kamar hanya yang statusnya "available"
         db.collection("rooms")
+          .where("status", "==", "Available") // Menambahkan filter berdasarkan status
           .get()
           .then((snapshot) => {
             snapshot.forEach((doc) => {
               const room = doc.data();
-              transactionRoom.innerHTML += `<option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>`;
+              transactionRoom.innerHTML += <option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>;
             });
           });
-
+      
+        // Mengambil data tamu
         db.collection("guests")
           .get()
           .then((snapshot) => {
             snapshot.forEach((doc) => {
               const guest = doc.data();
-              transactionGuest.innerHTML += `<option value="${doc.id}">${guest.name}</option>`;
+              transactionGuest.innerHTML += <option value="${doc.id}">${guest.name}</option>;
             });
           });
       }
-
       // Fungsi untuk mengedit transaksi
       function editTransaction(id) {
         db.collection("transactions")
@@ -303,46 +313,52 @@
       }
 
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
-      document
-        .getElementById("transaction-form")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
+      // Fungsi untuk menyimpan transaksi (Tambah/Edit)
+document.getElementById("transaction-form").addEventListener("submit", (e) => {
+  e.preventDefault();
 
-          const transactionId = document.getElementById("transaction-id").value;
-          const transactionRoom = document.getElementById("transaction-room");
-          const transactionGuest = document.getElementById("transaction-guest");
-          const transactionDays = document.getElementById("transaction-days");
+  const transactionId = document.getElementById("transaction-id").value;
+  const transactionRoom = document.getElementById("transaction-room");
+  const transactionGuest = document.getElementById("transaction-guest");
+  const transactionDays = document.getElementById("transaction-days");
+  const transactionDate = document.getElementById("transaction-date").value; // Ambil tanggal
 
-          const roomId = transactionRoom.value;
-          const guestId = transactionGuest.value;
-          const days = parseInt(transactionDays.value);
+  const roomId = transactionRoom.value;
+  const guestId = transactionGuest.value;
+  const days = parseInt(transactionDays.value);
 
-          const roomPrice = transactionRoom.selectedOptions[0]
-            ? parseInt(
-                transactionRoom.selectedOptions[0].getAttribute("data-price")
-              )
-            : 0;
-          const totalPrice = roomPrice * days;
+  const roomPrice = transactionRoom.selectedOptions[0]
+    ? parseInt(transactionRoom.selectedOptions[0].getAttribute("data-price"))
+    : 0;
+  const totalPrice = roomPrice * days;
 
-          const transactionData = {
-            roomId,
-            roomNumber: transactionRoom.selectedOptions[0].text,
-            guestId,
-            guestName: transactionGuest.selectedOptions[0].text,
-            days,
-            totalPrice,
-          };
+  const transactionData = {
+    roomId,
+    roomNumber: transactionRoom.selectedOptions[0].text,
+    guestId,
+    guestName: transactionGuest.selectedOptions[0].text,
+    days,
+    totalPrice,
+    date: transactionDate, // Simpan tanggal transaksi
+  };
 
-          if (transactionId) {
-            db.collection("transactions")
-              .doc(transactionId)
-              .update(transactionData);
-          } else {
-            db.collection("transactions").add(transactionData);
-          }
-
-          transactionModal.classList.add("hidden");
+  if (transactionId) {
+    db.collection("transactions")
+      .doc(transactionId)
+      .update(transactionData);
+  } else {
+    db.collection("transactions").add(transactionData).then(() => {
+      // Setelah transaksi ditambahkan, perbarui status kamar menjadi "occupied"
+      db.collection("rooms")
+        .doc(roomId)
+        .update({
+          status: "occupied"
         });
+    });
+  }
+
+  transactionModal.classList.add("hidden");
+});
 
       document
         .getElementById("add-transaction-btn")
