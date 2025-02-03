@@ -1,207 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manajemen Kamar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    /* Tambahkan animasi transisi untuk menu */
-    #menu {
-      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Kamar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      /* Tambahkan animasi transisi untuk menu */
+      #menu {
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      }
 
-    .active-nav {
-      background-color: #3b82f6;
-    }
-  </style>
-</head>
-<body class="bg-gray-100">
-  <!-- Navbar -->
-  <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Hotel POS System</h1>
-      <!-- Hamburger Icon -->
-      <button
-        id="menu-toggle"
-        class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
-        aria-label="Toggle Navigation"
-      >
-        ☰
-      </button>
-      <!-- Menu -->
-      <ul
-        id="menu"
-        class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
-      >
-        <li>
-          <a
-            href="index.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-            >Dashboard</a
-          >
-        </li>
-        <li>
-          <a
-            href="rooms.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block active-nav"
-            >Kamar</a
-          >
-        </li>
-        <li>
-          <a
-            href="guests.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block "
-            >Tamu</a
-          >
-        </li>
-        <li>
-          <a
-            href="transaksi.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-            >Transaksi</a
-          >
-        </li>
-        <li>
-          <a
-            href="product.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-            >Product</a
-          >
-        </li>
-        <li>
-          <a
-            href="employee.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-            >Pegawai</a
-          >
-        </li>
-        <li>
-          <a
-            href="login.html"
-            class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
-            >Login</a
-          >
-        </li>
-      </ul>
-    </div>
-  </nav>
+      .active-nav {
+        background-color: #3b82f6;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold flex items-center">
+          <i class="fa-solid fa-hotel mr-2"></i>Hotel POS System
+        </h1>
+        <button
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
+        >
+          ☰
+        </button>
+        <!-- Menu -->
+        <ul
+          id="menu"
+          class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+        >
+          <li>
+            <a
+              href="index.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="rooms.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a
+              href="guests.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Tamu</a
+            >
+          </li>
 
-  <!-- Main Content -->
-  <main class="container mx-auto p-4">
-    <h2 class="text-2xl font-bold mb-4">Manajemen Kamar</h2>
-<div class="bg-white p-4 shadow rounded mb-4">
-  <button id="add-room-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">Tambah Kamar</button>
-  <button id="add-room-number-btn" class="bg-blue-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0">Tambah Nomor Kamar</button>
-  <button id="detail-room-number-btn" class="bg-yellow-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0">Detail Nomor Kamar</button>
-</div>
+          <!-- Dropdown Transaksi -->
+          <li class="relative">
+            <button
+              id="transaksi-toggle"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+            >
+              Transaksi
+            </button>
+            <ul
+              id="transaksi-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="transaksi.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kamar Tamu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="transaksi_produk.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Produk</a
+                >
+              </li>
+            </ul>
+          </li>
 
-
-    <!-- Room Cards -->
-    <div id="room-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-  </main>
-<!-- Modal Form Nomor Kamar -->
-<div id="room-number-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
-    <h3 id="room-number-modal-title" class="text-xl font-bold mb-4">Tambah Nomor Kamar</h3>
-    <form id="room-number-form">
-      <label for="new-room-number" class="block mb-2">Nomor Kamar</label>
-      <input
-        type="number"
-        id="new-room-number"
-        placeholder="Masukkan nomor kamar"
-        class="w-full p-2 border rounded mb-4"
-        required
-      />
-      <button
-        type="submit"
-        class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
-      >
-        Simpan
-      </button>
-    </form>
-    <button
-      id="close-room-number-modal-btn"
-      class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
-    >
-      Tutup
-    </button>
-  </div>
-</div>
-<!-- Detail Nomor Kamar Modal -->
-<div
-  id="detail-room-number-modal"
-  class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
->
-  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
-    <h3 class="text-xl font-bold mb-4">Detail Nomor Kamar</h3>
-    <ul id="room-number-list" class="space-y-4">
-      <!-- Daftar nomor kamar akan dimuat di sini -->
-    </ul>
-    <button
-      id="close-detail-room-number-modal-btn"
-      class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
-    >
-      Tutup
-    </button>
-  </div>
-</div>
-
-  
-  <!-- Modal Form -->
-<div id="room-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-  <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
-    <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Kamar</h3>
-    <form id="room-form">
-      <input type="hidden" id="room-id" />
-
-      <!-- Dropdown Nomor Kamar -->
-      <label for="room-number" class="block mb-2">Nomor Kamar</label>
-      <select id="room-number" class="w-full p-2 border rounded mb-4" required>
-        <option value="" disabled selected>Pilih Nomor Kamar</option>
-        <option value="101">101</option>
-        <option value="102">102</option>
-        <option value="103">103</option>
-        <option value="104">104</option>
-        <option value="105">105</option>
-        <option value="106">106</option>
-      </select>
-
-      <!-- Dropdown Tipe Kamar -->
-      <label for="room-type" class="block mb-2">Tipe Kamar</label>
-      <select id="room-type" class="w-full p-2 border rounded mb-4" required>
-        <option value="" disabled selected>Pilih Tipe Kamar</option>
-        <option value="Double Bed">Double Bed</option>
-        <option value="Luxury Bed">Luxury Bed</option>
-        <option value="Twin Bed">Twin Bed</option>
-      </select>
-        <label for="room-price" class="block mb-2">Harga Kamar</label>
-        <input type="number" id="room-price" class="w-full p-2 border rounded mb-4" required />
-        <label for="room-status" class="block mb-2">Status Kamar</label>
-        <select id="room-status" class="w-full p-2 border rounded mb-4">
-          <option value="Available">Tersedia</option>
-          <option value="Occupied">Terisi</option>
-        </select>
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700">Simpan</button>
-      </form>
-      <button id="close-modal-btn" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700">Tutup</button>
-    </div>
-  </div>
-
-  <!-- Detail Modal -->
-  <div id="detail-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
-      <h3 class="text-xl font-bold mb-4">Detail Kamar</h3>
-      <div id="room-detail" class="text-sm space-y-2">
-        <!-- Detail content will be dynamically loaded -->
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Product</a
+            >
+          </li>
+          <li>
+            <a
+              href="employee.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Pegawai</a
+            >
+          </li>
+          <li>
+            <a
+              href="login.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Login</a
+            >
+          </li>
+        </ul>
       </div>
-      <button id="close-detail-btn" class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700">Tutup</button>
-    </div>
-  </div>
+    </nav>
 
-  <script src="./assets/js/rooms.js"></script>
-</body>
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 pt-11">
+      <h2 class="text-2xl font-bold mb-4 pt-12">Manajemen Kamar</h2>
+      <div class="bg-white p-4 shadow rounded mb-4">
+        <button
+          id="add-room-btn"
+          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
+        >
+          Tambah Kamar
+        </button>
+        <button
+          id="add-room-number-btn"
+          class="bg-blue-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0"
+        >
+          Tambah Nomor Kamar
+        </button>
+        <button
+          id="detail-room-number-btn"
+          class="bg-yellow-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0"
+        >
+          Detail Nomor Kamar
+        </button>
+      </div>
+
+      <!-- Room Cards -->
+      <div
+        id="room-list"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      ></div>
+    </main>
+    <!-- Modal Form Nomor Kamar -->
+    <div
+      id="room-number-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
+        <h3 id="room-number-modal-title" class="text-xl font-bold mb-4">
+          Tambah Nomor Kamar
+        </h3>
+        <form id="room-number-form">
+          <label for="new-room-number" class="block mb-2">Nomor Kamar</label>
+          <input
+            type="number"
+            id="new-room-number"
+            placeholder="Masukkan nomor kamar"
+            class="w-full p-2 border rounded mb-4"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
+          >
+            Simpan
+          </button>
+        </form>
+        <button
+          id="close-room-number-modal-btn"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+        >
+          Tutup
+        </button>
+      </div>
+    </div>
+    <!-- Detail Nomor Kamar Modal -->
+    <div
+      id="detail-room-number-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/3">
+        <h3 class="text-xl font-bold mb-4">Detail Nomor Kamar</h3>
+        <ul id="room-number-list" class="space-y-4">
+          <!-- Daftar nomor kamar akan dimuat di sini -->
+        </ul>
+        <button
+          id="close-detail-room-number-modal-btn"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+        >
+          Tutup
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div
+      id="room-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
+        <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Kamar</h3>
+        <form id="room-form">
+          <input type="hidden" id="room-id" />
+
+          <!-- Dropdown Nomor Kamar -->
+          <label for="room-number" class="block mb-2">Nomor Kamar</label>
+          <select
+            id="room-number"
+            class="w-full p-2 border rounded mb-4"
+            required
+          >
+            <option value="" disabled selected>Pilih Nomor Kamar</option>
+            <option value="101">101</option>
+            <option value="102">102</option>
+            <option value="103">103</option>
+            <option value="104">104</option>
+            <option value="105">105</option>
+            <option value="106">106</option>
+          </select>
+
+          <!-- Dropdown Tipe Kamar -->
+          <label for="room-type" class="block mb-2">Tipe Kamar</label>
+          <select
+            id="room-type"
+            class="w-full p-2 border rounded mb-4"
+            required
+          >
+            <option value="" disabled selected>Pilih Tipe Kamar</option>
+            <option value="Double Bed">Double Bed</option>
+            <option value="Luxury Bed">Luxury Bed</option>
+            <option value="Twin Bed">Twin Bed</option>
+          </select>
+          <label for="room-price" class="block mb-2">Harga Kamar</label>
+          <input
+            type="number"
+            id="room-price"
+            class="w-full p-2 border rounded mb-4"
+            required
+          />
+          <label for="room-status" class="block mb-2">Status Kamar</label>
+          <select id="room-status" class="w-full p-2 border rounded mb-4">
+            <option value="Available">Tersedia</option>
+            <option value="Occupied">Terisi</option>
+          </select>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full hover:bg-blue-700"
+          >
+            Simpan
+          </button>
+        </form>
+        <button
+          id="close-modal-btn"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+        >
+          Tutup
+        </button>
+      </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div
+      id="detail-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 lg:w-1/3">
+        <h3 class="text-xl font-bold mb-4">Detail Kamar</h3>
+        <div id="room-detail" class="text-sm space-y-2">
+          <!-- Detail content will be dynamically loaded -->
+        </div>
+        <button
+          id="close-detail-btn"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4 hover:bg-red-700"
+        >
+          Tutup
+        </button>
+      </div>
+    </div>
+
+    <script src="./assets/js/rooms.js"></script>
+    <script>
+      document
+        .getElementById("transaksi-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("transaksi-menu");
+          menu.classList.toggle("hidden");
+        });
+    </script>
+  </body>
 </html>

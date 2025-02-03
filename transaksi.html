@@ -22,10 +22,11 @@
   </head>
   <body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4 shadow-lg relative">
+    <nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold">Hotel POS System</h1>
-        <!-- Hamburger Icon -->
+        <h1 class="text-xl font-bold flex items-center">
+          <i class="fa-solid fa-hotel mr-2"></i>Hotel POS System
+        </h1>
         <button
           id="menu-toggle"
           class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
@@ -41,49 +42,72 @@
           <li>
             <a
               href="index.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Dashboard</a
             >
           </li>
           <li>
             <a
               href="rooms.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Kamar</a
             >
           </li>
           <li>
             <a
               href="guests.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Tamu</a
             >
           </li>
-          <li>
-            <a
-              href="transaksi.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block active-nav"
-              >Transaksi</a
+
+          <!-- Dropdown Transaksi -->
+          <li class="relative">
+            <button
+              id="transaksi-toggle"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
             >
+              Transaksi
+            </button>
+            <ul
+              id="transaksi-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="transaksi.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kamar Tamu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="transaksi_produk.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Produk</a
+                >
+              </li>
+            </ul>
           </li>
+
           <li>
             <a
               href="product.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Product</a
             >
           </li>
           <li>
             <a
               href="employee.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Pegawai</a
             >
           </li>
           <li>
             <a
               href="login.html"
-              class="hover:bg-blue-500 text-white rounded transition ease-in-out delay-250 px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Login</a
             >
           </li>
@@ -330,6 +354,13 @@
           }, 300);
         }
       });
+
+      document
+        .getElementById("transaksi-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("transaksi-menu");
+          menu.classList.toggle("hidden");
+        });
     </script>
   </body>
 </html>

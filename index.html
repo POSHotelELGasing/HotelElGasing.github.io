@@ -70,13 +70,36 @@
               >Tamu</a
             >
           </li>
-          <li>
-            <a
-              href="transaksi.html"
+
+          <!-- Dropdown Transaksi -->
+          <li class="relative">
+            <button
+              id="transaksi-toggle"
               class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-              >Transaksi</a
             >
+              Transaksi
+            </button>
+            <ul
+              id="transaksi-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="transaksi.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kamar Tamu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="transaksi_produk.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Produk</a
+                >
+              </li>
+            </ul>
           </li>
+
           <li>
             <a
               href="product.html"
@@ -103,7 +126,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto p-4 sm:p-6 pt-16">
+    <main class="container mx-auto p-4 sm:p-6 pt-10">
       <!-- Dashboard -->
       <section id="dashboard" class="mb-12">
         <h2 class="text-2xl font-bold mb-6 flex items-center">
@@ -167,60 +190,70 @@
         }
       });
 
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
-    authDomain: "prog4-34938.firebaseapp.com",
-    projectId: "prog4-34938",
-    storageBucket: "prog4-34938.appspot.com",
-    messagingSenderId: "920234132726",
-    appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
-  };
+      // Firebase Config
+      const firebaseConfig = {
+        apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+        authDomain: "prog4-34938.firebaseapp.com",
+        projectId: "prog4-34938",
+        storageBucket: "prog4-34938.appspot.com",
+        messagingSenderId: "920234132726",
+        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
+      };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-  // Fetch data from Firestore
-  function fetchDashboardData() {
-    return new Promise((resolve, reject) => {
-      const fetchRooms = db.collection("rooms").get().then((snapshot) => {
-        return snapshot.size; // Total count of rooms
-      });
+      // Fetch data from Firestore
+      function fetchDashboardData() {
+        return new Promise((resolve, reject) => {
+          const fetchRooms = db
+            .collection("rooms")
+            .get()
+            .then((snapshot) => {
+              return snapshot.size; // Total count of rooms
+            });
 
-      // Mocked guests and transactions for demonstration
-      const fetchGuests = new Promise((res) => res(50)); // Replace with Firestore fetch if needed
-      const fetchTransactions = new Promise((res) => res(100)); // Replace with Firestore fetch if needed
+          // Mocked guests and transactions for demonstration
+          const fetchGuests = new Promise((res) => res(50)); // Replace with Firestore fetch if needed
+          const fetchTransactions = new Promise((res) => res(100)); // Replace with Firestore fetch if needed
 
-      Promise.all([fetchRooms, fetchGuests, fetchTransactions])
-        .then(([roomsCount, guestsCount, transactionsCount]) => {
-          resolve({ roomsCount, guestsCount, transactionsCount });
-        })
-        .catch((err) => reject(err));
-    });
-  }
+          Promise.all([fetchRooms, fetchGuests, fetchTransactions])
+            .then(([roomsCount, guestsCount, transactionsCount]) => {
+              resolve({ roomsCount, guestsCount, transactionsCount });
+            })
+            .catch((err) => reject(err));
+        });
+      }
 
-  // Update dashboard with fetched data
-  function updateDashboard() {
-    fetchDashboardData()
-      .then((data) => {
-        document.getElementById("total-rooms").textContent = data.roomsCount;
-        document.getElementById("total-guests").textContent = data.guestsCount;
-        document.getElementById("total-transactions").textContent =
-          data.transactionsCount;
-      })
-      .catch((error) => {
-        console.error("Error fetching dashboard data:", error);
-        document.getElementById("total-rooms").textContent = "Error";
-        document.getElementById("total-guests").textContent = "Error";
-        document.getElementById("total-transactions").textContent = "Error";
-      });
-  }
-
-
+      // Update dashboard with fetched data
+      function updateDashboard() {
+        fetchDashboardData()
+          .then((data) => {
+            document.getElementById("total-rooms").textContent =
+              data.roomsCount;
+            document.getElementById("total-guests").textContent =
+              data.guestsCount;
+            document.getElementById("total-transactions").textContent =
+              data.transactionsCount;
+          })
+          .catch((error) => {
+            console.error("Error fetching dashboard data:", error);
+            document.getElementById("total-rooms").textContent = "Error";
+            document.getElementById("total-guests").textContent = "Error";
+            document.getElementById("total-transactions").textContent = "Error";
+          });
+      }
 
       window.onload = () => {
         updateDashboard();
       };
+
+      document
+        .getElementById("transaksi-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("transaksi-menu");
+          menu.classList.toggle("hidden");
+        });
     </script>
   </body>
 </html>
