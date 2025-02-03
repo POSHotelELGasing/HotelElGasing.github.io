@@ -60,15 +60,40 @@ function createEmployeeCard(id, data) {
       class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
     />
     <h3 class="font-bold text-lg">${personalData.name || "Tidak Ada Nama"}</h3>
-    <p class="text-sm text-gray-600">Jabatan: ${
-      jobData.position || "Tidak Ada Jabatan"
+    <p class="text-sm text-gray-600">Nomor Identitas: ${
+      personalData.id || "Tidak Ada"
     }</p>
-    <p class="text-sm text-gray-600">Departemen: ${
-      jobData.department || "Tidak Ada Departemen"
+    <p class="text-sm text-gray-600">Tanggal Lahir: ${
+      personalData.dob || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Jenis Kelamin: ${
+      personalData.gender || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Alamat: ${
+      personalData.address || "Tidak Ada"
     }</p>
     <p class="text-sm text-gray-600">Kontak: ${
-      personalData.phone || "Tidak Ada Kontak"
+      personalData.phone || "Tidak Ada"
     }</p>
+    <p class="text-sm text-gray-600">Email: ${
+      personalData.email || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">ID Pegawai: ${
+      jobData.employeeId || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Jabatan: ${
+      jobData.position || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Departemen: ${
+      jobData.department || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Tanggal Bergabung: ${
+      jobData.joinDate || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Status: ${
+      jobData.status || "Tidak Ada"
+    }</p>
+    <p class="text-sm text-gray-600">Shift: ${jobData.shift || "Tidak Ada"}</p>
     <div class="flex space-x-2 mt-4">
       <button class="bg-blue-500 text-white px-4 py-2 rounded detail-btn">Detail</button>
       <button class="bg-blue-600 text-white px-4 py-2 rounded edit-btn">Edit</button>
@@ -121,7 +146,7 @@ function createEmployeeCard(id, data) {
         <input id="swal-id" class="swal2-input" placeholder="Nomor Identitas" value="${
           personalData.id || ""
         }">
-        <input id="swal-dob" type="date" class="swal2-input" placeholder="Tanggal Lahir" value="${
+        <input id="swal-dob" type="date" class="swal2-input" value="${
           personalData.dob || ""
         }">
         <select id="swal-gender" class="swal2-input">
@@ -150,9 +175,31 @@ function createEmployeeCard(id, data) {
         <input id="swal-department" class="swal2-input" placeholder="Departemen" value="${
           jobData.department || ""
         }">
-        <input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung" value="${
+        <input id="swal-join-date" type="date" class="swal2-input" value="${
           jobData.joinDate || ""
         }">
+        <select id="swal-status" class="swal2-input">
+          <option value="Kontrak" ${
+            jobData.status === "Kontrak" ? "selected" : ""
+          }>Kontrak</option>
+          <option value="Tetap" ${
+            jobData.status === "Tetap" ? "selected" : ""
+          }>Tetap</option>
+          <option value="Freelance" ${
+            jobData.status === "Freelance" ? "selected" : ""
+          }>Freelance</option>
+        </select>
+        <select id="swal-shift" class="swal2-input">
+          <option value="Pagi" ${
+            jobData.shift === "Pagi" ? "selected" : ""
+          }>Pagi</option>
+          <option value="Siang" ${
+            jobData.shift === "Siang" ? "selected" : ""
+          }>Siang</option>
+          <option value="Malam" ${
+            jobData.shift === "Malam" ? "selected" : ""
+          }>Malam</option>
+        </select>
       `,
       focusConfirm: false,
       showCancelButton: true,
@@ -161,51 +208,29 @@ function createEmployeeCard(id, data) {
       preConfirm: () => {
         return {
           personalData: {
-            name: document.getElementById("swal-name").value.trim(),
-            id: document.getElementById("swal-id").value.trim(),
+            name: document.getElementById("swal-name").value,
+            id: document.getElementById("swal-id").value,
             dob: document.getElementById("swal-dob").value,
             gender: document.getElementById("swal-gender").value,
-            address: document.getElementById("swal-address").value.trim(),
-            phone: document.getElementById("swal-phone").value.trim(),
-            email: document.getElementById("swal-email").value.trim(),
+            address: document.getElementById("swal-address").value,
+            phone: document.getElementById("swal-phone").value,
+            email: document.getElementById("swal-email").value,
           },
           jobData: {
-            employeeId: document
-              .getElementById("swal-employee-id")
-              .value.trim(),
-            position: document.getElementById("swal-position").value.trim(),
-            department: document.getElementById("swal-department").value.trim(),
+            employeeId: document.getElementById("swal-employee-id").value,
+            position: document.getElementById("swal-position").value,
+            department: document.getElementById("swal-department").value,
             joinDate: document.getElementById("swal-join-date").value,
+            status: document.getElementById("swal-status").value,
+            shift: document.getElementById("swal-shift").value,
           },
         };
       },
     });
 
     if (updatedData) {
-      try {
-        const employeeRef = doc(db, "employees", id);
-
-        // Update Firestore satu per satu
-        await updateDoc(employeeRef, {
-          "personalData.name": updatedData.personalData.name,
-          "personalData.id": updatedData.personalData.id,
-          "personalData.dob": updatedData.personalData.dob,
-          "personalData.gender": updatedData.personalData.gender,
-          "personalData.address": updatedData.personalData.address,
-          "personalData.phone": updatedData.personalData.phone,
-          "personalData.email": updatedData.personalData.email,
-          "jobData.employeeId": updatedData.jobData.employeeId,
-          "jobData.position": updatedData.jobData.position,
-          "jobData.department": updatedData.jobData.department,
-          "jobData.joinDate": updatedData.jobData.joinDate,
-        });
-
-        Swal.fire("Berhasil!", "Data pegawai telah diperbarui.", "success");
-        loadEmployees(); // Refresh tampilan setelah update
-      } catch (error) {
-        Swal.fire("Error!", "Gagal memperbarui data pegawai.", "error");
-        console.error("Update Error:", error);
-      }
+      await updateDoc(doc(db, "employees", id), updatedData);
+      loadEmployees();
     }
   });
 
