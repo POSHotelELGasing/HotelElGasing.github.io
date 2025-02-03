@@ -55,7 +55,7 @@ function createEmployeeCard(id, data) {
   card.innerHTML = `
     <div class="flex flex-col items-center p-4 bg-white shadow-lg rounded-lg">
       <img
-        src="${personalData.photo || "https://via.placeholder.com/150"}"
+        src="${defaultPhoto}"
         alt="Foto ${personalData.name || "Pegawai"}"
         class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
       />
@@ -80,6 +80,7 @@ function createEmployeeCard(id, data) {
       </div>
     </div>
   `;
+  photo;
 
   // Event Listener untuk Tombol Detail
   card.querySelector(".detail-btn").addEventListener("click", () => {
@@ -169,11 +170,9 @@ addEmployeeBtn.addEventListener("click", async () => {
       <input id="swal-address" class="swal2-input" placeholder="Alamat Lengkap">
       <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon">
       <input id="swal-email" class="swal2-input" placeholder="Alamat Email">
-      <input id="swal-photo" type="file" class="swal2-input" accept="image/*">
     `,
     focusConfirm: false,
     preConfirm: () => {
-      const photoFile = document.getElementById("swal-photo").files[0];
       return {
         name: document.getElementById("swal-name").value,
         id: document.getElementById("swal-id").value,
@@ -182,7 +181,6 @@ addEmployeeBtn.addEventListener("click", async () => {
         address: document.getElementById("swal-address").value,
         phone: document.getElementById("swal-phone").value,
         email: document.getElementById("swal-email").value,
-        photoFile,
       };
     },
     confirmButtonText: "Lanjutkan",
@@ -191,16 +189,7 @@ addEmployeeBtn.addEventListener("click", async () => {
   });
 
   if (personalData) {
-    // Upload Photo to Firebase Storage
-    let photoURL = "";
-    if (personalData.photoFile) {
-      const photoRef = ref(
-        storage,
-        `employees/${personalData.id || Date.now()}`
-      );
-      await uploadBytes(photoRef, personalData.photoFile);
-      photoURL = await getDownloadURL(photoRef);
-    }
+    const photoURL = "https://via.placeholder.com/150"; // Set default foto
 
     // Form Input Data Pekerjaan
     const { value: jobData } = await Swal.fire({
