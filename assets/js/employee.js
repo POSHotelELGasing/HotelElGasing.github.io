@@ -255,7 +255,6 @@ addEmployeeBtn.addEventListener("click", async () => {
       <input id="swal-id" class="swal2-input" placeholder="Nomor Identitas">
       <input id="swal-dob" type="date" class="swal2-input" placeholder="Tanggal Lahir">
       <select id="swal-gender" class="swal2-input">
-        <option value="">Jenis Kelamin</option>
         <option value="Pria">Pria</option>
         <option value="Wanita">Wanita</option>
       </select>
@@ -280,63 +279,52 @@ addEmployeeBtn.addEventListener("click", async () => {
     showCancelButton: true,
   });
 
-  if (personalData) {
-    const photoURL = defaultPhoto; // Tetapkan gambar default
+  if (!personalData) return; // Jika user batal, keluar dari fungsi
 
-    await addDoc(collection(db, "employees"), {
-      personalData: { ...personalData, photo: photoURL },
-      jobData,
-    });
+  const { value: jobData } = await Swal.fire({
+    title: "Data Pekerjaan Pegawai",
+    html: `
+      <input id="swal-position" class="swal2-input" placeholder="Jabatan">
+      <input id="swal-department" class="swal2-input" placeholder="Departemen">
+      <input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung">
+      <select id="swal-status" class="swal2-input">
+        <option value="Kontrak">Kontrak</option>
+        <option value="Tetap">Tetap</option>
+        <option value="Freelance">Freelance</option>
+      </select>
+      <select id="swal-shift" class="swal2-input">
+        <option value="Pagi">Pagi</option>
+        <option value="Siang">Siang</option>
+        <option value="Malam">Malam</option>
+      </select>
+    `,
+    focusConfirm: false,
+    preConfirm: () => {
+      return {
+        position: document.getElementById("swal-position").value,
+        department: document.getElementById("swal-department").value,
+        joinDate: document.getElementById("swal-join-date").value,
+        status: document.getElementById("swal-status").value,
+        shift: document.getElementById("swal-shift").value,
+      };
+    },
+    confirmButtonText: "Simpan",
+    cancelButtonText: "Batal",
+    showCancelButton: true,
+  });
 
-    // Form Input Data Pekerjaan
-    const { value: jobData } = await Swal.fire({
-      title: "Data Pekerjaan Pegawai",
-      html: `
-        <input id="swal-employee-id" class="swal2-input" placeholder="ID Pegawai">
-        <input id="swal-position" class="swal2-input" placeholder="Jabatan">
-        <input id="swal-department" class="swal2-input" placeholder="Departemen">
-        <input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung">
-        <select id="swal-status" class="swal2-input">
-          <option value="">Status Kepegawaian</option>
-          <option value="Kontrak">Kontrak</option>
-          <option value="Tetap">Tetap</option>
-          <option value="Freelance">Freelance</option>
-        </select>
-        <select id="swal-shift" class="swal2-input">
-          <option value="">Shift Kerja</option>
-          <option value="Pagi">Pagi</option>
-          <option value="Siang">Siang</option>
-          <option value="Malam">Malam</option>
-        </select>
-      `,
-      focusConfirm: false,
-      preConfirm: () => {
-        return {
-          employeeId: document.getElementById("swal-employee-id").value,
-          position: document.getElementById("swal-position").value,
-          department: document.getElementById("swal-department").value,
-          joinDate: document.getElementById("swal-join-date").value,
-          status: document.getElementById("swal-status").value,
-          shift: document.getElementById("swal-shift").value,
-        };
-      },
-      confirmButtonText: "Simpan",
-      cancelButtonText: "Batal",
-      showCancelButton: true,
-    });
+  if (!jobData) return; // Jika user batal, keluar dari fungsi
+  const autoEmployeeId = `EMP-${Date.now()}`;
 
-    if (jobData) {
-      // Simpan Data ke Firestore
-      await addDoc(collection(db, "employees"), {
-        personalData: { ...personalData, photo: photoURL },
-        jobData,
-      });
+  // Simpan ke Firestore setelah semua data tersedia
+  await addDoc(collection(db, "employees"), {
+    personalData: { ...personalData, photo: defaultPhoto },
+    jobData: { ...jobData, employeeId: autoEmployeeId }, // Tambahkan ID pegawai otomatis
+  });
 
-      // Reload Employees
-      loadEmployees();
-    }
-  }
+  // Reload Employees
+
+  loadEmployees();
 });
-
 // Initial Load
 loadEmployees();
