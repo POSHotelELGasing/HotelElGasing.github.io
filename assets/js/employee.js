@@ -112,18 +112,75 @@ function createEmployeeCard(id, data) {
 
   // Event Listener untuk Tombol Edit
   card.querySelector(".edit-btn").addEventListener("click", async () => {
-    const { value: newName } = await Swal.fire({
-      title: "Edit Nama",
-      input: "text",
-      inputValue: data.personalData.name,
+    const { value: updatedData } = await Swal.fire({
+      title: "Edit Data Pegawai",
+      html: `
+        <input id="swal-name" class="swal2-input" placeholder="Nama Lengkap" value="${
+          personalData.name || ""
+        }">
+        <input id="swal-id" class="swal2-input" placeholder="Nomor Identitas" value="${
+          personalData.id || ""
+        }">
+        <input id="swal-dob" type="date" class="swal2-input" placeholder="Tanggal Lahir" value="${
+          personalData.dob || ""
+        }">
+        <select id="swal-gender" class="swal2-input">
+          <option value="Pria" ${
+            personalData.gender === "Pria" ? "selected" : ""
+          }>Pria</option>
+          <option value="Wanita" ${
+            personalData.gender === "Wanita" ? "selected" : ""
+          }>Wanita</option>
+        </select>
+        <input id="swal-address" class="swal2-input" placeholder="Alamat" value="${
+          personalData.address || ""
+        }">
+        <input id="swal-phone" class="swal2-input" placeholder="Nomor Telepon" value="${
+          personalData.phone || ""
+        }">
+        <input id="swal-email" class="swal2-input" placeholder="Email" value="${
+          personalData.email || ""
+        }">
+        <input id="swal-employee-id" class="swal2-input" placeholder="ID Pegawai" value="${
+          jobData.employeeId || ""
+        }">
+        <input id="swal-position" class="swal2-input" placeholder="Jabatan" value="${
+          jobData.position || ""
+        }">
+        <input id="swal-department" class="swal2-input" placeholder="Departemen" value="${
+          jobData.department || ""
+        }">
+        <input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung" value="${
+          jobData.joinDate || ""
+        }">
+      `,
+      focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: "Simpan",
       cancelButtonText: "Batal",
+      preConfirm: () => {
+        return {
+          personalData: {
+            name: document.getElementById("swal-name").value,
+            id: document.getElementById("swal-id").value,
+            dob: document.getElementById("swal-dob").value,
+            gender: document.getElementById("swal-gender").value,
+            address: document.getElementById("swal-address").value,
+            phone: document.getElementById("swal-phone").value,
+            email: document.getElementById("swal-email").value,
+          },
+          jobData: {
+            employeeId: document.getElementById("swal-employee-id").value,
+            position: document.getElementById("swal-position").value,
+            department: document.getElementById("swal-department").value,
+            joinDate: document.getElementById("swal-join-date").value,
+          },
+        };
+      },
     });
-    if (newName) {
-      await updateDoc(doc(db, "employees", id), {
-        "personalData.name": newName,
-      });
+
+    if (updatedData) {
+      await updateDoc(doc(db, "employees", id), updatedData);
       loadEmployees();
     }
   });
