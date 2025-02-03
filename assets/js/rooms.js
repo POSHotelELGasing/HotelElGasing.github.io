@@ -187,17 +187,32 @@ snapshot.forEach((doc) => {
 
 // Validasi Nomor Kamar di Dropdown
 document.getElementById("add-room-btn").addEventListener("click", () => {
-const dropdown = document.getElementById("room-number");
-dropdown.innerHTML = `<option value="" disabled selected>Pilih Nomor Kamar</option>`;
-db.collection("roomNumbers").get().then((snapshot) => {
-snapshot.forEach((doc) => {
-  const roomNumber = doc.data().number;
-  dropdown.innerHTML += `<option value="${roomNumber}">${roomNumber}</option>`;
-});
+  const dropdown = document.getElementById("room-number");
+  dropdown.innerHTML = `<option value="" disabled selected>Pilih Nomor Kamar</option>`;
+
+  // Ambil semua nomor kamar yang sudah digunakan di "rooms"
+  db.collection("rooms").get().then((roomSnapshot) => {
+      let usedRoomNumbers = new Set();
+      roomSnapshot.forEach((doc) => {
+          usedRoomNumbers.add(doc.data().number);
+      });
+
+      // Ambil semua nomor kamar dari "roomNumbers"
+      db.collection("roomNumbers").get().then((roomNumbersSnapshot) => {
+          roomNumbersSnapshot.forEach((doc) => {
+              const roomNumber = doc.data().number;
+
+              // Hanya tambahkan nomor kamar yang belum digunakan
+              if (!usedRoomNumbers.has(roomNumber)) {
+                  dropdown.innerHTML += `<option value="${roomNumber}">${roomNumber}</option>`;
+              }
+          });
+      });
+  });
+
+  openModal("Tambah Kamar");
 });
 
-openModal("Tambah Kamar");
-});
 
 // Modal Detail Nomor Kamar
 const detailRoomNumberModal = document.getElementById(
