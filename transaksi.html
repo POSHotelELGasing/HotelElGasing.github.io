@@ -265,33 +265,33 @@
 
       // Fungsi untuk mengisi dropdown kamar dan tamu
       function loadRoomsAndGuests() {
-        const transactionRoom = document.getElementById("transaction-room");
-        const transactionGuest = document.getElementById("transaction-guest");
-      
-        transactionRoom.innerHTML = '<option value="">Pilih Kamar</option>';
-        transactionGuest.innerHTML = '<option value="">Pilih Tamu</option>';
-      
-        // Mengambil data kamar hanya yang statusnya "available"
-        db.collection("rooms")
-          .where("status", "==", "Available") // Menambahkan filter berdasarkan status
-          .get()
-          .then((snapshot) => {
-            snapshot.forEach((doc) => {
-              const room = doc.data();
-              transactionRoom.innerHTML += <option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>;
-            });
-          });
-      
-        // Mengambil data tamu
-        db.collection("guests")
-          .get()
-          .then((snapshot) => {
-            snapshot.forEach((doc) => {
-              const guest = doc.data();
-              transactionGuest.innerHTML += <option value="${doc.id}">${guest.name}</option>;
-            });
-          });
-      }
+  const transactionRoom = document.getElementById("transaction-room");
+  const transactionGuest = document.getElementById("transaction-guest");
+
+  transactionRoom.innerHTML = '<option value="">Pilih Kamar</option>';
+  transactionGuest.innerHTML = '<option value="">Pilih Tamu</option>';
+
+  // Mengambil data kamar yang statusnya "Available"
+  db.collection("rooms")
+    .where("status", "==", "Available") 
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const room = doc.data();
+        transactionRoom.innerHTML += `<option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>`;
+      });
+    });
+
+  // Mengambil data tamu
+  db.collection("guests")
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const guest = doc.data();
+        transactionGuest.innerHTML += `<option value="${doc.id}">${guest.name}</option>`;
+      });
+    });
+}
       // Fungsi untuk mengedit transaksi
       function editTransaction(id) {
         db.collection("transactions")
@@ -314,7 +314,7 @@
 
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
-document.getElementById("transaction-form").addEventListener("submit", (e) => {
+      document.getElementById("transaction-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
   const transactionId = document.getElementById("transaction-id").value;
@@ -327,9 +327,10 @@ document.getElementById("transaction-form").addEventListener("submit", (e) => {
   const guestId = transactionGuest.value;
   const days = parseInt(transactionDays.value);
 
-  const roomPrice = transactionRoom.selectedOptions[0]
-    ? parseInt(transactionRoom.selectedOptions[0].getAttribute("data-price"))
+  const roomPrice = transactionRoom.selectedOptions[0] 
+    ? parseInt(transactionRoom.selectedOptions[0].getAttribute("data-price")) 
     : 0;
+  
   const totalPrice = roomPrice * days;
 
   const transactionData = {
@@ -339,27 +340,33 @@ document.getElementById("transaction-form").addEventListener("submit", (e) => {
     guestName: transactionGuest.selectedOptions[0].text,
     days,
     totalPrice,
-    date: transactionDate, // Simpan tanggal transaksi
+    date: transactionDate,
   };
 
   if (transactionId) {
     db.collection("transactions")
       .doc(transactionId)
-      .update(transactionData);
+      .update(transactionData)
+      .then(() => {
+        Swal.fire("Berhasil!", "Transaksi berhasil diperbarui!", "success");
+        transactionModal.classList.add("hidden");
+      });
   } else {
-    db.collection("transactions").add(transactionData).then(() => {
-      // Setelah transaksi ditambahkan, perbarui status kamar menjadi "occupied"
-      db.collection("rooms")
-        .doc(roomId)
-        .update({
-          status: "occupied"
-        });
+    db.collection("transactions").add(transactionData).then((docRef) => {
+      if (roomId) {
+        db.collection("rooms")
+          .doc(roomId)
+          .update({
+            status: "Occupied"
+          }).then(() => {
+            console.log("Status kamar diperbarui menjadi Occupied");
+          }).catch(error => console.error("Gagal memperbarui status kamar", error));
+      }
+      Swal.fire("Berhasil!", "Transaksi berhasil disimpan!", "success");
+      transactionModal.classList.add("hidden");
     });
   }
-
-  transactionModal.classList.add("hidden");
 });
-
       document
         .getElementById("add-transaction-btn")
         .addEventListener("click", () => {
