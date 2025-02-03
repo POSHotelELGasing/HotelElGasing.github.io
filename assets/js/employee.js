@@ -161,18 +161,20 @@ function createEmployeeCard(id, data) {
       preConfirm: () => {
         return {
           personalData: {
-            name: document.getElementById("swal-name").value,
-            id: document.getElementById("swal-id").value,
+            name: document.getElementById("swal-name").value.trim(),
+            id: document.getElementById("swal-id").value.trim(),
             dob: document.getElementById("swal-dob").value,
             gender: document.getElementById("swal-gender").value,
-            address: document.getElementById("swal-address").value,
-            phone: document.getElementById("swal-phone").value,
-            email: document.getElementById("swal-email").value,
+            address: document.getElementById("swal-address").value.trim(),
+            phone: document.getElementById("swal-phone").value.trim(),
+            email: document.getElementById("swal-email").value.trim(),
           },
           jobData: {
-            employeeId: document.getElementById("swal-employee-id").value,
-            position: document.getElementById("swal-position").value,
-            department: document.getElementById("swal-department").value,
+            employeeId: document
+              .getElementById("swal-employee-id")
+              .value.trim(),
+            position: document.getElementById("swal-position").value.trim(),
+            department: document.getElementById("swal-department").value.trim(),
             joinDate: document.getElementById("swal-join-date").value,
           },
         };
@@ -180,8 +182,30 @@ function createEmployeeCard(id, data) {
     });
 
     if (updatedData) {
-      await updateDoc(doc(db, "employees", id), updatedData);
-      loadEmployees();
+      try {
+        const employeeRef = doc(db, "employees", id);
+
+        // Update Firestore satu per satu
+        await updateDoc(employeeRef, {
+          "personalData.name": updatedData.personalData.name,
+          "personalData.id": updatedData.personalData.id,
+          "personalData.dob": updatedData.personalData.dob,
+          "personalData.gender": updatedData.personalData.gender,
+          "personalData.address": updatedData.personalData.address,
+          "personalData.phone": updatedData.personalData.phone,
+          "personalData.email": updatedData.personalData.email,
+          "jobData.employeeId": updatedData.jobData.employeeId,
+          "jobData.position": updatedData.jobData.position,
+          "jobData.department": updatedData.jobData.department,
+          "jobData.joinDate": updatedData.jobData.joinDate,
+        });
+
+        Swal.fire("Berhasil!", "Data pegawai telah diperbarui.", "success");
+        loadEmployees(); // Refresh tampilan setelah update
+      } catch (error) {
+        Swal.fire("Error!", "Gagal memperbarui data pegawai.", "error");
+        console.error("Update Error:", error);
+      }
     }
   });
 
