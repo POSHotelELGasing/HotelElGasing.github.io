@@ -60,40 +60,12 @@ function createEmployeeCard(id, data) {
       class="w-32 h-32 object-cover rounded-full shadow-lg mb-4"
     />
     <h3 class="font-bold text-lg">${personalData.name || "Tidak Ada Nama"}</h3>
-    <p class="text-sm text-gray-600">Nomor Identitas: ${
-      personalData.id || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Tanggal Lahir: ${
-      personalData.dob || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Jenis Kelamin: ${
-      personalData.gender || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Alamat: ${
-      personalData.address || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Kontak: ${
-      personalData.phone || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Email: ${
-      personalData.email || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">ID Pegawai: ${
-      jobData.employeeId || "Tidak Ada"
-    }</p>
     <p class="text-sm text-gray-600">Jabatan: ${
-      jobData.position || "Tidak Ada"
+      jobData.position || "Tidak Ada Jabatan"
     }</p>
     <p class="text-sm text-gray-600">Departemen: ${
-      jobData.department || "Tidak Ada"
+      jobData.department || "Tidak Ada Departemen"
     }</p>
-    <p class="text-sm text-gray-600">Tanggal Bergabung: ${
-      jobData.joinDate || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Status: ${
-      jobData.status || "Tidak Ada"
-    }</p>
-    <p class="text-sm text-gray-600">Shift: ${jobData.shift || "Tidak Ada"}</p>
     <div class="flex space-x-2 mt-4">
       <button class="bg-blue-500 text-white px-4 py-2 rounded detail-btn">Detail</button>
       <button class="bg-blue-600 text-white px-4 py-2 rounded edit-btn">Edit</button>
