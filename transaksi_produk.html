@@ -194,7 +194,7 @@
     const transactionList = document.getElementById("transactions-list");
     transactionList.innerHTML = "";
 
-    db.collection("transactions").onSnapshot(snapshot => {
+    db.collection("transactions-produk").onSnapshot(snapshot => {
       transactionList.innerHTML = "";
       snapshot.forEach(doc => {
         const transaction = doc.data();
@@ -235,7 +235,7 @@
       }
     }).then(result => {
       if (result.isConfirmed) {
-        db.collection("transactions").doc(id).update({
+        db.collection("transactions-produk").doc(id).update({
           quantity: result.value.newQuantity
         }).then(() => {
           Swal.fire("Berhasil!", "Transaksi berhasil diperbarui.", "success");
@@ -257,7 +257,7 @@
       confirmButtonText: "Ya, hapus!"
     }).then((result) => {
       if (result.isConfirmed) {
-        db.collection("transactions").doc(id).delete().then(() => {
+        db.collection("transactions-produk").doc(id).delete().then(() => {
           Swal.fire("Terhapus!", "Transaksi berhasil dihapus.", "success");
         }).catch(error => {
           Swal.fire("Error!", error.message, "error");
@@ -371,7 +371,7 @@
               const { guestId, roomId, productId, quantity, totalPrice } =
                 result.value;
 
-              db.collection("transactions")
+              db.collection("transactions-produk")
                 .add({
                   guestId: guestId,
                   roomId: roomId,

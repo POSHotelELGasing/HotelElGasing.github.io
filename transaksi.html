@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manajemen Transaksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -18,189 +18,220 @@
         background-color: #3b82f6;
       }
     </style>
-</head>
-<body class="bg-gray-100">
-
-<!-- Navbar -->
-<nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
-  <div class="container mx-auto flex justify-between items-center">
-    <h1 class="text-xl font-bold flex items-center">
-      <i class="fa-solid fa-hotel mr-2"></i>Hotel POS System
-    </h1>
-    <button
-      id="menu-toggle"
-      class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
-      aria-label="Toggle Navigation"
-    >
-      ☰
-    </button>
-    <!-- Menu -->
-    <ul
-      id="menu"
-      class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
-    >
-      <li>
-        <a
-          href="index.html"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-          >Dashboard</a
-        >
-      </li>
-      <li>
-        <a
-          href="rooms.html"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
-          >Kamar</a
-        >
-      </li>
-      <li>
-        <a
-          href="guests.html"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-          >Tamu</a
-        >
-      </li>
-
-      <!-- Dropdown Transaksi -->
-      <li class="relative">
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold flex items-center">
+          <i class="fa-solid fa-hotel mr-2"></i>Hotel POS System
+        </h1>
         <button
-          id="transaksi-toggle"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
         >
-          Transaksi
+          ☰
         </button>
+        <!-- Menu -->
         <ul
-          id="transaksi-menu"
-          class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+          id="menu"
+          class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
         >
           <li>
             <a
-              href="transaksi.html"
-              class="block px-4 py-2 hover:bg-blue-500"
-              >Kamar Tamu</a
+              href="index.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Dashboard</a
             >
           </li>
           <li>
             <a
-              href="transaksi_produk.html"
-              class="block px-4 py-2 hover:bg-blue-500"
-              >Produk</a
+              href="rooms.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a
+              href="guests.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Tamu</a
+            >
+          </li>
+
+          <!-- Dropdown Transaksi -->
+          <li class="relative">
+            <button
+              id="transaksi-toggle"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+            >
+              Transaksi
+            </button>
+            <ul
+              id="transaksi-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="transaksi.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kamar Tamu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="transaksi_produk.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Produk</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Product</a
+            >
+          </li>
+          <li>
+            <a
+              href="employee.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Pegawai</a
+            >
+          </li>
+          <li>
+            <a
+              href="login.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Login</a
             >
           </li>
         </ul>
-      </li>
+      </div>
+    </nav>
 
-      <li>
-        <a
-          href="product.html"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-          >Product</a
-        >
-      </li>
-      <li>
-        <a
-          href="employee.html"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-          >Pegawai</a
-        >
-      </li>
-      <li>
-        <a
-          href="login.html"
-          class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-          >Login</a
-        >
-      </li>
-    </ul>
-  </div>
-</nav>
+    <!-- Main Content -->
+    <main class="container mx-auto p-6 pt-11">
+      <h2 class="text-2xl font-bold mb-4 pt-12">Manajemen Transaksi</h2>
 
-<!-- Main Content -->
-<main class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4">Manajemen Transaksi</h2>
-
-    <div class="bg-white p-4 shadow rounded mb-4">
-        <button id="add-transaction-btn" class="bg-green-600 text-white p-2 rounded w-full sm:w-auto">
-            Tambah Transaksi
+      <div class="bg-white p-4 shadow rounded mb-4">
+        <button
+          id="add-transaction-btn"
+          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
+        >
+          Tambah Transaksi
         </button>
-    </div>
+      </div>
 
-    <!-- Tempat Menampilkan Transaksi dalam Bentuk Kartu -->
-    <div id="transaction-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-</main>
+      <!-- Tempat Menampilkan Transaksi dalam Bentuk Kartu -->
+      <div
+        id="transaction-list"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      ></div>
+    </main>
 
-<!-- Modal Tambah/Edit Transaksi -->
-<div id="transaction-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
-        <h3 id="modal-title" class="text-xl font-bold mb-4">Tambah Transaksi</h3>
+    <!-- Modal Tambah/Edit Transaksi -->
+    <div
+      id="transaction-modal"
+      class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-white p-6 rounded shadow-lg w-full sm:w-1/2 md:w-1/3">
+        <h3 id="modal-title" class="text-xl font-bold mb-4">
+          Tambah Transaksi
+        </h3>
         <form id="transaction-form">
-            <input type="hidden" id="transaction-id">
+          <input type="hidden" id="transaction-id" />
 
-            <label class="block mb-2">Nomor Kamar</label>
-            <select id="transaction-room" class="p-2 border rounded mb-4 w-full" required>
-                <option value="">Memuat...</option>
-            </select>
+          <label class="block mb-2">Nomor Kamar</label>
+          <select
+            id="transaction-room"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          >
+            <option value="">Memuat...</option>
+          </select>
 
-            <label class="block mb-2">Nama Tamu</label>
-            <select id="transaction-guest" class="p-2 border rounded mb-4 w-full" required>
-                <option value="">Memuat...</option>
-            </select>
+          <label class="block mb-2">Nama Tamu</label>
+          <select
+            id="transaction-guest"
+            class="p-2 border rounded mb-4 w-full"
+            required
+          >
+            <option value="">Memuat...</option>
+          </select>
 
-            <label class="block mb-2">Durasi (hari)</label>
-            <input type="number" id="transaction-days" class="p-2 border rounded mb-4 w-full" placeholder="Lama Hari" required min="1">
+          <label class="block mb-2">Durasi (hari)</label>
+          <input
+            type="number"
+            id="transaction-days"
+            class="p-2 border rounded mb-4 w-full"
+            placeholder="Lama Hari"
+            required
+            min="1"
+          />
 
-            <button type="submit" class="bg-blue-600 text-white p-2 rounded w-full">
-                Simpan Transaksi
-            </button>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white p-2 rounded w-full"
+          >
+            Simpan Transaksi
+          </button>
         </form>
-        <button id="close-transaction-modal" class="bg-red-600 text-white p-2 rounded w-full mt-4">
-            Tutup
+        <button
+          id="close-transaction-modal"
+          class="bg-red-600 text-white p-2 rounded w-full mt-4"
+        >
+          Tutup
         </button>
+      </div>
     </div>
-</div>
 
-<script>
-  const menuToggle = document.getElementById("menu-toggle");
-  const menu = document.getElementById("menu");
+    <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("menu");
 
-  menuToggle.addEventListener("click", () => {
-    const isHidden = menu.classList.contains("hidden");
-    if (isHidden) {
-      menu.classList.remove("hidden");
-      setTimeout(() => {
-        menu.classList.remove("-translate-y-full", "opacity-0");
-        menu.classList.add("translate-y-0", "opacity-100");
-      }, 10);
-    } else {
-      menu.classList.remove("translate-y-0", "opacity-100");
-      menu.classList.add("-translate-y-full", "opacity-0");
-      setTimeout(() => {
-        menu.classList.add("hidden");
-      }, 300);
-    }
-  });
-    // Konfigurasi Firebase
-    const firebaseConfig = {
+      menuToggle.addEventListener("click", () => {
+        const isHidden = menu.classList.contains("hidden");
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          setTimeout(() => {
+            menu.classList.remove("-translate-y-full", "opacity-0");
+            menu.classList.add("translate-y-0", "opacity-100");
+          }, 10);
+        } else {
+          menu.classList.remove("translate-y-0", "opacity-100");
+          menu.classList.add("-translate-y-full", "opacity-0");
+          setTimeout(() => {
+            menu.classList.add("hidden");
+          }, 300);
+        }
+      });
+      // Konfigurasi Firebase
+      const firebaseConfig = {
         apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
         authDomain: "prog4-34938.firebaseapp.com",
         projectId: "prog4-34938",
         storageBucket: "prog4-34938.appspot.com",
         messagingSenderId: "920234132726",
-        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7"
-    };
+        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
+      };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-    const transactionList = document.getElementById("transaction-list");
-    const transactionModal = document.getElementById("transaction-modal");
+      const transactionList = document.getElementById("transaction-list");
+      const transactionModal = document.getElementById("transaction-modal");
 
-    // 🔥 Real-time update dengan onSnapshot()
-    db.collection("transactions").onSnapshot((snapshot) => {
+      // 🔥 Real-time update dengan onSnapshot()
+      db.collection("transactions").onSnapshot((snapshot) => {
         transactionList.innerHTML = "";
         snapshot.forEach((doc) => {
-            const transaction = doc.data();
-            transactionList.innerHTML += `
+          const transaction = doc.data();
+          transactionList.innerHTML += `
                 <div class="bg-white p-4 shadow rounded">
                     <h3 class="text-lg font-bold">${transaction.guestName}</h3>
                     <p>Kamar: ${transaction.roomNumber}</p>
@@ -212,87 +243,126 @@
                     </div>
                 </div>`;
         });
-    });
+      });
 
-    // Fungsi untuk menghapus transaksi
-    function deleteTransaction(id) {
-        db.collection("transactions").doc(id).delete().then(() => {
+      // Fungsi untuk menghapus transaksi
+      function deleteTransaction(id) {
+        db.collection("transactions")
+          .doc(id)
+          .delete()
+          .then(() => {
             Swal.fire("Terhapus!", "Transaksi berhasil dihapus.", "success");
-        });
-    }
+          });
+      }
 
-    // Fungsi untuk mengisi dropdown kamar dan tamu
-    function loadRoomsAndGuests() {
+      // Fungsi untuk mengisi dropdown kamar dan tamu
+      function loadRoomsAndGuests() {
         const transactionRoom = document.getElementById("transaction-room");
         const transactionGuest = document.getElementById("transaction-guest");
 
         transactionRoom.innerHTML = '<option value="">Pilih Kamar</option>';
         transactionGuest.innerHTML = '<option value="">Pilih Tamu</option>';
 
-        db.collection("rooms").get().then((snapshot) => {
+        db.collection("rooms")
+          .get()
+          .then((snapshot) => {
             snapshot.forEach((doc) => {
-                const room = doc.data();
-                transactionRoom.innerHTML += `<option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>`;
+              const room = doc.data();
+              transactionRoom.innerHTML += `<option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>`;
             });
-        });
+          });
 
-        db.collection("guests").get().then((snapshot) => {
+        db.collection("guests")
+          .get()
+          .then((snapshot) => {
             snapshot.forEach((doc) => {
-                const guest = doc.data();
-                transactionGuest.innerHTML += `<option value="${doc.id}">${guest.name}</option>`;
+              const guest = doc.data();
+              transactionGuest.innerHTML += `<option value="${doc.id}">${guest.name}</option>`;
             });
-        });
-    }
+          });
+      }
 
-    // Fungsi untuk mengedit transaksi
-    function editTransaction(id) {
-        db.collection("transactions").doc(id).get().then((doc) => {
+      // Fungsi untuk mengedit transaksi
+      function editTransaction(id) {
+        db.collection("transactions")
+          .doc(id)
+          .get()
+          .then((doc) => {
             if (doc.exists) {
-                const transaction = doc.data();
-                document.getElementById("transaction-id").value = id;
-                document.getElementById("transaction-room").value = transaction.roomId;
-                document.getElementById("transaction-guest").value = transaction.guestId;
-                document.getElementById("transaction-days").value = transaction.days;
-                transactionModal.classList.remove("hidden");
+              const transaction = doc.data();
+              document.getElementById("transaction-id").value = id;
+              document.getElementById("transaction-room").value =
+                transaction.roomId;
+              document.getElementById("transaction-guest").value =
+                transaction.guestId;
+              document.getElementById("transaction-days").value =
+                transaction.days;
+              transactionModal.classList.remove("hidden");
             }
-        });
-    }
+          });
+      }
 
-    // Fungsi untuk menyimpan transaksi (Tambah/Edit)
-    document.getElementById("transaction-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        
-        const transactionId = document.getElementById("transaction-id").value;
-        const transactionRoom = document.getElementById("transaction-room");
-        const transactionGuest = document.getElementById("transaction-guest");
-        const transactionDays = document.getElementById("transaction-days");
+      // Fungsi untuk menyimpan transaksi (Tambah/Edit)
+      document
+        .getElementById("transaction-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
 
-        const roomId = transactionRoom.value;
-        const guestId = transactionGuest.value;
-        const days = parseInt(transactionDays.value);
+          const transactionId = document.getElementById("transaction-id").value;
+          const transactionRoom = document.getElementById("transaction-room");
+          const transactionGuest = document.getElementById("transaction-guest");
+          const transactionDays = document.getElementById("transaction-days");
 
-        const roomPrice = transactionRoom.selectedOptions[0] ? parseInt(transactionRoom.selectedOptions[0].getAttribute("data-price")) : 0;
-        const totalPrice = roomPrice * days;
+          const roomId = transactionRoom.value;
+          const guestId = transactionGuest.value;
+          const days = parseInt(transactionDays.value);
 
-        const transactionData = { roomId, roomNumber: transactionRoom.selectedOptions[0].text, guestId, guestName: transactionGuest.selectedOptions[0].text, days, totalPrice };
+          const roomPrice = transactionRoom.selectedOptions[0]
+            ? parseInt(
+                transactionRoom.selectedOptions[0].getAttribute("data-price")
+              )
+            : 0;
+          const totalPrice = roomPrice * days;
 
-        if (transactionId) {
-            db.collection("transactions").doc(transactionId).update(transactionData);
-        } else {
+          const transactionData = {
+            roomId,
+            roomNumber: transactionRoom.selectedOptions[0].text,
+            guestId,
+            guestName: transactionGuest.selectedOptions[0].text,
+            days,
+            totalPrice,
+          };
+
+          if (transactionId) {
+            db.collection("transactions")
+              .doc(transactionId)
+              .update(transactionData);
+          } else {
             db.collection("transactions").add(transactionData);
-        }
+          }
 
-        transactionModal.classList.add("hidden");
-    });
+          transactionModal.classList.add("hidden");
+        });
 
-    document.getElementById("add-transaction-btn").addEventListener("click", () => {
-        transactionModal.classList.remove("hidden");
-        loadRoomsAndGuests();
-    });
+      document
+        .getElementById("add-transaction-btn")
+        .addEventListener("click", () => {
+          transactionModal.classList.remove("hidden");
+          loadRoomsAndGuests();
+        });
 
-    document.getElementById("close-transaction-modal").addEventListener("click", () => {
-        transactionModal.classList.add("hidden");
-    });
-</script>
-</body>
+      document
+        .getElementById("close-transaction-modal")
+        .addEventListener("click", () => {
+          transactionModal.classList.add("hidden");
+        });
+
+      document
+        .getElementById("transaksi-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("transaksi-menu");
+          menu.classList.toggle("hidden");
+        });
+    </script>
+  </body>
 </html>
