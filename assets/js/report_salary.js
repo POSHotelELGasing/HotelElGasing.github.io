@@ -273,6 +273,57 @@ searchEmployee.addEventListener("input", (e) => {
   );
 });
 
+document.getElementById("download-pdf-btn").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: "landscape" });
+
+  doc.setFontSize(14);
+  doc.text("Laporan Gaji Karyawan", 15, 15);
+  doc.setFontSize(10);
+
+  const rows = [];
+  document.querySelectorAll("#report-table tr").forEach((row) => {
+    const rowData = [];
+    row.querySelectorAll("td").forEach((cell) => {
+      rowData.push(cell.innerText);
+    });
+    rows.push(rowData);
+  });
+
+  if (rows.length === 0) {
+    console.warn("⚠️ Tidak ada data dalam tabel untuk diunduh!");
+    Swal.fire(
+      "Peringatan",
+      "Tidak ada data yang tersedia untuk diunduh!",
+      "warning"
+    );
+    return;
+  }
+
+  doc.autoTable({
+    head: [
+      [
+        "Nama",
+        "Jabatan",
+        "Departemen",
+        "Gaji Pokok",
+        "Tunjangan",
+        "Potongan",
+        "Total",
+        "Tanggal Gajian",
+      ],
+    ],
+    body: rows,
+    startY: 30,
+    theme: "grid",
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] },
+  });
+
+  doc.save("Laporan_Gaji_Karyawan.pdf");
+  console.log("✅ Laporan Gaji telah diunduh sebagai PDF!");
+});
+
 loadReport();
 
 document
