@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manajemen Gaji Karyawan</title>
+    <title>Laporan Gaji Karyawan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       rel="stylesheet"
@@ -129,15 +129,14 @@
               <li>
                 <a
                   href="salary_employee.html"
-                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
+                  class="block px-4 py-2 hover:bg-blue-500"
                   >Kelola Gaji</a
                 >
               </li>
-
               <li>
                 <a
                   href="report_salary.html"
-                  class="block px-4 py-2 hover:bg-blue-500"
+                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
                   >Report Gaji</a
                 >
               </li>
@@ -155,18 +154,57 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="container mx-auto p-6 pt-7">
-      <section class="pt-4">
-        <div class="mb-4">
-          <h2 class="text-2xl font-bold mb-4 pt-12">Manajemen Gaji Karyawan</h2>
-          <button
-            id="add-salary-btn"
-            class="bg-green-600 text-white p-2 rounded"
+    <!-- Statistik Pengeluaran -->
+    <main class="container mx-auto p-4 md:p-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-4 md:p-6 shadow rounded-lg text-center">
+          <h3 class="text-lg font-semibold text-gray-700">
+            Total Pengeluaran Gaji
+          </h3>
+          <p
+            id="total-salary"
+            class="text-3xl md:text-4xl font-bold text-blue-600"
           >
-            Tambah Gaji
-          </button>
-          <select id="filter-month" class="ml-4 p-2 border rounded">
+            Rp 0
+          </p>
+        </div>
+        <div class="bg-white p-4 md:p-6 shadow rounded-lg text-center">
+          <h3 class="text-lg font-semibold text-gray-700">Total Karyawan</h3>
+          <p
+            id="total-employees"
+            class="text-3xl md:text-4xl font-bold text-blue-600"
+          >
+            0
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-center gap-4 my-4">
+        <button
+          id="view-daily"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Harian
+        </button>
+        <button
+          id="view-monthly"
+          class="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Bulanan
+        </button>
+        <button
+          id="view-yearly"
+          class="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          Tahunan
+        </button>
+      </div>
+
+      <canvas id="salaryChart" class="mb-6 w-full"></canvas>
+
+      <div class="mb-4 flex flex-wrap gap-2 md:gap-4">
+        <div class="w-full sm:w-auto">
+          <label for="filter-month" class="font-bold">Filter Bulan:</label>
+          <select id="filter-month" class="p-2 border rounded w-full">
             <option value="">Semua</option>
             <option value="01">Januari</option>
             <option value="02">Februari</option>
@@ -181,21 +219,75 @@
             <option value="11">November</option>
             <option value="12">Desember</option>
           </select>
+        </div>
+        <div class="w-full sm:w-auto">
+          <label for="filter-department" class="font-bold"
+            >Filter Departemen:</label
+          >
+          <select id="filter-department" class="p-2 border rounded w-full">
+            <option value="">Semua</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+        <div class="w-full sm:w-auto">
+          <label for="filter-position" class="font-bold">Filter Jabatan:</label>
+          <select id="filter-position" class="p-2 border rounded w-full">
+            <option value="">Semua</option>
+            <option value="Manager">Manager</option>
+            <option value="Staff">Staff</option>
+            <option value="Supervisor">Supervisor</option>
+          </select>
+        </div>
+        <div class="w-full sm:w-auto">
+          <label for="search-employee" class="font-bold">Cari Pegawai:</label>
+          <input
+            type="text"
+            id="search-employee"
+            placeholder="Masukkan Nama Pegawai..."
+            class="p-2 border rounded w-full"
+          />
+        </div>
+        <div class="w-full sm:w-auto">
+          <button
+            id="download-csv-btn"
+            class="bg-green-600 text-white p-2 rounded w-full"
+          >
+            Unduh CSV
+          </button>
+        </div>
+        <div class="w-full sm:w-auto">
           <button
             id="download-pdf-btn"
-            class="ml-4 bg-red-600 text-white p-2 rounded"
+            class="bg-red-600 text-white p-2 rounded w-full"
           >
             Unduh PDF
           </button>
         </div>
+      </div>
 
-        <div
-          id="salary-list"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-        ></div>
-      </section>
+      <div class="overflow-x-auto">
+        <table
+          class="w-full bg-white shadow-md rounded-lg text-sm md:text-base"
+        >
+          <thead>
+            <tr class="bg-blue-500 text-white">
+              <th class="p-2">Nama</th>
+              <th class="p-2">Jabatan</th>
+              <th class="p-2">Departemen</th>
+              <th class="p-2">Gaji Pokok</th>
+              <th class="p-2">Tunjangan</th>
+              <th class="p-2">Potongan</th>
+              <th class="p-2">Total</th>
+              <th class="p-2">Tanggal Gajian</th>
+            </tr>
+          </thead>
+          <tbody id="report-table"></tbody>
+        </table>
+      </div>
     </main>
 
-    <script type="module" src="./assets/js/salary_employee.js"></script>
+    <script type="module" src="./assets/js/report_salary.js"></script>
   </body>
 </html>
