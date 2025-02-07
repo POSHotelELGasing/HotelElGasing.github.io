@@ -113,3 +113,23 @@ document
     var menu = document.getElementById("pegawai-menu");
     menu.classList.toggle("hidden");
   });
+
+const menuToggle = document.getElementById("menu-toggle");
+const menu = document.getElementById("menu");
+
+menuToggle.addEventListener("click", () => {
+  const isHidden = menu.classList.contains("hidden");
+  if (isHidden) {
+    menu.classList.remove("hidden");
+    setTimeout(() => {
+      menu.classList.remove("-translate-y-full", "opacity-0");
+      menu.classList.add("translate-y-0", "opacity-100");
+    }, 10);
+  } else {
+    menu.classList.remove("translate-y-0", "opacity-100");
+    menu.classList.add("-translate-y-full", "opacity-0");
+    setTimeout(() => {
+      menu.classList.add("hidden");
+    }, 300);
+  }
+});
