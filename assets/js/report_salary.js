@@ -23,6 +23,16 @@ const filterPosition = document.getElementById("filter-position");
 const searchEmployee = document.getElementById("search-employee");
 const totalSalary = document.getElementById("total-salary");
 const totalEmployees = document.getElementById("total-employees");
+const employeeCountElement = document.getElementById("employee-count");
+
+async function updateEmployeeCount() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "employees"));
+    employeeCountElement.textContent = querySnapshot.size;
+  } catch (error) {
+    console.error("Error fetching employee count:", error);
+  }
+}
 
 let salaryChart;
 
@@ -134,6 +144,7 @@ async function loadReport(
       }).format(amount);
 
     // Menambahkan data ke tabel
+    updateEmployeeCount();
     const row = `
 <tr class="border-b">
     <td class="p-2">${data.employeeName}</td>
