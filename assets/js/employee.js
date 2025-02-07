@@ -34,6 +34,26 @@ const defaultPhoto = "https://via.placeholder.com/150"; // Gambar default pegawa
 const employeeList = document.getElementById("employee-list");
 const addEmployeeBtn = document.getElementById("add-employee-btn");
 
+async function getJobAndDeptOptions() {
+  const jobSnapshot = await getDocs(collection(db, "positions"));
+  const deptSnapshot = await getDocs(collection(db, "departments"));
+  let jobOptions = "<option value=''>Pilih Jabatan</option>";
+  let deptOptions = "<option value=''>Pilih Departemen</option>";
+
+  jobSnapshot.forEach((doc) => {
+    jobOptions += `<option value="${doc.data().position}">${
+      doc.data().position
+    }</option>`;
+  });
+
+  deptSnapshot.forEach((doc) => {
+    deptOptions += `<option value="${doc.data().name}">${
+      doc.data().name
+    }</option>`;
+  });
+
+  return { jobOptions, deptOptions };
+}
 // Load Employees
 async function loadEmployees() {
   employeeList.innerHTML = "";
@@ -129,6 +149,27 @@ function createEmployeeCard(id, data) {
 
   // Event Listener untuk Tombol Edit
   card.querySelector(".edit-btn").addEventListener("click", async () => {
+    const positionsSnapshot = await getDocs(collection(db, "positions"));
+    const departmentsSnapshot = await getDocs(collection(db, "departments"));
+
+    let positionOptions = "<option value=''>Pilih Jabatan</option>";
+    positionsSnapshot.forEach((doc) => {
+      const isSelected =
+        jobData.position === doc.data().position ? "selected" : "";
+      positionOptions += `<option value="${
+        doc.data().position
+      }" ${isSelected}>${doc.data().position}</option>`;
+    });
+
+    let departmentOptions = "<option value=''>Pilih Departemen</option>";
+    departmentsSnapshot.forEach((doc) => {
+      const isSelected =
+        jobData.department === doc.data().name ? "selected" : "";
+      departmentOptions += `<option value="${doc.data().name}" ${isSelected}>${
+        doc.data().name
+      }</option>`;
+    });
+
     const { value: updatedData } = await Swal.fire({
       title: "Edit Data Pegawai",
       html: `
@@ -161,12 +202,8 @@ function createEmployeeCard(id, data) {
         <input id="swal-employee-id" class="swal2-input" placeholder="ID Pegawai" value="${
           jobData.employeeId || ""
         }">
-        <input id="swal-position" class="swal2-input" placeholder="Jabatan" value="${
-          jobData.position || ""
-        }">
-        <input id="swal-department" class="swal2-input" placeholder="Departemen" value="${
-          jobData.department || ""
-        }">
+        <select id="swal-position" class="swal2-input">${positionOptions}</select>
+        <select id="swal-department" class="swal2-input">${departmentOptions}</select>
         <input id="swal-join-date" type="date" class="swal2-input" value="${
           jobData.joinDate || ""
         }">
@@ -248,6 +285,7 @@ function createEmployeeCard(id, data) {
 // Add Employee
 addEmployeeBtn.addEventListener("click", async () => {
   // Form Input Data Pribadi
+  const { jobOptions, deptOptions } = await getJobAndDeptOptions();
   const { value: personalData } = await Swal.fire({
     title: "Data Pribadi Pegawai",
     html: `
@@ -284,8 +322,8 @@ addEmployeeBtn.addEventListener("click", async () => {
   const { value: jobData } = await Swal.fire({
     title: "Data Pekerjaan Pegawai",
     html: `
-      <input id="swal-position" class="swal2-input" placeholder="Jabatan">
-      <input id="swal-department" class="swal2-input" placeholder="Departemen">
+      <select id="swal-position" class="swal2-input">${jobOptions}</select>
+      <select id="swal-department" class="swal2-input">${deptOptions}</select>
       <input id="swal-join-date" type="date" class="swal2-input" placeholder="Tanggal Bergabung">
       <select id="swal-status" class="swal2-input">
         <option value="Kontrak">Kontrak</option>
