@@ -12,6 +12,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
       /* Tambahkan animasi transisi untuk menu */
       #menu {
@@ -68,7 +72,7 @@
           <li class="relative">
             <button
               id="transaksi-toggle"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
             >
               Transaksi
             </button>
@@ -100,13 +104,34 @@
               >Menu</a
             >
           </li>
-          <li>
-            <a
-              href="employee.html"
+          <li class="relative">
+            <button
+              id="pegawai-toggle"
               class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-              >Pegawai</a
             >
+              Pegawai
+            </button>
+            <ul
+              id="pegawai-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Daftar Pegawai</a
+                >
+              </li>
+              <li>
+                <a
+                  href="salary_employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kelola Gaji</a
+                >
+              </li>
+            </ul>
           </li>
+
           <li>
             <a
               href="login.html"
@@ -117,7 +142,6 @@
         </ul>
       </div>
     </nav>
-
   
 
        <main class="container mx-auto p-6 pt-11">
@@ -141,7 +165,12 @@
     <script>
       const menuToggle = document.getElementById("menu-toggle");
 const menu = document.getElementById("menu");
-
+document
+        .getElementById("pegawai-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("pegawai-menu");
+          menu.classList.toggle("hidden");
+        });
 menuToggle.addEventListener("click", () => {
   const isHidden = menu.classList.contains("hidden");
   if (isHidden) {

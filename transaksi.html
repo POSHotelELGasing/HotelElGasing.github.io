@@ -8,6 +8,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
       /* Tambahkan animasi transisi untuk menu */
       #menu {
@@ -64,7 +68,7 @@
           <li class="relative">
             <button
               id="transaksi-toggle"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
             >
               Transaksi
             </button>
@@ -96,13 +100,34 @@
               >Menu</a
             >
           </li>
-          <li>
-            <a
-              href="employee.html"
+          <li class="relative">
+            <button
+              id="pegawai-toggle"
               class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-              >Pegawai</a
             >
+              Pegawai
+            </button>
+            <ul
+              id="pegawai-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Daftar Pegawai</a
+                >
+              </li>
+              <li>
+                <a
+                  href="salary_employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kelola Gaji</a
+                >
+              </li>
+            </ul>
           </li>
+
           <li>
             <a
               href="login.html"
@@ -180,7 +205,7 @@
             class="p-2 border rounded mb-4 w-full"
             required
           />
-          
+
           <button
             type="submit"
             class="bg-blue-600 text-white p-2 rounded w-full"
@@ -265,33 +290,33 @@
 
       // Fungsi untuk mengisi dropdown kamar dan tamu
       function loadRoomsAndGuests() {
-  const transactionRoom = document.getElementById("transaction-room");
-  const transactionGuest = document.getElementById("transaction-guest");
+        const transactionRoom = document.getElementById("transaction-room");
+        const transactionGuest = document.getElementById("transaction-guest");
 
-  transactionRoom.innerHTML = '<option value="">Pilih Kamar</option>';
-  transactionGuest.innerHTML = '<option value="">Pilih Tamu</option>';
+        transactionRoom.innerHTML = '<option value="">Pilih Kamar</option>';
+        transactionGuest.innerHTML = '<option value="">Pilih Tamu</option>';
 
-  // Mengambil data kamar yang statusnya "Available"
-  db.collection("rooms")
-    .where("status", "==", "Available") 
-    .get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        const room = doc.data();
-        transactionRoom.innerHTML += `<option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>`;
-      });
-    });
+        // Mengambil data kamar yang statusnya "Available"
+        db.collection("rooms")
+          .where("status", "==", "Available")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              const room = doc.data();
+              transactionRoom.innerHTML += `<option value="${doc.id}" data-price="${room.price}">Kamar ${room.number} - Rp ${room.price}</option>`;
+            });
+          });
 
-  // Mengambil data tamu
-  db.collection("guests")
-    .get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        const guest = doc.data();
-        transactionGuest.innerHTML += `<option value="${doc.id}">${guest.name}</option>`;
-      });
-    });
-}
+        // Mengambil data tamu
+        db.collection("guests")
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              const guest = doc.data();
+              transactionGuest.innerHTML += `<option value="${doc.id}">${guest.name}</option>`;
+            });
+          });
+      }
       // Fungsi untuk mengedit transaksi
       function editTransaction(id) {
         db.collection("transactions")
@@ -314,59 +339,78 @@
 
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
-      document.getElementById("transaction-form").addEventListener("submit", (e) => {
-  e.preventDefault();
+      document
+        .getElementById("transaction-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
 
-  const transactionId = document.getElementById("transaction-id").value;
-  const transactionRoom = document.getElementById("transaction-room");
-  const transactionGuest = document.getElementById("transaction-guest");
-  const transactionDays = document.getElementById("transaction-days");
-  const transactionDate = document.getElementById("transaction-date").value; // Ambil tanggal
+          const transactionId = document.getElementById("transaction-id").value;
+          const transactionRoom = document.getElementById("transaction-room");
+          const transactionGuest = document.getElementById("transaction-guest");
+          const transactionDays = document.getElementById("transaction-days");
+          const transactionDate =
+            document.getElementById("transaction-date").value; // Ambil tanggal
 
-  const roomId = transactionRoom.value;
-  const guestId = transactionGuest.value;
-  const days = parseInt(transactionDays.value);
+          const roomId = transactionRoom.value;
+          const guestId = transactionGuest.value;
+          const days = parseInt(transactionDays.value);
 
-  const roomPrice = transactionRoom.selectedOptions[0] 
-    ? parseInt(transactionRoom.selectedOptions[0].getAttribute("data-price")) 
-    : 0;
-  
-  const totalPrice = roomPrice * days;
+          const roomPrice = transactionRoom.selectedOptions[0]
+            ? parseInt(
+                transactionRoom.selectedOptions[0].getAttribute("data-price")
+              )
+            : 0;
 
-  const transactionData = {
-    roomId,
-    roomNumber: transactionRoom.selectedOptions[0].text,
-    guestId,
-    guestName: transactionGuest.selectedOptions[0].text,
-    days,
-    totalPrice,
-    date: transactionDate,
-  };
+          const totalPrice = roomPrice * days;
 
-  if (transactionId) {
-    db.collection("transactions")
-      .doc(transactionId)
-      .update(transactionData)
-      .then(() => {
-        Swal.fire("Berhasil!", "Transaksi berhasil diperbarui!", "success");
-        transactionModal.classList.add("hidden");
-      });
-  } else {
-    db.collection("transactions").add(transactionData).then((docRef) => {
-      if (roomId) {
-        db.collection("rooms")
-          .doc(roomId)
-          .update({
-            status: "Occupied"
-          }).then(() => {
-            console.log("Status kamar diperbarui menjadi Occupied");
-          }).catch(error => console.error("Gagal memperbarui status kamar", error));
-      }
-      Swal.fire("Berhasil!", "Transaksi berhasil disimpan!", "success");
-      transactionModal.classList.add("hidden");
-    });
-  }
-});
+          const transactionData = {
+            roomId,
+            roomNumber: transactionRoom.selectedOptions[0].text,
+            guestId,
+            guestName: transactionGuest.selectedOptions[0].text,
+            days,
+            totalPrice,
+            date: transactionDate,
+          };
+
+          if (transactionId) {
+            db.collection("transactions")
+              .doc(transactionId)
+              .update(transactionData)
+              .then(() => {
+                Swal.fire(
+                  "Berhasil!",
+                  "Transaksi berhasil diperbarui!",
+                  "success"
+                );
+                transactionModal.classList.add("hidden");
+              });
+          } else {
+            db.collection("transactions")
+              .add(transactionData)
+              .then((docRef) => {
+                if (roomId) {
+                  db.collection("rooms")
+                    .doc(roomId)
+                    .update({
+                      status: "Occupied",
+                    })
+                    .then(() => {
+                      console.log("Status kamar diperbarui menjadi Occupied");
+                    })
+                    .catch((error) =>
+                      console.error("Gagal memperbarui status kamar", error)
+                    );
+                }
+                Swal.fire(
+                  "Berhasil!",
+                  "Transaksi berhasil disimpan!",
+                  "success"
+                );
+                transactionModal.classList.add("hidden");
+              });
+          }
+        });
       document
         .getElementById("add-transaction-btn")
         .addEventListener("click", () => {
@@ -384,6 +428,13 @@
         .getElementById("transaksi-toggle")
         .addEventListener("click", function () {
           var menu = document.getElementById("transaksi-menu");
+          menu.classList.toggle("hidden");
+        });
+
+      document
+        .getElementById("pegawai-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("pegawai-menu");
           menu.classList.toggle("hidden");
         });
     </script>
