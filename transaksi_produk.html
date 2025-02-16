@@ -56,7 +56,7 @@
           <li>
             <a
               href="rooms.html"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
               >Kamar</a
             >
           </li>
@@ -67,57 +67,32 @@
               >Tamu</a
             >
           </li>
-
-          <!-- Dropdown Transaksi -->
-          <li class="relative">
-            <button
-              id="transaksi-toggle"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav" 
-            >
-              Transaksi
-            </button>
-            <ul
-              id="transaksi-menu"
-              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
-            >
-              <li>
-                <a
-                  href="transaksi.html"
-                  class="block px-4 py-2 hover:bg-blue-500"
-                  >Kamar Tamu</a
-                >
-              </li>
-              <li>
-                <a
-                  href="transaksi_produk.html"
-                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
-                  >Menu</a
-                >
-              </li>
-              <li>
-                <a
-                  href="transaksilayanan.html"
-                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
-                  >Layanan</a
-                >
-              </li>
-            </ul>
-          </li>
-
           <li>
             <a
-              href="product.html"
+              href="transaksi.html"
               class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
-              >Menu</a
+              >Transaksi Kamar Tamu</a
             >
           </li>
-          <li class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block">
-            <button
-              id="pegawai-toggle"
-              class=""
+          <li>
+            <a
+              href="transaksi_produk.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Transaksi Menu</a
             >
-              Pegawai
-            </button>
+          </li>
+          <li>
+            <a
+              href="transaksilayanan.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Layanan</a
+            >
+          </li>
+          <!-- Dropdown Transaksi -->
+          <li
+            class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+          >
+            <button id="pegawai-toggle" class="">Pegawai</button>
             <ul
               id="pegawai-menu"
               class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
@@ -131,16 +106,16 @@
               </li>
               <li>
                 <a
-                  href="job_dept.html"
+                  href="salary_employee.html"
                   class="block px-4 py-2 hover:bg-blue-500"
-                  >Depertemen & Jabatan</a
+                  >Kelola Gaji</a
                 >
               </li>
               <li>
                 <a
-                  href="salary_employee.html"
+                  href="job_dept.html"
                   class="block px-4 py-2 hover:bg-blue-500"
-                  >Kelola Gaji</a
+                  >Depertemen & Jabatan</a
                 >
               </li>
               <li>
@@ -152,6 +127,15 @@
               </li>
             </ul>
           </li>
+
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Menu</a
+            >
+          </li>
+
 
           <li>
             <a
@@ -210,14 +194,7 @@ menuToggle.addEventListener("click", () => {
 });
     </script>
 
-    <script>
-      document
-        .getElementById("transaksi-toggle")
-        .addEventListener("click", function () {
-          var menu = document.getElementById("transaksi-menu");
-          menu.classList.toggle("hidden");
-        });
-    </script>
+
     <script>
       // Konfigurasi Firebase
       const firebaseConfig = {
@@ -489,7 +466,12 @@ db.collection("product").doc(productId).get().then((productDoc) => {
     Swal.fire("Error!", "Produk tidak ditemukan!", "error");
   }
 });
-
+document
+  .getElementById("pegawai-toggle")
+  .addEventListener("click", function () {
+    var menu = document.getElementById("pegawai-menu");
+    menu.classList.toggle("hidden");
+  });
 
 
 

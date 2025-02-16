@@ -344,12 +344,6 @@ document
     menu.classList.toggle("hidden");
   });
 
-document
-  .getElementById("transaksi-toggle")
-  .addEventListener("click", function () {
-    var menu = document.getElementById("transaksi-menu");
-    menu.classList.toggle("hidden");
-  });
 
 const menuToggle = document.getElementById("menu-toggle");
 const menu = document.getElementById("menu");

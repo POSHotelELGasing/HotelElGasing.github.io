@@ -56,7 +56,7 @@
           <li>
             <a
               href="rooms.html"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
               >Kamar</a
             >
           </li>
@@ -67,38 +67,62 @@
               >Tamu</a
             >
           </li>
-
-          <!-- Dropdown Transaksi -->
-          <li class="relative">
-            <button
-              id="transaksi-toggle"
+          <li>
+            <a
+              href="transaksi.html"
               class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Transaksi Kamar Tamu</a
             >
-              Transaksi
-            </button>
+          </li>
+          <li>
+            <a
+              href="transaksi_produk.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Transaksi Menu</a
+            >
+          </li>
+          <li>
+            <a
+              href="transaksilayanan.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Layanan</a
+            >
+          </li>
+          <!-- Dropdown Transaksi -->
+          <li
+            class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+          >
+            <button id="pegawai-toggle" class="">Pegawai</button>
             <ul
-              id="transaksi-menu"
+              id="pegawai-menu"
               class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
             >
               <li>
                 <a
-                  href="transaksi.html"
+                  href="employee.html"
                   class="block px-4 py-2 hover:bg-blue-500"
-                  >Kamar Tamu</a
+                  >Daftar Pegawai</a
                 >
               </li>
               <li>
                 <a
-                  href="transaksi_produk.html"
+                  href="salary_employee.html"
                   class="block px-4 py-2 hover:bg-blue-500"
-                  >Menu</a
+                  >Kelola Gaji</a
                 >
               </li>
               <li>
                 <a
-                  href="transaksilayanan.html"
-                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
-                  >Layanan</a
+                  href="job_dept.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Depertemen & Jabatan</a
+                >
+              </li>
+              <li>
+                <a
+                  href="report_salary.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Report Gaji</a
                 >
               </li>
             </ul>
@@ -111,44 +135,7 @@
               >Menu</a
             >
           </li>
-          <li
-            class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
-          >
-            <button id="pegawai-toggle">Pegawai</button>
-            <ul
-              id="pegawai-menu"
-              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
-            >
-              <li>
-                <a
-                  href="employee.html"
-                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
-                  >Daftar Pegawai</a
-                >
-              </li>
-              <li>
-                <a
-                  href="job_dept.html"
-                  class="block px-4 py-2 hover:bg-blue-500"
-                  >Depertemen & Jabatan</a
-                >
-              </li>
-              <li>
-                <a
-                  href="salary_employee.html"
-                  class="block px-4 py-2 hover:bg-blue-500"
-                  >Kelola Gaji</a
-                >
-              </li>
-              <li>
-                <a
-                  href="report_salary.html"
-                  class="block px-4 py-2 hover:bg-blue-500"
-                  >Report Gaji</a
-                >
-              </li>
-            </ul>
-          </li>
+
 
           <li>
             <a
@@ -195,13 +182,6 @@
     </main>
 
     <script>
-      document
-        .getElementById("transaksi-toggle")
-        .addEventListener("click", function () {
-          var menu = document.getElementById("transaksi-menu");
-          menu.classList.toggle("hidden");
-        });
-
       document
         .getElementById("pegawai-toggle")
         .addEventListener("click", function () {

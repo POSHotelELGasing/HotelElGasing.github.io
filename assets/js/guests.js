@@ -158,13 +158,6 @@ document.getElementById("close-guest-modal").addEventListener("click", () => {
 window.onload = displayGuests;
 
 document
-  .getElementById("transaksi-toggle")
-  .addEventListener("click", function () {
-    var menu = document.getElementById("transaksi-menu");
-    menu.classList.toggle("hidden");
-  });
-
-document
   .getElementById("pegawai-toggle")
   .addEventListener("click", function () {
     var menu = document.getElementById("pegawai-menu");
