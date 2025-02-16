@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Transaksi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Tambahkan animasi transisi untuk menu */
+      #menu {
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      }
+
+      .active-nav {
+        background-color: #3b82f6;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold flex items-center">
+          <i class="fa-solid fa-hotel mr-2"></i>Hotel POS System
+        </h1>
+        <button
+          id="menu-toggle"
+          class="block sm:hidden focus:outline-none hover:bg-blue-500 p-2 rounded transition duration-300"
+          aria-label="Toggle Navigation"
+        >
+          ☰
+        </button>
+        <!-- Menu -->
+        <ul
+          id="menu"
+          class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
+        >
+          <li>
+            <a
+              href="index.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="rooms.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a
+              href="guests.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Tamu</a
+            >
+          </li>
+
+          <!-- Dropdown Transaksi -->
+          <li class="relative">
+            <button
+              id="transaksi-toggle"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+            >
+              Transaksi
+            </button>
+            <ul
+              id="transaksi-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="transaksi.html"
+                  class="block px-4 py-2 hover:bg-blue-500 active-nav"
+                  >Kamar Tamu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="transaksi_produk.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Menu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="transaksilayanan.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Layanan</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Menu</a
+            >
+          </li>
+          <li
+            class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+          >
+            <button id="pegawai-toggle" class="">Pegawai</button>
+            <ul
+              id="pegawai-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Daftar Pegawai</a
+                >
+              </li>
+              <li>
+                <a
+                  href="job_dept.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Depertemen & Jabatan</a
+                >
+              </li>
+              <li>
+                <a
+                  href="salary_employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kelola Gaji</a
+                >
+              </li>
+              <li>
+                <a
+                  href="report_salary.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Report Gaji</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <a
+              href="login.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+<body class="bg-gray-100 p-5">
+
+    <!-- Form Tambah Transaksi -->
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Tambah Transaksi Layanan Hotel</h2>
+        <form id="formHotel">
+            <label class="block">Nama Tamu:</label>
+            <input type="text" id="namaTamu" class="w-full border rounded p-2 mb-2" required>
+            
+            <label class="block">Jenis Layanan:</label>
+            <select id="layanan" class="w-full border rounded p-2 mb-2">
+                <option value="Room Service">Layanan Kamar - Rp150.000</option>
+                <option value="Laundry Hotel">Laundry Hotel - Rp100.000</option>
+                <option value="Spa & Pijat">Spa & Pijat - Rp200.000</option>
+            </select>
+
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full mt-3">Tambah Transaksi</button>
+        </form>
+    </div>
+
+    <!-- Filter Laporan -->
+    <div class="max-w-lg mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Laporan Transaksi</h2>
+        <label class="block mb-2">Filter Tanggal:</label>
+        <input type="date" id="filterTanggal" class="border rounded p-2 w-full mb-4">
+        
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Nama Tamu</th>
+                    <th class="border p-2">Layanan</th>
+                    <th class="border p-2">Harga</th>
+                    <th class="border p-2">Tanggal</th>
+                    <th class="border p-2">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelLaporan"></tbody>
+        </table>
+        
+        <!-- Total Pendapatan -->
+        <div class="mt-4 text-lg font-bold">
+            Total Pendapatan: Rp <span id="totalPendapatan">0</span>
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+            authDomain: "prog4-34938.firebaseapp.com",
+            projectId: "prog4-34938",
+            storageBucket: "prog4-34938.appspot.com",
+            messagingSenderId: "920234132726",
+            appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Tambah Transaksi ke Firestore
+        document.getElementById("formHotel").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const namaTamu = document.getElementById("namaTamu").value;
+            const layanan = document.getElementById("layanan").value;
+            const harga = layanan === "Room Service" ? 150000 : layanan === "Laundry Hotel" ? 100000 : 200000;
+            const tanggal = new Date().toISOString().split('T')[0];
+
+            await db.collection("transactions").add({
+                namaTamu,
+                layanan,
+                harga,
+                tanggal
+            });
+
+            alert("Transaksi berhasil ditambahkan!");
+            document.getElementById("formHotel").reset();
+        });
+
+        function loadLaporan(tanggalFilter = null) {
+            const tabelLaporan = document.getElementById("tabelLaporan");
+            const totalPendapatanElem = document.getElementById("totalPendapatan");
+            let totalPendapatan = 0;
+
+            db.collection("transactions").onSnapshot(snapshot => {
+                tabelLaporan.innerHTML = "";
+                totalPendapatan = 0;
+
+                snapshot.forEach(doc => {
+                    const transaksi = doc.data();
+                    if (tanggalFilter && transaksi.tanggal !== tanggalFilter) {
+                        return;
+                    }
+
+                    totalPendapatan += transaksi.harga;
+
+                    const row = document.createElement("tr");
+                    row.className = "border";
+                    row.innerHTML = `
+                        <td class="border p-2">${transaksi.namaTamu}</td>
+                        <td class="border p-2">${transaksi.layanan}</td>
+                        <td class="border p-2">Rp${transaksi.harga.toLocaleString()}</td>
+                        <td class="border p-2">${transaksi.tanggal}</td>
+                        <td class="border p-2">
+                            <button class="bg-red-500 text-white px-2 rounded" onclick="hapusTransaksi('${doc.id}')">Hapus</button>
+                        </td>
+                    `;
+                    tabelLaporan.appendChild(row);
+                });
+
+                totalPendapatanElem.textContent = totalPendapatan.toLocaleString();
+            });
+        }
+
+        async function hapusTransaksi(id) {
+            await db.collection("transactions").doc(id).delete();
+            alert("Transaksi berhasil dihapus!");
+        }
+
+        // Filter laporan berdasarkan tanggal
+        document.getElementById("filterTanggal").addEventListener("change", function() {
+            const tanggal = this.value;
+            loadLaporan(tanggal);
+        });
+
+        // Muat laporan awal
+        loadLaporan();
+    </script>
+
+</body>
+</html>
