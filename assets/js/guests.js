@@ -156,7 +156,11 @@ document.getElementById("close-guest-modal").addEventListener("click", () => {
 });
 
 window.onload = displayGuests;
-
+document
+.getElementById("report-guest-btn")
+.addEventListener("click", function() {
+  window.location.href = "report_guest.html";
+});
 document
   .getElementById("pegawai-toggle")
   .addEventListener("click", function () {

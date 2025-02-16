@@ -169,22 +169,31 @@
             </a>
           </div>
           
-          <div class="bg-white p-6 shadow rounded-lg text-center">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">  
+            <a href="report_guest.html" class="bg-white p-6 shadow rounded-lg text-center">
             <div class="mb-4">
               <i class="fa-solid fa-user-group stat-icon"></i>
             </div>
             <h3 class="text-lg font-semibold text-gray-700">Total Tamu</h3>
             <p id="total-guests" class="text-4xl font-bold text-blue-600">0</p>
+          </a>
           </div>
-          <div class="bg-white p-6 shadow rounded-lg text-center">
-            <div class="mb-4">
-              <i class="fa-solid fa-cash-register stat-icon"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700">Total Transaksi</h3>
-            <p id="total-transactions" class="text-4xl font-bold text-blue-600">
-              0
-            </p>
-          </div>
+
+<!-- Total Menu Section -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">  
+  <a href="report_menu.html" class="bg-white p-6 shadow rounded-lg text-center">
+  <div class="mb-4">
+    <i class="fa-solid fa-utensils stat-icon"></i> <!-- Ganti ikon di sini -->
+  </div>
+  <h3 class="text-lg font-semibold text-gray-700">Total Menu</h3> <!-- Ganti judul di sini -->
+  <p id="total-product" class="text-4xl font-bold text-blue-600">
+    0
+  </p>
+</a>
+</div>
+
         </div>
       </section>
     </main>
@@ -244,37 +253,38 @@
             .get()
             .then((snapshot) => snapshot.size),
           db
-            .collection("transactions")
+            .collection("product")  // Ganti 'transactions' dengan 'menus' (koleksi menu)
             .get()
             .then((snapshot) => snapshot.size),
         ])
-          .then(([roomsCount, guestsCount, transactionsCount]) => {
-            return { roomsCount, guestsCount, transactionsCount };
+          .then(([roomsCount, guestsCount, menuCount]) => {  // Ganti 'transactionsCount' dengan 'menuCount'
+            return { roomsCount, guestsCount, menuCount };
           })
           .catch((error) => {
             console.error("Error fetching dashboard data:", error);
             return {
               roomsCount: "Error",
               guestsCount: "Error",
-              transactionsCount: "Error",
+              menuCount: "Error",
             };
           });
       }
-
+      
       // Update dashboard with fetched data
       function updateDashboard() {
         fetchDashboardData().then((data) => {
           document.getElementById("total-rooms").textContent = data.roomsCount;
-          document.getElementById("total-guests").textContent =
-            data.guestsCount;
-          document.getElementById("total-transactions").textContent =
-            data.transactionsCount;
+          document.getElementById("total-guests").textContent = data.guestsCount;
+          document.getElementById("total-product").textContent = data.menuCount;  // Ganti 'transactionsCount' dengan 'menuCount'
         });
       }
-
+      
       window.onload = () => {
         updateDashboard();
       };
+      
+
+
 
 
       document

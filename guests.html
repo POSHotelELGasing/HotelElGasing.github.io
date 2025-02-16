@@ -153,14 +153,24 @@
     <main class="container mx-auto p-6 pt-11">
       <h2 class="text-2xl font-bold mb-4 pt-12">Manajemen Tamu</h2>
 
-      <div class="bg-white p-4 shadow rounded mb-4">
+      <div class="bg-white p-6 shadow-lg rounded-xl mb-6 flex justify-between items-center space-x-4">
         <button
           id="add-guest-btn"
-          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
+          class="bg-green-600 text-white p-3 rounded-lg w-full sm:w-auto flex items-center justify-center space-x-2 transition duration-300 transform hover:bg-green-500 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-300"
         >
-          Tambah Tamu
+          <i class="fa-solid fa-user-plus"></i>
+          <span class="text-lg">Tambah Tamu</span>
+        </button>
+        
+        <button
+          id="report-guest-btn"
+          class="bg-blue-600 text-white p-3 rounded-lg w-full sm:w-auto flex items-center justify-center space-x-2 transition duration-300 transform hover:bg-blue-500 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        >
+          <i class="fa-solid fa-chart-line"></i>
+          <span class="text-lg">Laporan Tamu</span>
         </button>
       </div>
+      
 
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"

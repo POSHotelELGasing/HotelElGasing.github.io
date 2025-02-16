@@ -154,6 +154,12 @@
         >
           Tambah Menu
         </button>
+         <button
+        id="report-product-btn"
+        class="bg-red-600 text-white p-2 rounded mt-4"
+      >
+        Laporan Kamar
+      </button>
       </header>
 
       <!-- Product Cards -->
@@ -254,7 +260,11 @@
         productModal.classList.add("hidden");
         document.getElementById("product-form").reset();
       };
-
+      document
+      .getElementById("report-product-btn")
+      .addEventListener("click", function() {
+        window.location.href = "report_menu.html";
+      });
       document
         .getElementById("add-product-btn")
         .addEventListener("click", () => {
