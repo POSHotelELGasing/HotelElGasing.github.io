@@ -161,26 +161,36 @@
     <main class="container mx-auto p-4 pt-11">
       <h2 class="text-2xl font-bold mb-4 pt-12">Manajemen Kamar</h2>
       <div class="bg-white p-4 shadow rounded mb-4">
-        <button
-          id="add-room-btn"
-          class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
-        >
-          Tambah Kamar
-        </button>
-        <button
-          id="add-room-number-btn"
-          class="bg-blue-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0"
-        >
-          Tambah Nomor Kamar
-        </button>
-        <button
-          id="detail-room-number-btn"
-          class="bg-yellow-600 text-white p-2 rounded w-full sm:w-auto mt-2 sm:mt-0"
-        >
-          Detail Nomor Kamar
-        </button>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+          <button
+            id="add-room-btn"
+            class="bg-green-600 text-white p-2 rounded w-full sm:w-auto"
+          >
+            Tambah Kamar
+          </button>
+          <button
+            id="add-room-number-btn"
+            class="bg-blue-600 text-white p-2 rounded w-full sm:w-auto"
+          >
+            Tambah Nomor Kamar
+          </button>
+      
+          <button
+            id="detail-room-number-btn"
+            class="bg-yellow-600 text-white p-2 rounded w-full sm:w-auto"
+          >
+            Detail Nomor Kamar
+          </button>
+      
+          <button
+            id="report-room-btn"
+            class="bg-red-600 text-white p-2 rounded w-full sm:w-auto"
+          >
+            Laporan Kamar
+          </button>
+        </div>
       </div>
-
+      
       <!-- Room Cards -->
       <div
         id="room-list"
