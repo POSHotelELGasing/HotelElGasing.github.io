@@ -185,6 +185,11 @@ document
 document
   .getElementById("close-room-number-modal-btn")
   .addEventListener("click", closeRoomNumberModal);
+  document
+  .getElementById("report-room-btn")
+  .addEventListener("click", function() {
+    window.location.href = "report_rooms.html";
+  });
 
 document.getElementById("room-number-form").addEventListener("submit", (e) => {
   e.preventDefault();
