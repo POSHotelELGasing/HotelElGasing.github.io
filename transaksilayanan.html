@@ -21,20 +21,21 @@
       .active-nav {
         background-color: #3b82f6;
       }
-      
+
       /* Style tombol dengan animasi hover */
       button:hover {
         background-color: #2563eb;
         transition: background-color 0.3s ease-in-out;
       }
-      
+
       /* Style tabel */
       table {
         width: 100%;
         border-collapse: collapse;
       }
-      
-      th, td {
+
+      th,
+      td {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
@@ -64,82 +65,178 @@
           id="menu"
           class="hidden sm:flex absolute sm:flex-row sm:space-x-4 sm:relative top-full left-0 w-full sm:w-auto bg-blue-600 sm:bg-transparent transform -translate-y-full opacity-0 sm:translate-y-0 sm:opacity-100"
         >
-          <li><a href="index.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Dashboard</a></li>
-          <li><a href="rooms.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav">Kamar</a></li>
-          <li><a href="guests.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Tamu</a></li>
-          <li><a href="transaksi.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Transaksi Kamar Tamu</a></li>
-          <li><a href="transaksi_produk.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Transaksi Menu</a></li>
-          <li><a href="transaksilayanan.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Layanan</a></li>
-          <li class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block">
+          <li>
+            <a
+              href="index.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="rooms.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block "
+              >Kamar</a
+            >
+          </li>
+          <li>
+            <a
+              href="guests.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Tamu</a
+            >
+          </li>
+          <li>
+            <a
+              href="transaksi.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Transaksi Kamar Tamu</a
+            >
+          </li>
+          <li>
+            <a
+              href="transaksi_produk.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Transaksi Menu</a
+            >
+          </li>
+          <li>
+            <a
+              href="transaksilayanan.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+              >Layanan</a
+            >
+          </li>
+          <li
+            class="relative hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+          >
             <button id="pegawai-toggle" class="">Pegawai</button>
-            <ul id="pegawai-menu" class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1">
-              <li><a href="employee.html" class="block px-4 py-2 hover:bg-blue-500">Daftar Pegawai</a></li>
-              <li><a href="salary_employee.html" class="block px-4 py-2 hover:bg-blue-500">Kelola Gaji</a></li>
-              <li><a href="job_dept.html" class="block px-4 py-2 hover:bg-blue-500">Depertemen & Jabatan</a></li>
-              <li><a href="report_salary.html" class="block px-4 py-2 hover:bg-blue-500">Report Gaji</a></li>
+            <ul
+              id="pegawai-menu"
+              class="absolute left-0 w-40 bg-blue-600 hidden shadow-lg rounded mt-1"
+            >
+              <li>
+                <a
+                  href="employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Daftar Pegawai</a
+                >
+              </li>
+              <li>
+                <a
+                  href="salary_employee.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Kelola Gaji</a
+                >
+              </li>
+              <li>
+                <a
+                  href="job_dept.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Depertemen & Jabatan</a
+                >
+              </li>
+              <li>
+                <a
+                  href="report_salary.html"
+                  class="block px-4 py-2 hover:bg-blue-500"
+                  >Report Gaji</a
+                >
+              </li>
             </ul>
           </li>
-          <li><a href="product.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Menu</a></li>
-          <li><a href="login.html" class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block">Login</a></li>
+          <li>
+            <a
+              href="product.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Menu</a
+            >
+          </li>
+          <li>
+            <a
+              href="login.html"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
+              >Login</a
+            >
+          </li>
         </ul>
       </div>
     </nav>
 
-    <div class="pt-16 px-5">
-      <!-- Form Tambah Transaksi -->
-      <div class="max-w-full sm:max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Tambah Transaksi Layanan Hotel</h2>
-        <form id="formHotel">
-          <label class="block">Nama Tamu:</label>
-          <select id="guestName" class="w-full border rounded p-2 mb-2" required>
-              <!-- Opsi tamu akan ditambahkan secara dinamis di sini -->
-          </select>
-          
-          <label class="block">Jenis Layanan:</label>
-          <select id="layanan" class="w-full border rounded p-2 mb-2">
-            <option value="Room Service">Layanan Kamar - Rp150.000</option>
-            <option value="Laundry Hotel">Laundry Hotel - Rp100.000</option>
-            <option value="Spa & Pijat">Spa & Pijat - Rp200.000</option>
-          </select>
-
-          <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full mt-3">Tambah Transaksi</button>
+    <main class="container mx-auto p-6 pt-11">
+      <section class=" bg-white p-6 rounded-lg shadow-lg mb-6 pt-12">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Tambah Transaksi Layanan Hotel</h2>
+        <form id="formHotel" class="space-y-4">
+          <div>
+            <label class="block font-medium mb-1">Nama Tamu:</label>
+            <select id="guestName" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400" required></select>
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Jenis Layanan:</label>
+            <select id="layanan" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400">
+              <option value="Room Service">Layanan Kamar - Rp150.000</option>
+              <option value="Laundry Hotel">Laundry Hotel - Rp100.000</option>
+              <option value="Spa & Pijat">Spa & Pijat - Rp200.000</option>
+            </select>
+          </div>
+          <button type="submit" class="bg-blue-600 text-white p-3 rounded-lg w-full hover:bg-blue-700 transition">Tambah Transaksi</button>
         </form>
-      </div>
+      </section>
 
-      <div class="max-w-full sm:max-w-lg mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Laporan Transaksi</h2>
-        <label class="block mb-2">Filter Tanggal:</label>
-        <input type="date" id="filterTanggal" class="border rounded p-2 w-full mb-4">
-      
+      <div
+        class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+        id="laporanCards"
+      >  
+      <h2 class="text-xl font-bold mb-4">Laporan Transaksi</h2>
+      <label class="block mb-2">Filter Tanggal:</label>
+      <input
+        type="date"
+        id="filterTanggal"
+        class="border rounded p-2 w-full mb-4"
+      />
         <div id="laporanCards" class="space-y-4">
           <!-- Card Transaksi Akan Ditampilkan Di Sini -->
         </div>
-      
-        <!-- Total Pendapatan -->
         <div class="mt-4 text-lg font-bold">
           Total Pendapatan: Rp <span id="totalPendapatan">0</span>
         </div>
       </div>
-      <div id="formEdit" class="hidden max-w-full sm:max-w-lg mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
+          <!-- Card Transaksi Akan Ditampilkan Di Sini -->
+        </div>
+        <div class="mt-4 text-lg font-bold">
+          Total Pendapatan: Rp <span id="totalPendapatan">0</span>
+        </div>
+      </div>
+
+      <div
+        id="formEdit"
+        class="hidden max-w-full sm:max-w-lg mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg"
+      >
         <h2 class="text-xl font-bold mb-4">Edit Transaksi Layanan Hotel</h2>
         <form id="formEditHotel">
           <label class="block">Nama Tamu:</label>
-          <select id="editGuestName" class="w-full border rounded p-2 mb-2" required>
+          <select
+            id="editGuestName"
+            class="w-full border rounded p-2 mb-2"
+            required
+          >
             <!-- Opsi tamu akan ditambahkan secara dinamis di sini -->
           </select>
-      
           <label class="block">Jenis Layanan:</label>
           <select id="editLayanan" class="w-full border rounded p-2 mb-2">
             <option value="Room Service">Layanan Kamar - Rp150.000</option>
             <option value="Laundry Hotel">Laundry Hotel - Rp100.000</option>
             <option value="Spa & Pijat">Spa & Pijat - Rp200.000</option>
           </select>
-      
-          <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full mt-3">Simpan Perubahan</button>
+          <button
+            type="submit"
+            class="bg-blue-500 text-white p-2 rounded w-full mt-3"
+          >
+            Simpan Perubahan
+          </button>
         </form>
       </div>
-      
-    </div>
+    </main>
 
     <script>
       const menuToggle = document.getElementById("menu-toggle");
@@ -176,35 +273,28 @@
 
       // Tambah Transaksi ke Firestore (menggunakan koleksi "layanan")
       document.getElementById("formHotel").addEventListener("submit", async function(event) {
-        event.preventDefault();
-      
-        const guestName = document.getElementById("guestName").value;  // Ambil nama tamu dari dropdown
-        const layanan = document.getElementById("layanan").value;
-        const harga = layanan === "Room Service" ? 150000 : layanan === "Laundry Hotel" ? 100000 : 200000;
-        const tanggal = new Date().toISOString().split('T')[0];
-      
-        await db.collection("layanan").add({
-          guestName,
-          layanan,
-          harga,
-          tanggal
-        });
-      
-        alert("Transaksi berhasil ditambahkan!");
-        document.getElementById("formHotel").reset();
-      });
+      event.preventDefault();
+      const guestName = document.getElementById("guestName").value;
+      const layanan = document.getElementById("layanan").value;
+      const harga = layanan === "Room Service" ? 150000 : layanan === "Laundry Hotel" ? 100000 : 200000;
+      const tanggal = new Date().toISOString().split("T")[0];
+      await db.collection("layanan").add({ guestName, layanan, harga, tanggal });
+      Swal.fire("Berhasil!", "Transaksi berhasil ditambahkan.", "success");
+      document.getElementById("formHotel").reset();
+      loadLaporan(); // Memuat ulang data secara otomatis
+    });
 
       function loadLaporan(tanggalFilter = null) {
         const laporanRef = db.collection("layanan");
         const query = tanggalFilter
           ? laporanRef.where("tanggal", "==", tanggalFilter)
           : laporanRef;
-      
-        query.get().then(querySnapshot => {
+
+        query.get().then((querySnapshot) => {
           let totalPendapatan = 0;
           let laporanHTML = "";
-      
-          querySnapshot.forEach(doc => {
+
+          querySnapshot.forEach((doc) => {
             const data = doc.data();
             totalPendapatan += data.harga;
             laporanHTML += `
@@ -212,8 +302,12 @@
               <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-semibold">${data.guestName}</h3>
                 <div>
-                  <button onclick="editTransaksi('${doc.id}')" class="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 transition duration-300 mr-2">Edit</button>
-                  <button onclick="deleteTransaksi('${doc.id}')" class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition duration-300">Hapus</button>
+                  <button onclick="editTransaksi('${
+                    doc.id
+                  }')" class="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 transition duration-300 mr-2">Edit</button>
+                  <button onclick="deleteTransaksi('${
+                    doc.id
+                  }')" class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition duration-300">Hapus</button>
                 </div>
               </div>
               <p class="text-gray-600">${data.layanan}</p>
@@ -221,25 +315,28 @@
               <p class="text-sm text-gray-400">${data.tanggal}</p>
             </div>
           `;
-          
           });
-      
+
           document.getElementById("laporanCards").innerHTML = laporanHTML;
-          document.getElementById("totalPendapatan").innerText = totalPendapatan.toLocaleString();
+          document.getElementById("totalPendapatan").innerText =
+            totalPendapatan.toLocaleString();
         });
       }
       let editDocId = null; // Menyimpan ID transaksi yang akan diedit
 
       function editTransaksi(id) {
         // Ambil data transaksi yang akan diedit
-        db.collection("layanan").doc(id).get().then(doc => {
-          const data = doc.data();
-          editDocId = id;
-      
-          // Menampilkan data transaksi menggunakan SweetAlert
-          Swal.fire({
-            title: 'Edit Transaksi',
-            html: `
+        db.collection("layanan")
+          .doc(id)
+          .get()
+          .then((doc) => {
+            const data = doc.data();
+            editDocId = id;
+
+            // Menampilkan data transaksi menggunakan SweetAlert
+            Swal.fire({
+              title: "Edit Transaksi",
+              html: `
               <label>Nama Tamu:</label>
               <select id="editGuestName" class="swal2-input" required>
                 <option value="${data.guestName}">${data.guestName}</option>
@@ -247,116 +344,150 @@
               </select>
               <label>Jenis Layanan:</label>
               <select id="editLayanan" class="swal2-input">
-                <option value="Room Service" ${data.layanan === "Room Service" ? "selected" : ""}>Room Service - Rp150.000</option>
-                <option value="Laundry Hotel" ${data.layanan === "Laundry Hotel" ? "selected" : ""}>Laundry Hotel - Rp100.000</option>
-                <option value="Spa & Pijat" ${data.layanan === "Spa & Pijat" ? "selected" : ""}>Spa & Pijat - Rp200.000</option>
+                <option value="Room Service" ${
+                  data.layanan === "Room Service" ? "selected" : ""
+                }>Room Service - Rp150.000</option>
+                <option value="Laundry Hotel" ${
+                  data.layanan === "Laundry Hotel" ? "selected" : ""
+                }>Laundry Hotel - Rp100.000</option>
+                <option value="Spa & Pijat" ${
+                  data.layanan === "Spa & Pijat" ? "selected" : ""
+                }>Spa & Pijat - Rp200.000</option>
               </select>
               <label>Harga:</label>
-              <input id="editHarga" class="swal2-input" value="${data.harga}" readonly />
+              <input id="editHarga" class="swal2-input" value="${
+                data.harga
+              }" readonly />
             `,
-            showCancelButton: true,
-            confirmButtonText: 'Simpan Perubahan',
-            cancelButtonText: 'Batal',
-            preConfirm: () => {
-              // Mengambil nilai form yang sudah diubah
-              return {
-                guestName: document.getElementById("editGuestName").value,
-                layanan: document.getElementById("editLayanan").value,
-                harga: parseInt(document.getElementById("editHarga").value) // Menyimpan harga baru jika ada perubahan
+              showCancelButton: true,
+              confirmButtonText: "Simpan Perubahan",
+              cancelButtonText: "Batal",
+              preConfirm: () => {
+                // Mengambil nilai form yang sudah diubah
+                return {
+                  guestName: document.getElementById("editGuestName").value,
+                  layanan: document.getElementById("editLayanan").value,
+                  harga: parseInt(document.getElementById("editHarga").value), // Menyimpan harga baru jika ada perubahan
+                };
+              },
+            }).then((result) => {
+              if (result.isConfirmed) {
+                const updatedData = result.value;
+
+                // Update data di Firestore
+                db.collection("layanan")
+                  .doc(editDocId)
+                  .update({
+                    guestName: updatedData.guestName,
+                    layanan: updatedData.layanan,
+                    harga: updatedData.harga,
+                  })
+                  .then(() => {
+                    Swal.fire(
+                      "Berhasil!",
+                      "Transaksi telah diperbarui.",
+                      "success"
+                    );
+                    loadLaporan(); // Reload laporan transaksi setelah edit
+                  })
+                  .catch((err) => {
+                    Swal.fire(
+                      "Gagal!",
+                      "Gagal memperbarui transaksi.",
+                      "error"
+                    );
+                  });
               }
-            }
-          }).then(result => {
-            if (result.isConfirmed) {
-              const updatedData = result.value;
-              
-              // Update data di Firestore
-              db.collection("layanan").doc(editDocId).update({
-                guestName: updatedData.guestName,
-                layanan: updatedData.layanan,
-                harga: updatedData.harga
-              }).then(() => {
-                Swal.fire('Berhasil!', 'Transaksi telah diperbarui.', 'success');
-                loadLaporan(); // Reload laporan transaksi setelah edit
-              }).catch(err => {
-                Swal.fire('Gagal!', 'Gagal memperbarui transaksi.', 'error');
-              });
-            }
+            });
           });
-        });
       }
-      
+
       // Menyimpan perubahan pada transaksi
-      document.getElementById("formEditHotel").addEventListener("submit", async function(event) {
-        event.preventDefault();
-      
-        const guestName = document.getElementById("editGuestName").value;
-        const layanan = document.getElementById("editLayanan").value;
-        const harga = layanan === "Room Service" ? 150000 : layanan === "Laundry Hotel" ? 100000 : 200000;
-        const tanggal = new Date().toISOString().split('T')[0];
-      
-        try {
-          await db.collection("layanan").doc(editDocId).update({
-            guestName,
-            layanan,
-            harga,
-            tanggal
-          });
-      
-          // Menampilkan SweetAlert setelah transaksi berhasil disimpan
-          Swal.fire({
-            icon: 'success',
-            title: 'Perubahan berhasil disimpan!',
-            text: `Transaksi ${guestName} telah berhasil diperbarui.`
-          });
-      
-          // Menutup form edit setelah perubahan berhasil
-          document.getElementById("formEdit").classList.add("hidden");
-      
-          // Memuat laporan transaksi terbaru
-          loadLaporan();
-        } catch (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Terjadi kesalahan saat menyimpan perubahan.'
-          });
-        }
-      });
-      
+      document
+        .getElementById("formEditHotel")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const guestName = document.getElementById("editGuestName").value;
+          const layanan = document.getElementById("editLayanan").value;
+          const harga =
+            layanan === "Room Service"
+              ? 150000
+              : layanan === "Laundry Hotel"
+              ? 100000
+              : 200000;
+          const tanggal = new Date().toISOString().split("T")[0];
+
+          try {
+            await db.collection("layanan").doc(editDocId).update({
+              guestName,
+              layanan,
+              harga,
+              tanggal,
+            });
+
+            // Menampilkan SweetAlert setelah transaksi berhasil disimpan
+            Swal.fire({
+              icon: "success",
+              title: "Perubahan berhasil disimpan!",
+              text: `Transaksi ${guestName} telah berhasil diperbarui.`,
+            });
+
+            // Menutup form edit setelah perubahan berhasil
+            document.getElementById("formEdit").classList.add("hidden");
+
+            // Memuat laporan transaksi terbaru
+            loadLaporan();
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Terjadi kesalahan saat menyimpan perubahan.",
+            });
+          }
+        });
+
       // Fungsi untuk menghapus transaksi
       function deleteTransaksi(id) {
-        db.collection("layanan").doc(id).delete().then(() => {
-          alert("Transaksi berhasil dihapus");
-          loadLaporan();
-        });
+        db.collection("layanan")
+          .doc(id)
+          .delete()
+          .then(() => {
+            alert("Transaksi berhasil dihapus");
+            loadLaporan();
+          });
       }
 
       // Event listener untuk filter tanggal
-      document.getElementById("filterTanggal").addEventListener("change", function() {
-        loadLaporan(this.value);
-      });
+      document
+        .getElementById("filterTanggal")
+        .addEventListener("change", function () {
+          loadLaporan(this.value);
+        });
 
       // Ambil data tamu dan load laporan awal
-      db.collection("guests").get().then(snapshot => {
-        const guestSelect = document.getElementById("guestName");
-        snapshot.forEach(doc => {
-          const guest = doc.data();
-          const option = document.createElement("option");
-          option.value = guest.name;
-          option.innerText = guest.name;
-          guestSelect.appendChild(option);
+      db.collection("guests")
+        .get()
+        .then((snapshot) => {
+          const guestSelect = document.getElementById("guestName");
+          snapshot.forEach((doc) => {
+            const guest = doc.data();
+            const option = document.createElement("option");
+            option.value = guest.name;
+            option.innerText = guest.name;
+            guestSelect.appendChild(option);
+          });
+          loadLaporan(); // Muat laporan awal
         });
-        loadLaporan();  // Muat laporan awal
-      });
 
       // Menu toggle di mobile
 
       document
-      .getElementById("pegawai-toggle")
-      .addEventListener("click", function () {
-        var menu = document.getElementById("pegawai-menu");
-        menu.classList.toggle("hidden");
-      });
+        .getElementById("pegawai-toggle")
+        .addEventListener("click", function () {
+          var menu = document.getElementById("pegawai-menu");
+          menu.classList.toggle("hidden");
+        });
     </script>
   </body>
 </html>
