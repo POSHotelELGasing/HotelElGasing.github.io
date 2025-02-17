@@ -58,26 +58,20 @@
               const user = result.user;
               const email = user.email;
 
-              // Cek apakah email ada di Firestore (collection: employee)
-              const employeeRef = db
+              const employeesRef = db
                 .collection("employees")
-                .where("email", "==", email);
-              const snapshot = await employeeRef.get();
+                .where("personalData.email", "==", email);
+              const snapshot = await employeesRef.get();
 
               if (!snapshot.empty) {
-                // Jika user ditemukan di Firestore, ambil data mereka
                 let userData;
                 snapshot.forEach((doc) => (userData = doc.data()));
-
-                // Simpan ke localStorage (opsional)
                 localStorage.setItem("currentUser", JSON.stringify(userData));
                 alert("Login berhasil! Anda masuk sebagai " + userData.role);
-
-                // Redirect berdasarkan role
                 if (userData.role === "Admin") {
-                  window.location.href = "index.html";
+                  window.location.href = "admin_dashboard.html";
                 } else {
-                  window.location.href = "guests.html";
+                  window.location.href = "dashboard.html";
                 }
               } else {
                 alert("Akun ini tidak terdaftar sebagai karyawan!");
