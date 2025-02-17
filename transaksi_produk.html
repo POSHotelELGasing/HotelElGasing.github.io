@@ -3,15 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Manajemen Transaksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       rel="stylesheet"
@@ -27,7 +23,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="bg-gray-100">
     <!-- Navbar -->
     <nav class="bg-blue-600 text-white p-4 shadow-lg fixed w-full z-10">
       <div class="container mx-auto flex justify-between items-center">
@@ -56,7 +52,7 @@
           <li>
             <a
               href="rooms.html"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block "
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
               >Kamar</a
             >
           </li>
@@ -77,7 +73,7 @@
           <li>
             <a
               href="transaksi_produk.html"
-              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block active-nav"
+              class="hover:bg-blue-500 text-white rounded transition px-4 py-2 block"
               >Transaksi Menu</a
             >
           </li>
@@ -147,334 +143,134 @@
         </ul>
       </div>
     </nav>
-  
+<body class="bg-gray-100 p-5">
 
-       <main class="container mx-auto p-6 pt-11">
-        <h2 class="text-2xl font-bold p-6 pt-12">Transaksi Menu</h2>
-        <span class="pl-3"><i class="fa-solid fa-credit-card"></i></span>
-      </h2>
-      <div class="bg-white p-4 shadow rounded mb-4">
-        <button
-        id="add-transaction-btn"
-        class="bg-green-600 text-white px-4 py-2 rounded"
-      >
-        Tambahkan Transaksi
-      </button>
-      </div>
-      
-      <div class="container mx-auto p-6">
-        <div id="transactions-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-      </div>
-    </main>
+    <!-- Form Tambah Transaksi -->
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Tambah Transaksi Layanan Hotel</h2>
+        <form id="formHotel">
+            <label class="block">Nama Tamu:</label>
+            <input type="text" id="namaTamu" class="w-full border rounded p-2 mb-2" required>
+            
+            <label class="block">Jenis Layanan:</label>
+            <select id="layanan" class="w-full border rounded p-2 mb-2">
+                <option value="Room Service">Layanan Kamar - Rp150.000</option>
+                <option value="Laundry Hotel">Laundry Hotel - Rp100.000</option>
+                <option value="Spa & Pijat">Spa & Pijat - Rp200.000</option>
+            </select>
 
-    <script>
-      const menuToggle = document.getElementById("menu-toggle");
-const menu = document.getElementById("menu");
-document
-        .getElementById("pegawai-toggle")
-        .addEventListener("click", function () {
-          var menu = document.getElementById("pegawai-menu");
-          menu.classList.toggle("hidden");
-        });
-menuToggle.addEventListener("click", () => {
-  const isHidden = menu.classList.contains("hidden");
-  if (isHidden) {
-    menu.classList.remove("hidden");
-    setTimeout(() => {
-      menu.classList.remove("-translate-y-full", "opacity-0");
-      menu.classList.add("translate-y-0", "opacity-100");
-    }, 10);
-  } else {
-    menu.classList.remove("translate-y-0", "opacity-100");
-    menu.classList.add("-translate-y-full", "opacity-0");
-    setTimeout(() => {
-      menu.classList.add("hidden");
-    }, 300);
-  }
-});
-    </script>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full mt-3">Tambah Transaksi</button>
+        </form>
+    </div>
 
+    <!-- Filter Laporan -->
+    <div class="max-w-lg mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Laporan Transaksi</h2>
+        <label class="block mb-2">Filter Tanggal:</label>
+        <input type="date" id="filterTanggal" class="border rounded p-2 w-full mb-4">
+        
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Nama Tamu</th>
+                    <th class="border p-2">Layanan</th>
+                    <th class="border p-2">Harga</th>
+                    <th class="border p-2">Tanggal</th>
+                    <th class="border p-2">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelLaporan"></tbody>
+        </table>
+        
+        <!-- Total Pendapatan -->
+        <div class="mt-4 text-lg font-bold">
+            Total Pendapatan: Rp <span id="totalPendapatan">0</span>
+        </div>
+    </div>
 
     <script>
-      // Konfigurasi Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
-        authDomain: "prog4-34938.firebaseapp.com",
-        projectId: "prog4-34938",
-        storageBucket: "prog4-34938.appspot.com",
-        messagingSenderId: "920234132726",
-        appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
-      };
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4BKM35Qy-rf0dlfqiqyWzs9AwUZq0ojA",
+            authDomain: "prog4-34938.firebaseapp.com",
+            projectId: "prog4-34938",
+            storageBucket: "prog4-34938.appspot.com",
+            messagingSenderId: "920234132726",
+            appId: "1:920234132726:web:4439c637de33ddf4f3d8d7",
+        };
 
-      // Ambil Data Tamu dari localStorage
-      async function getGuests() {
-  const guests = [];
-  const snapshot = await db.collection("guests").get();
-  snapshot.forEach((doc) => {
-    const guest = doc.data();
-    guests.push({ id: doc.id, name: guest.name });
-  });
-  return guests;
-}
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
+        // Tambah Transaksi ke Firestore
+        document.getElementById("formHotel").addEventListener("submit", async function(event) {
+            event.preventDefault();
 
-      // Ambil Data Kamar dari Firebase
-      async function getRooms() {
-        const rooms = [];
-        const snapshot = await db.collection("rooms").get();
-        snapshot.forEach((doc) => {
-          const room = doc.data();
-          rooms.push({ id: doc.id, number: room.number, type: room.type });
+            const namaTamu = document.getElementById("namaTamu").value;
+            const layanan = document.getElementById("layanan").value;
+            const harga = layanan === "Room Service" ? 150000 : layanan === "Laundry Hotel" ? 100000 : 200000;
+            const tanggal = new Date().toISOString().split('T')[0];
+
+            await db.collection("transactions").add({
+                namaTamu,
+                layanan,
+                harga,
+                tanggal
+            });
+
+            alert("Transaksi berhasil ditambahkan!");
+            document.getElementById("formHotel").reset();
         });
-        return rooms;
-      }
 
-      // Ambil Data Produk dari Firebase
-      async function getProducts() {
-  const products = [];
-  const snapshot = await db.collection("product").get();
-  snapshot.forEach((doc) => {
-    const product = doc.data();
-    products.push({ id: doc.id, name: product.name, price: product.price, stock: product.stock });
-  });
-  return products;
-}
+        function loadLaporan(tanggalFilter = null) {
+            const tabelLaporan = document.getElementById("tabelLaporan");
+            const totalPendapatanElem = document.getElementById("totalPendapatan");
+            let totalPendapatan = 0;
 
-      function loadTransactions() {
-  Swal.fire({
-    title: "Memuat Data...",
-    text: "Mohon tunggu",
-    allowOutsideClick: false,
-    didOpen: () => {
-      Swal.showLoading();
-    }
-  });
+            db.collection("transactions").onSnapshot(snapshot => {
+                tabelLaporan.innerHTML = "";
+                totalPendapatan = 0;
 
-  const transactionList = document.getElementById("transactions-list");
-  db.collection("transactions-produk").onSnapshot(async (snapshot) => {
-    transactionList.innerHTML = ""; // Kosongkan daftar sebelum diperbarui
-    for (const doc of snapshot.docs) {
-      const transaction = doc.data();
+                snapshot.forEach(doc => {
+                    const transaksi = doc.data();
+                    if (tanggalFilter && transaksi.tanggal !== tanggalFilter) {
+                        return;
+                    }
 
-      // Ambil data tamu berdasarkan ID
-      const guestDoc = await db.collection("guests").doc(transaction.guestId).get();
-      const guestName = guestDoc.exists ? guestDoc.data().name : "Tidak Diketahui";
+                    totalPendapatan += transaksi.harga;
 
-      // Ambil data kamar berdasarkan ID
-      const roomDoc = await db.collection("rooms").doc(transaction.roomId).get();
-      const roomNumber = roomDoc.exists ? roomDoc.data().number : "Tidak Diketahui";
+                    const row = document.createElement("tr");
+                    row.className = "border";
+                    row.innerHTML = `
+                        <td class="border p-2">${transaksi.namaTamu}</td>
+                        <td class="border p-2">${transaksi.layanan}</td>
+                        <td class="border p-2">Rp${transaksi.harga.toLocaleString()}</td>
+                        <td class="border p-2">${transaksi.tanggal}</td>
+                        <td class="border p-2">
+                            <button class="bg-red-500 text-white px-2 rounded" onclick="hapusTransaksi('${doc.id}')">Hapus</button>
+                        </td>
+                    `;
+                    tabelLaporan.appendChild(row);
+                });
 
-      // Ambil data produk berdasarkan ID
-      const productDoc = await db.collection("product").doc(transaction.productId).get();
-      const productName = productDoc.exists ? productDoc.data().name : "Tidak Diketahui";
-
-      const card = document.createElement("div");
-      card.className = "bg-white p-4 shadow rounded";
-      card.innerHTML = `
-        <h4 class="text-lg font-bold">Tamu: ${guestName}</h4>
-        <p>Kamar: ${roomNumber}</p>
-        <p>Produk: ${productName}</p>
-        <p>Jumlah: ${transaction.quantity}</p>
-        <p class="font-bold">Total Harga: Rp ${(transaction.totalPrice || 0).toLocaleString("id-ID")}</p>
-        <div class="mt-2 flex space-x-2">
-          <button class="bg-yellow-500 text-white px-2 py-1 rounded" onclick="editTransaction('${doc.id}', ${transaction.quantity})">Edit</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteTransaction('${doc.id}')">Hapus</button>
-        </div>`;
-      transactionList.appendChild(card);
-    }
-    Swal.close(); // Tutup loading setelah transaksi selesai dimuat
-  });
-}
-
-  function editTransaction(id, quantity, totalPrice) {
-    Swal.fire({
-      title: "Edit Transaksi",
-      html: `
-        <label for="quantity" class="block text-left">Jumlah:</label>
-        <input type="number" id="quantity" class="swal2-input" value="${quantity}" min="1">
-      `,
-      showCancelButton: true,
-      confirmButtonText: "Simpan",
-      preConfirm: () => {
-        const newQuantity = parseInt(document.getElementById("quantity").value);
-        if (newQuantity <= 0) {
-          Swal.showValidationMessage("Jumlah harus lebih dari 0!");
-          return false;
+                totalPendapatanElem.textContent = totalPendapatan.toLocaleString();
+            });
         }
-        return { newQuantity };
-      }
-    }).then(result => {
-      if (result.isConfirmed) {
-        db.collection("transactions-produk").doc(id).update({
-  quantity: result.value.newQuantity
-}).then(() => {
-  Swal.fire("Berhasil!", "Transaksi berhasil diperbarui.", "success").then(() => {
-    location.reload(); // Refresh halaman setelah transaksi berhasil diperbarui
-  });
-}).catch(error => {
-  Swal.fire("Error!", error.message, "error");
-});
 
-      }
-    });
-  }
+        async function hapusTransaksi(id) {
+            await db.collection("transactions").doc(id).delete();
+            alert("Transaksi berhasil dihapus!");
+        }
 
-  function deleteTransaction(id) {
-  Swal.fire({
-    title: "Yakin ingin menghapus?",
-    text: "Data transaksi ini akan dihapus secara permanen!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Ya, hapus!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      db.collection("transactions-produk").doc(id).delete()
-        .then(() => {
-          Swal.fire("Terhapus!", "Transaksi berhasil dihapus.", "success");
-        })
-        .catch((error) => {
-          Swal.fire("Error!", error.message, "error");
+        // Filter laporan berdasarkan tanggal
+        document.getElementById("filterTanggal").addEventListener("change", function() {
+            const tanggal = this.value;
+            loadLaporan(tanggal);
         });
-    }
-  });
-}
 
-  window.onload = loadTransactions;
-
-      // Buka Modal Input Transaksi
-      document.getElementById("add-transaction-btn").addEventListener("click", async function () {
-  const guests = await getGuests();
-  const rooms = await getRooms();
-  const products = await getProducts();
-
-  if (guests.length === 0 || rooms.length === 0 || products.length === 0) {
-    Swal.fire("Error", "Pastikan data tamu, kamar, dan produk tersedia!", "error");
-    return;
-  }
-
-  const guestOptions = guests.map((g) => `<option value="${g.id}">${g.name}</option>`).join("");
-  const roomOptions = rooms.map((r) => `<option value="${r.id}">${r.number} - ${r.type}</option>`).join("");
-  const productOptions = products.map((p) => `<option value="${p.id}" data-price="${p.price}" data-stock="${p.stock}">${p.name} - Rp ${p.price} (Stok: ${p.stock})</option>`).join("");
-
-  Swal.fire({
-    title: "Tambahkan Transaksi Produk",
-    html: `
-      <label for="guest-select" class="block text-left">Pilih Tamu:</label>
-      <select id="guest-select" class="swal2-input">${guestOptions}</select>
-
-      <label for="room-select" class="block text-left">Pilih Kamar:</label>
-      <select id="room-select" class="swal2-input">${roomOptions}</select>
-
-      <label for="product-select" class="block text-left">Pilih Produk:</label>
-      <select id="product-select" class="swal2-input">${productOptions}</select>
-
-      <label for="quantity-input" class="block text-left">Jumlah:</label>
-      <input type="number" id="quantity-input" class="swal2-input" value="1" min="1">
-
-      <p>Total Harga: <span id="total-price">0</span> IDR</p>
-    `,
-    showCancelButton: true,
-    confirmButtonText: "Simpan",
-    cancelButtonText: "Batal",
-    didOpen: () => {
-      const productSelect = document.getElementById("product-select");
-      const quantityInput = document.getElementById("quantity-input");
-      const totalPriceEl = document.getElementById("total-price");
-
-      function updateTotalPrice() {
-        let selectedOption = productSelect.options[productSelect.selectedIndex];
-        let price = parseFloat(selectedOption.getAttribute("data-price")) || 0;
-        let quantity = parseInt(quantityInput.value) || 1;
-        totalPriceEl.textContent = (price * quantity).toLocaleString("id-ID");
-      }
-
-      productSelect.addEventListener("change", updateTotalPrice);
-      quantityInput.addEventListener("input", updateTotalPrice);
-      updateTotalPrice();
-    },
-    preConfirm: () => {
-      const guestId = document.getElementById("guest-select").value;
-      const roomId = document.getElementById("room-select").value;
-      const productId = document.getElementById("product-select").value;
-      const quantity = parseInt(document.getElementById("quantity-input").value) || 1;
-
-      const selectedProduct = document.querySelector("#product-select option:checked");
-      const stock = parseInt(selectedProduct.getAttribute("data-stock")) || 0;
-
-      if (quantity > stock) {
-        Swal.showValidationMessage("Stok produk tidak mencukupi!");
-        return false;
-      }
-
-      const totalPriceEl = document.getElementById("total-price").textContent;
-      const totalPrice = totalPriceEl ? parseFloat(totalPriceEl.replace(/\D/g, "")) : 0;
-
-      return { guestId, roomId, productId, quantity, totalPrice };
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const { guestId, roomId, productId, quantity, totalPrice } = result.value;
-
-      db.collection("product").doc(productId).update({
-        stock: firebase.firestore.FieldValue.increment(-quantity)
-      }).then(() => {
-        return db.collection("transactions-produk").add({
-          guestId, roomId, productId, quantity, totalPrice, timestamp: new Date()
-        });
-      }).then(() => {
-        Swal.fire("Berhasil!", "Transaksi berhasil disimpan dan stok berkurang.", "success");
-      }).catch((error) => {
-        Swal.fire("Error!", error.message, "error");
-      });
-    }
-  });
-});
-
-db.collection("product").doc(productId).get().then((productDoc) => {
-  if (productDoc.exists) {
-    let currentStock = productDoc.data().stock || 0; // Ambil stok produk
-    if (currentStock < quantity) {
-      Swal.fire("Gagal!", "Stok produk tidak mencukupi!", "error");
-      return;
-    }
-
-    // Kurangi stok produk
-    db.collection("product").doc(productId).update({
-      stock: currentStock - quantity
-    }).then(() => {
-      // Simpan transaksi setelah stok diperbarui
-      return db.collection("transactions-produk").add({
-        guestId: guestId,
-        roomId: roomId,
-        productId: productId,
-        quantity: quantity,
-        totalPrice: totalPrice,
-        timestamp: new Date(),
-      });
-    }).then(() => {
-      Swal.fire("Berhasil!", "Transaksi berhasil disimpan dan stok berkurang.", "success").then(() => {
-        location.reload(); // Refresh halaman setelah transaksi berhasil
-      });
-    }).catch((error) => {
-      Swal.fire("Error!", error.message, "error");
-    });
-  } else {
-    Swal.fire("Error!", "Produk tidak ditemukan!", "error");
-  }
-});
-document
-  .getElementById("pegawai-toggle")
-  .addEventListener("click", function () {
-    var menu = document.getElementById("pegawai-menu");
-    menu.classList.toggle("hidden");
-  });
-
-
-
+        // Muat laporan awal
+        loadLaporan();
     </script>
-  </body>
+
+</body>
 </html>
