@@ -194,22 +194,35 @@
             <option value="">Memuat...</option>
           </select>
 
-          <label class="block mb-2">Durasi (hari)</label>
-          <input
-            type="number"
-            id="transaction-days"
-            class="p-2 border rounded mb-4 w-full"
-            placeholder="Lama Hari"
-            required
-            min="1"
-          />
-          <label class="block mb-2">Tanggal Transaksi</label>
-          <input
-            type="date"
-            id="transaction-date"
-            class="p-2 border rounded mb-4 w-full"
-            required
-          />
+<!-- Tanggal Check-in -->
+<label class="block mb-2">Tanggal Check-in</label>
+<input
+  type="date"
+  id="transaction-date"
+  class="p-2 border rounded mb-4 w-full"
+  required
+/>
+
+<!-- Durasi Hari -->
+<label class="block mb-2">Durasi (hari)</label>
+<input
+  type="number"
+  id="transaction-days"
+  class="p-2 border rounded mb-4 w-full"
+  placeholder="Lama Hari"
+  required
+  min="1"
+/>
+
+<!-- Tanggal Checkout (Akan dihitung otomatis) -->
+<label class="block mb-2">Tanggal Checkout</label>
+<input
+  type="date"
+  id="transaction-checkout"
+  class="p-2 border rounded mb-4 w-full"
+  readonly
+/>
+
 
           <button
             type="submit"
@@ -264,24 +277,52 @@
       const transactionModal = document.getElementById("transaction-modal");
 
       // 🔥 Real-time update dengan onSnapshot()
-      db.collection("transactions").onSnapshot((snapshot) => {
-        transactionList.innerHTML = "";
-        snapshot.forEach((doc) => {
-          const transaction = doc.data();
-          transactionList.innerHTML += `
-                <div class="bg-white p-4 shadow rounded">
-                    <h3 class="text-lg font-bold">${transaction.guestName}</h3>
-                    <p>Kamar: ${transaction.roomNumber}</p>
-                    <p>Durasi: ${transaction.days} hari</p>
-                    <p class="font-bold">Total Harga: Rp ${transaction.totalPrice}</p>
-                    <p class="text-sm text-gray-500">Tanggal: ${transaction.date}</p> <!-- Tampilkan tanggal -->
-                    <div class="mt-4 flex space-x-2">
-                        <button class="bg-blue-600 text-white p-2 rounded" onclick="editTransaction('${doc.id}')">Edit</button>
-                        <button class="bg-red-600 text-white p-2 rounded" onclick="deleteTransaction('${doc.id}')">Hapus</button>
-                    </div>
-                </div>`;
-        });
-      });
+// 🔥 Real-time update dengan onSnapshot()
+db.collection("transactions").onSnapshot((snapshot) => {
+  transactionList.innerHTML = "";
+  snapshot.forEach((doc) => {
+    const transaction = doc.data();
+    transactionList.innerHTML += `
+      <div class="bg-white p-4 shadow rounded">
+        <h3 class="text-lg font-bold">${transaction.guestName}</h3>
+        <p>Kamar: ${transaction.roomNumber}</p>
+        <p>Durasi: ${transaction.days} hari</p>
+        <p class="font-bold">Total Harga: Rp ${transaction.totalPrice}</p>
+        <p class="text-sm text-gray-500">Tanggal Check-in: ${transaction.date}</p>
+        <p class="text-sm text-gray-500">Tanggal Checkout: ${transaction.checkoutDate}</p> <!-- Tampilkan tanggal checkout -->
+        <div class="mt-4 flex space-x-2">
+          <button class="bg-blue-600 text-white p-2 rounded" onclick="editTransaction('${doc.id}')">Edit</button>
+          <button class="bg-red-600 text-white p-2 rounded" onclick="deleteTransaction('${doc.id}')">Hapus</button>
+        </div>
+      </div>`;
+  });
+});
+
+const transactionDate = document.getElementById('transaction-date');
+const transactionDays = document.getElementById('transaction-days');
+const transactionCheckout = document.getElementById('transaction-checkout');
+
+// Fungsi untuk menghitung tanggal checkout
+function calculateCheckoutDate() {
+  const checkinDate = new Date(transactionDate.value); // Mendapatkan tanggal check-in
+  const days = parseInt(transactionDays.value); // Mendapatkan durasi hari
+
+  // Jika tanggal check-in dan durasi hari valid
+  if (!isNaN(checkinDate.getTime()) && !isNaN(days) && days > 0) {
+    // Menambah durasi hari ke tanggal check-in untuk mendapatkan tanggal checkout
+    checkinDate.setDate(checkinDate.getDate() + days);
+
+    // Formatkan tanggal menjadi format yyyy-mm-dd
+    const checkoutDate = checkinDate.toISOString().split('T')[0];
+    
+    // Set tanggal checkout pada input readonly
+    transactionCheckout.value = checkoutDate;
+  }
+}
+
+// Tambahkan event listener pada input tanggal check-in dan durasi
+transactionDate.addEventListener('input', calculateCheckoutDate);
+transactionDays.addEventListener('input', calculateCheckoutDate);
 
       // Fungsi untuk menghapus transaksi
       function deleteTransaction(id) {
@@ -345,77 +386,82 @@
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
       // Fungsi untuk menyimpan transaksi (Tambah/Edit)
       document
-        .getElementById("transaction-form")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
-
-          const transactionId = document.getElementById("transaction-id").value;
-          const transactionRoom = document.getElementById("transaction-room");
-          const transactionGuest = document.getElementById("transaction-guest");
-          const transactionDays = document.getElementById("transaction-days");
-          const transactionDate =
-            document.getElementById("transaction-date").value; // Ambil tanggal
-
-          const roomId = transactionRoom.value;
-          const guestId = transactionGuest.value;
-          const days = parseInt(transactionDays.value);
-
-          const roomPrice = transactionRoom.selectedOptions[0]
-            ? parseInt(
-                transactionRoom.selectedOptions[0].getAttribute("data-price")
-              )
-            : 0;
-
-          const totalPrice = roomPrice * days;
-
-          const transactionData = {
-            roomId,
-            roomNumber: transactionRoom.selectedOptions[0].text,
-            guestId,
-            guestName: transactionGuest.selectedOptions[0].text,
-            days,
-            totalPrice,
-            date: transactionDate,
-          };
-
-          if (transactionId) {
-            db.collection("transactions")
-              .doc(transactionId)
-              .update(transactionData)
-              .then(() => {
-                Swal.fire(
-                  "Berhasil!",
-                  "Transaksi berhasil diperbarui!",
-                  "success"
-                );
-                transactionModal.classList.add("hidden");
-              });
-          } else {
-            db.collection("transactions")
-              .add(transactionData)
-              .then((docRef) => {
-                if (roomId) {
-                  db.collection("rooms")
-                    .doc(roomId)
-                    .update({
-                      status: "Occupied",
-                    })
-                    .then(() => {
-                      console.log("Status kamar diperbarui menjadi Occupied");
-                    })
-                    .catch((error) =>
-                      console.error("Gagal memperbarui status kamar", error)
-                    );
-                }
-                Swal.fire(
-                  "Berhasil!",
-                  "Transaksi berhasil disimpan!",
-                  "success"
-                );
-                transactionModal.classList.add("hidden");
-              });
-          }
-        });
+      .getElementById("transaction-form")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+    
+        const transactionId = document.getElementById("transaction-id").value;
+        const transactionRoom = document.getElementById("transaction-room");
+        const transactionGuest = document.getElementById("transaction-guest");
+        const transactionDays = document.getElementById("transaction-days");
+        const transactionDate =
+          document.getElementById("transaction-date").value; // Ambil tanggal transaksi
+        const transactionCheckout =
+          document.getElementById("transaction-checkout").value; // Ambil tanggal checkout
+    
+        const roomId = transactionRoom.value;
+        const guestId = transactionGuest.value;
+        const days = parseInt(transactionDays.value);
+    
+        const roomPrice = transactionRoom.selectedOptions[0]
+          ? parseInt(
+              transactionRoom.selectedOptions[0].getAttribute("data-price")
+            )
+          : 0;
+    
+        const totalPrice = roomPrice * days;
+    
+        const transactionData = {
+          roomId,
+          roomNumber: transactionRoom.selectedOptions[0].text,
+          guestId,
+          guestName: transactionGuest.selectedOptions[0].text,
+          days,
+          totalPrice,
+          date: transactionDate,
+          checkoutDate: transactionCheckout, // Tambahkan checkoutDate
+        };
+    
+        if (transactionId) {
+          // Update transaksi yang sudah ada
+          db.collection("transactions")
+            .doc(transactionId)
+            .update(transactionData)
+            .then(() => {
+              Swal.fire("Berhasil!", "Transaksi berhasil diperbarui!", "success");
+              transactionModal.classList.add("hidden");
+            })
+            .catch((error) => {
+              console.error("Gagal memperbarui transaksi: ", error);
+            });
+        } else {
+          // Simpan transaksi baru
+          db.collection("transactions")
+            .add(transactionData)
+            .then((docRef) => {
+              if (roomId) {
+                // Update status kamar menjadi "Occupied"
+                db.collection("rooms")
+                  .doc(roomId)
+                  .update({
+                    status: "Occupied",
+                  })
+                  .then(() => {
+                    console.log("Status kamar diperbarui menjadi Occupied");
+                  })
+                  .catch((error) =>
+                    console.error("Gagal memperbarui status kamar", error)
+                  );
+              }
+              Swal.fire("Berhasil!", "Transaksi berhasil disimpan!", "success");
+              transactionModal.classList.add("hidden");
+            })
+            .catch((error) => {
+              console.error("Gagal menyimpan transaksi: ", error);
+            });
+        }
+      });
+    
       document
         .getElementById("add-transaction-btn")
         .addEventListener("click", () => {
